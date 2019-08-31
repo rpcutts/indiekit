@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "name": "@indiekit/indieauth",
+  "version": "0.1.0",
+  "description": "Authenticate with IndieAuth endpoints",
+  "keywords": [
+    "indiekit",
+    "indieweb",
+    "indieauth"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@indiekit/support": "file:../support",
+    "dotenv": "^8.1.0",
+    "node-fetch": "^2.6.0",
+    "normalize-url": "^4.3.0"
+  },
+  "xo": false
+}

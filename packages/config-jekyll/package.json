@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "@indiekit/config-jekyll",
+  "version": "0.1.0",
+  "description": "IndieKit config for Jekyll-based websites",
+  "keywords": [
+    "indieweb",
+    "micropub",
+    "jekyll"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "echo \"Run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "@indiekit/templates-yaml": "file:../templates-yaml"
+  },
+  "xo": false
+}

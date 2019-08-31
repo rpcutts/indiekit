@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "@indiekit/micropub",
+  "version": "0.1.0",
+  "description": "Publish to Micropub endpoints",
+  "keywords": [
+    "indiekit",
+    "indieweb",
+    "micropub"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "dependencies": {
+    "@indiekit/microformats": "^0.1.0",
+    "@indiekit/publication": "^0.1.0",
+    "@indiekit/support": "^0.1.0",
+    "camelcase-keys": "^6.0.1",
+    "post-type-discovery": "github:grantcodes/post-type-discovery"
+  },
+  "devDependencies": {
+    "@indiekit/app": "file:../app"
+  },
+  "xo": false
+}

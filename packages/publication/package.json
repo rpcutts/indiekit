@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "@indiekit/publication",
+  "version": "0.1.0",
+  "description": "Configure an IndieWeb publication",
+  "keywords": [
+    "indiekit",
+    "indieweb"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "dependencies": {
+    "@indiekit/support": "file:../support",
+    "lodash": "^4.17.15",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@indiekit/publisher-github": "file:../publisher-github"
+  },
+  "xo": false
+}

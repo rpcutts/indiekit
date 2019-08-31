@@ -1,0 +1,43 @@
+{
+  "private": true,
+  "name": "@indiekit/app",
+  "version": "0.1.0",
+  "description": "An IndieWeb publishing toolkit",
+  "keywords": [
+    "express",
+    "indieweb",
+    "micropub"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib",
+    "static",
+    "views"
+  ],
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "dependencies": {
+    "@indiekit/config-jekyll": "file:../config-jekyll",
+    "@indiekit/indieauth": "file:../indieauth",
+    "@indiekit/microformats": "file:../microformats",
+    "@indiekit/micropub": "file:../micropub",
+    "@indiekit/publication": "file:../publication",
+    "@indiekit/publisher-github": "file:../publisher-github",
+    "@indiekit/support": "file:../support",
+    "connect-mongo": "^3.0.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "i18n": "^0.8.3",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.1",
+    "multer": "^1.4.2",
+    "nunjucks": "^3.2.0",
+    "serve-favicon": "^2.5.0"
+  },
+  "xo": false
+}

@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "@indiekit/publisher-github",
+  "version": "0.1.0",
+  "description": "Publish to the IndieWeb via GitHub",
+  "keywords": [
+    "indiekit",
+    "indieweb",
+    "micropub",
+    "github"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "dependencies": {
+    "@octokit/rest": "^16.28.7",
+    "dotenv": "^8.1.0"
+  },
+  "xo": false
+}

@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "@indiekit/microformats",
+  "version": "0.1.0",
+  "description": "Publish to the IndieWeb via GitHub",
+  "keywords": [
+    "indiekit",
+    "indieweb",
+    "microformats"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "dependencies": {
+    "@indiekit/support": "file:../support",
+    "luxon": "^1.17.2",
+    "microformat-node": "^2.0.1",
+    "node-fetch": "^2.6.0",
+    "slug": "^1.1.0"
+  },
+  "xo": false
+}

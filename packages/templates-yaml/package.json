@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@indiekit/templates-yaml",
+  "version": "0.1.0",
+  "description": "IndieWeb templates with YAML frontmatter",
+  "keywords": [
+    "indiekit",
+    "indieweb",
+    "micropub",
+    "yaml"
+  ],
+  "author": "Paul Robert Lloyd",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "templates"
+  ],
+  "scripts": {
+    "test": "echo \"Run tests from root\" && exit 1"
+  },
+  "xo": false
+}

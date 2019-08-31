@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@paulrobertlloyd/indiekit",
   "version": "0.1.0",
   "description": "An IndieWeb publishing toolkit",
@@ -12,42 +13,30 @@
   "repository": "github:paulrobertlloyd/indiekit",
   "bugs": "https://github.com/paulrobertlloyd/indiekit/issues",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node app/server.js",
-    "dev": "nodemon app/server.js",
+    "start": "node packages/app",
+    "dev": "nodemon packages/app",
     "test": "ava --verbose",
-    "posttest": "rm -r ./.ava_output",
     "coverage": "nyc ava"
   },
   "engines": {
     "node": "11.x"
   },
   "dependencies": {
-    "@octokit/rest": "^16.28.9",
-    "@timberio/node": "^0.35.0",
-    "@timberio/winston": "^0.35.0",
-    "camelcase-keys": "^6.0.1",
-    "data-store": "^3.1.0",
-    "dotenv": "^8.1.0",
-    "express": "^4.17.1",
-    "file-type": "^12.3.0",
-    "i18n": "^0.8.3",
-    "lodash": "^4.17.15",
-    "luxon": "^1.17.2",
-    "microformat-node": "^2.0.1",
-    "multer": "^1.4.2",
-    "node-cache": "^4.2.1",
-    "node-fetch": "^2.6.0",
-    "normalize-url": "^4.3.0",
-    "nunjucks": "^3.2.0",
-    "post-type-discovery": "github:grantcodes/post-type-discovery",
-    "serve-favicon": "^2.5.0",
-    "slug": "^1.1.0",
-    "winston": "^3.2.1"
+    "@indiekit/app": "file:packages/app",
+    "@indiekit/config-jekyll": "file:packages/config-jekyll",
+    "@indiekit/indieauth": "file:packages/indieauth",
+    "@indiekit/microformats": "file:packages/microformats",
+    "@indiekit/micropub": "file:packages/micropub",
+    "@indiekit/publication": "file:packages/publication",
+    "@indiekit/publisher-github": "file:packages/publisher-github",
+    "@indiekit/support": "file:packages/support",
+    "@indiekit/templates-yaml": "file:packages/templates-yaml"
   },
   "devDependencies": {
     "ava": "^2.3.0",
     "coveralls": "^3.0.6",
+    "dotenv": "^8.1.0",
+    "lerna": "^3.16.4",
     "nock": "^11.3.3",
     "nodemon": "^1.19.2",
     "nyc": "^14.0.0",
@@ -64,14 +53,14 @@
       "NODE_ENV": "test"
     },
     "files": [
-      "test/**/*.test.js"
+      "packages/**/*.test.js"
     ]
   },
   "nyc": {
     "exclude": [
       "app/config.js",
-      "lib/logger.js",
-      "test/**/*.test.js"
+      "packages/support/lib/logger.js",
+      "packages/**/*.test.js"
     ],
     "reporter": [
       "text",
@@ -89,11 +78,27 @@
             "client_id",
             "error_description",
             "error_uri",
-            "success_description"
+            "success_description",
+            "token_type"
           ]
         }
       ],
-      "capitalized-comments": "warn"
+      "capitalized-comments": "warn",
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": true,
+          "packageDir": [
+            "./",
+            "./packages/app",
+            "./packages/microformats",
+            "./packages/micropub",
+            "./packages/publication",
+            "./packages/publisher-github",
+            "./packages/support"
+          ]
+        }
+      ]
     }
   }
 }
