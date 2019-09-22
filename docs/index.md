@@ -31,8 +31,6 @@ A long term ambition is to build a tool that supports different publishing desti
 
 ## Credits
 
-This tool is inspired by [similar projects](https://paulrobertlloyd.github.io/indiekit/projects) made by members of the [IndieWeb community](https://indieweb.org).
-
 Logo adapted from [‘to merge’](https://www.toicon.com/icons/afiado_merge) icon by Susana Passinhas.
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
