@@ -17,8 +17,6 @@
     "test": "ava --verbose"
   },
   "dependencies": {
-    "@timberio/node": "^0.35.0",
-    "@timberio/winston": "^0.35.0",
     "file-type": "^12.2.0",
     "lodash": "^4.17.15",
     "luxon": "^1.17.2",

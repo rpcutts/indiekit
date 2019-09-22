@@ -31,9 +31,3 @@ If you’d like to deploy this application somewhere else, make sure the followi
 * `GITHUB_USER`: Username on GitHub. **Required**.
 * `GITHUB_REPO`: Name of the repository files will be saved to. **Required**.
 * `GITHUB_BRANCH`: Name of the branch files will be saved to. *Optional*, defaults to `master`.
-
-### Timber
-If you want to send logs to [Timber](https://timber.io), set the following variables:
-
-* `TIMBER_TOKEN`: Timber API key. *Optional*
-* `TIMBER_SOURCE`: Timber source ID. *Optional*
