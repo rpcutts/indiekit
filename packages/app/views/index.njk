@@ -1,7 +1,7 @@
 {% extends "_default.njk" %}
 
 {% block content %}
-<p>{{ __("This is the %s endpoint for", "<a href=\"https://www.w3.org/TR/micropub/\">Micropub</a>") | safe }} <a href="{{ pub.url }}">{{ pub.url | replace('https://', '')}}</a>.</p>
+<h2>{{ __("This is the %s endpoint for", "<a href=\"https://www.w3.org/TR/micropub/\">Micropub</a>") | safe }} <a href="{{ pub.url }}">{{ pub.url | replace('https://', '')}}</a>.</h2>
 <dl>
 {% if pub.config["media-endpoint"] %}
   <dt>{{ __("Media endpoint") }}</dt>

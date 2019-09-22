@@ -1,7 +1,9 @@
+const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const {DateTime} = require('luxon');
 const fileType = require('file-type');
+const frontmatter = require('front-matter');
 const nunjucks = require('nunjucks');
 
 const utils = {
@@ -309,6 +311,52 @@ const utils = {
     });
 
     return env.renderString(string, context);
+  },
+
+  /**
+   * Render a document with YAML frontmatter and Nunjucks variables
+   *
+   * @function renderDocument
+   * @param {String} file File to parse
+   * @param {String} context Context data
+   * @return {Object} Document data object
+   */
+  renderDocument(file, context) {
+    // Read file
+    let string = fs.readFileSync(file);
+
+    // Convert file buffer to string
+    string = Buffer.from(string).toString('utf8');
+
+    // Parse YAML frontmatter
+    const document = frontmatter(string);
+
+    // Add YAML frontmatter data to provided context under the `page` key
+    context.page = document.attributes;
+
+    // Return document object with Nunjucks rendered body
+    return {
+      body: utils.render(document.body, context),
+      page: document.attributes,
+      title: utils.render(document.attributes.title, context)
+    };
+  },
+
+  /**
+   * Resolves a URL path to either named file, or index in named folder.
+   *
+   * @function resolveFilePath
+   * @param {String} urlpath Path to file
+   * @param {String} ext File extension
+   * @return {String} Resolved path to file on disk
+   */
+  resolveFilePath(urlpath, ext) {
+    const dir = `${urlpath}.${ext}`;
+    if (fs.existsSync(dir)) {
+      return dir;
+    }
+
+    return path.join(urlpath, `index.${ext}`);
   }
 };
 

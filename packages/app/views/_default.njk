@@ -10,19 +10,23 @@
     <title>{{ title + " - " if title }}{{ app.name }}</title>
   </head>
   <body>
-    <header>
-      <h1>
+    <header class="banner">
+      <h1 class="banner__title">
         <a class="u-url" href="{{ app.url }}">
           {% include 'logo.svg' %}
           <span class="p-name">{{ app.name }}</span>
         </a>
       </h1>
-      <p class="p-summary">{{ app.description }}</p>
+      <p class="banner__description p-summary">{{ app.description }}</p>
+      <nav class="banner__navigation" aria-label="site">
+        <a href="/docs">Docs</a>
+      </nav>
     </header>
-    <main>
+    <main class="content">
+      {% if title %}<h2>{{ title }}</h2>{% endif %}
       {% block content %}{% endblock %}
     </main>
-    <footer>
+    <footer class="contentinfo">
       <a href="https://github.com/{{ app.repository | replace('github:', '') }}/releases/tag/v{{ app.version }}">v{{ app.version }}</a>
     </footer>
   </body>

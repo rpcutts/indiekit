@@ -1,9 +1,8 @@
 {% extends "_default.njk" %}
 
-{% set title = status %}
+{% set title = status + " - " + error %}
 
 {% block content %}
-<h2>{{ status }} - {{ error }}</h2>
 <p>{{ error_description }}</p>
 {% if error_uri %}
 <p><small><a href="{{ error_uri }}">{{ error_uri }}</a></small></p>

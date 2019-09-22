@@ -1,10 +1,13 @@
-## Usage
+---
+title: Website configuration
+---
+{{ app.name }} lets you customise where posts are saved, how they are formatted and what URLs they will appear at.
 
-Having deployed IndieKit to your own server, you’ll no doubt want to customise certain aspects of it. Configuration can be provided via a JSON file by providing a value for the `INDIEKIT_CONFIG_PATH` environment variable. This will let you customise where posts are saved, how they are formatted and what URLs they will appear at.
+Configuration is provided via a JSON file in your repository. You can tell {{ app.name }} where to find this file by providing a value for the `INDIEKIT_CONFIG_PATH` environment variable.
 
 ### Configuration options
 
-### `categories`
+#### `categories`
 
 A [list of categories clients can expose in their publishing interface](https://github.com/indieweb/micropub-extensions/issues/5). Defaults to `[]`. There are two ways of providing these values:
 
@@ -12,7 +15,6 @@ A [list of categories clients can expose in their publishing interface](https://
 
   ```json
   categories: [
-    "indiekit",
     "indieweb",
     "indiewebcamp"
   ]
@@ -22,15 +24,15 @@ A [list of categories clients can expose in their publishing interface](https://
 
   ```json
   categories: {
-    "url": "https://paulrobertlloyd.com/categories.json"
+    "url": "{{ pub.url }}/categories.json"
   }
   ```
 
-  The category list will be updated when IndieKit refreshes its cache (see: [`INDIEKIT_CACHE_EXPIRES`](https://paulrobertlloyd.github.io/indiekit/deploy#environment-variables))
+  The category list will be updated whenever {{ app.name }} refreshes its cache (see: [`INDIEKIT_CACHE_EXPIRES`]({{ app.url }}/docs/server-configuration#environment-variables))
 
 #### `media-endpoint`
 
-The URL for your preferred [media endpoint](https://www.w3.org/TR/micropub/#media-endpoint). Use this if you want another endpoint to respond to media upload requests. Defaults to `https://<your-endpoint>/media`.
+The URL for your preferred [media endpoint](https://www.w3.org/TR/micropub/#media-endpoint). Use this if you want another endpoint to respond to media upload requests. Defaults to `{{ app.url }}/media`.
 
 #### `syndicate-to`
 
@@ -53,7 +55,7 @@ Information about [syndication targets](https://www.w3.org/TR/micropub/#h-syndic
 
 #### `post-types`
 
-IndieKit provides a set of default paths and templates for the following [post types](https://indieweb.org/posts#Types_of_Posts):
+{{ app.name }} provides a set of default paths and templates for the following [post types](https://indieweb.org/posts#Types_of_Posts):
 
 * 📄 [`article`](https://indieweb.org/article)
 * 📔 [`note`](https://indieweb.org/note)
@@ -94,14 +96,13 @@ These defaults can be ammended, and new types can be added. For example, to over
     }
   }
 }
-
 ```
 
 * **`name`**: The name you give to this post type on your own site. You needn’t specify this value, but if you do, certain Micropub clients will expose it in their publishing UI.
 
 * **`icon`**: Shortcode for the emoji icon to use in commit messages. A [full list of emoji codes can be found here](https://www.webfx.com/tools/emoji-cheat-sheet/).
 
-* **`template`**: Where IndieKit can find the post type template within your repository. Note, this is not the template used to render your site, but a template specifically for the use of IndieKit to render content (typically as a Markdown file with YAML frontmatter).
+* **`template`**: Where {{ app.name }} can find the post type template within your repository. Note, this is not the template used to render your site, but a template specifically for the use of {{ app.name }} to render content (typically as a Markdown file with YAML frontmatter).
 
 * **`post.path`**: Where posts should be saved to in your repository.
 

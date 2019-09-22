@@ -36,7 +36,7 @@ If you’d like to deploy this application on your own server, first make sure i
   npm i @indiekit/app
   ```
 
-2. Ensure the following environment variables have been set:
+2. Ensure the following required environment variables have been set:
 
   * `INDIEKIT_URL`: URL of the website you want to publish to.
   * `GITHUB_TOKEN`: A GitHub [personal access token](https://github.com/settings/tokens).
@@ -49,36 +49,7 @@ If you’d like to deploy this application on your own server, first make sure i
   node @indiekit/app
   ```
 
-4. Browser to `https://<your-endpoint>/help` for information about how to configure IndieKit to publish to your website.
-
-### Enable automatic discovery
-
-For your Micropub (and token) endpoints to be discoverable to Micropub clients, the following values should be in your website’s `<head>`:
-
-```html
-<link rel="authorization_endpoint" href="https://indieauth.com/auth">
-<link rel="token_endpoint" href="https://tokens.indieauth.com/token">
-<link rel="micropub" href="https://<your-endpoint>/micropub">
-```
-
-## Configuring IndieKit
-
-IndieKit respects the following environment variables:
-
-### IndieKit
-* `INDIEKIT_URL`: URL of the website you want to publish to. **Required**.
-* `INDIEKIT_CONFIG_PATH`: Location of configuration file in your repo, relative to its root. *Optional*, if not provided, default values will be used for templates and file paths.
-* `INDIEKIT_LOCALE`: Locale with which to format dates. *Optional*, defaults to `en-GB`.
-* `INDIEKIT_CACHE_EXPIRES`: Time (in seconds) before cached publication config and post templates are refetched. *Optional*, defaults to `86400` (1 day).
-
-### IndieAuth
-* `INDIEAUTH_TOKEN_ENDPOINT`: IndieAuth token endpoint. *Optional*, defaults [`https://tokens.indieauth.com/token`](https://tokens.indieauth.com/token)
-
-### GitHub
-* `GITHUB_TOKEN`: A GitHub [personal access token](https://github.com/settings/tokens). **Required**.
-* `GITHUB_USER`: Username on GitHub. **Required**.
-* `GITHUB_REPO`: Name of the repository files will be saved to. **Required**.
-* `GITHUB_BRANCH`: Name of the branch files will be saved to. *Optional*, defaults to `master`.
+4. Browse to `https://<your-endpoint>/help/welcome` for information about how to get started with IndieKit.
 
 ## Local development
 
@@ -86,7 +57,7 @@ IndieKit respects the following environment variables:
 npm start
 ```
 
-If you want to run the service locally, perhaps to use with a tool like [Postman](https://www.getpostman.com/), ensure the [required environment variables](https://paulrobertlloyd.github.io/indiekit/deploy) have been set.
+If you want to run the service locally, perhaps to use with a tool like [Postman](https://www.getpostman.com/), ensure the required environment variables have been set.
 
 If you’re developing a new feature and want the application to automatically restart whenever a file change is detected, you can use `npm run dev`.
 

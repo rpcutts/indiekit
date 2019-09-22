@@ -13,6 +13,7 @@ const mongoose = require('mongoose');
 
 const admin = require('./lib/admin');
 const config = require('./config');
+const filters = require('./lib/filters');
 const routes = require('./routes');
 
 const app = express();
@@ -24,11 +25,12 @@ app.enable('trust proxy');
 // Parse Nunjucks templates
 const viewsDir = path.join(__dirname, 'views');
 const staticDir = path.join(__dirname, 'static');
-nunjucks.configure([viewsDir, staticDir], {
+const env = nunjucks.configure([viewsDir, staticDir], {
   autoescape: true,
   express: app,
   watch: true
 });
+env.addFilter('markdown', filters.markdown);
 app.set('view engine', 'njk');
 
 // Serve static files and paths
