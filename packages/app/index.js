@@ -38,7 +38,7 @@ app.use(favicon(`${staticDir}/favicon.ico`));
 // Internationalisation
 i18n.configure({
   defaultLocale: config.locale,
-  directory: process.env.PWD + '/locales',
+  directory: path.join(__dirname, 'locales'),
   objectNotation: true,
   queryParameter: 'lang'
 });

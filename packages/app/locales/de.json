@@ -5,11 +5,6 @@
   "Syndication targets": "Syndikate zu diesen Sites",
   "Not found": "Nicht gefunden",
   "The requested resource was not found": "Die angeforderte Ressource wurde nicht gefunden",
-  "{icon} %s created\nwith {app}": "{icon} %s erstellt\nmit {app}",
-  "{icon} %s deleted\nwith {app}": "{icon} %s gelöscht\nmit {app}",
-  "{icon} %s undeleted\nwith {app}": "{icon} %s restauriert\nmit {app}",
-  "{icon} %s updated\nwith {app}": "{icon} %s aktualisiert\nmit {app}",
-  "{icon} %s uploaded\nwith {app}": "{icon} %s hochgeladen\nmit {app}",
   "post": {
     "article": "Artikel Post",
     "note": "Notiz Posten",
