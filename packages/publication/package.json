@@ -18,12 +18,9 @@
     "test": "ava --verbose"
   },
   "dependencies": {
-    "@indiekit/support": "file:../support",
+    "@indiekit/support": "0.1.0",
     "lodash": "^4.17.15",
     "node-fetch": "^2.6.0"
-  },
-  "devDependencies": {
-    "@indiekit/publisher-github": "file:../publisher-github"
   },
   "xo": false
 }

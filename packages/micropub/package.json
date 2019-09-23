@@ -19,14 +19,14 @@
     "test": "ava --verbose"
   },
   "dependencies": {
-    "@indiekit/microformats": "^0.1.0",
-    "@indiekit/publication": "^0.1.0",
-    "@indiekit/support": "^0.1.0",
+    "@indiekit/indieauth": "0.1.0",
+    "@indiekit/microformats": "0.1.0",
+    "@indiekit/publication": "0.1.0",
+    "@indiekit/support": "0.1.0",
     "camelcase-keys": "^6.0.1",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
     "post-type-discovery": "github:grantcodes/post-type-discovery"
-  },
-  "devDependencies": {
-    "@indiekit/app": "file:../app"
   },
   "xo": false
 }

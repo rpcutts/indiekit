@@ -19,7 +19,7 @@
     "test": "echo \"Run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@indiekit/support": "file:../support",
+    "@indiekit/support": "0.1.0",
     "dotenv": "^8.1.0",
     "node-fetch": "^2.6.0",
     "normalize-url": "^4.3.0"

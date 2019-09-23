@@ -13,6 +13,7 @@
   "repository": "github:paulrobertlloyd/indiekit",
   "bugs": "https://github.com/paulrobertlloyd/indiekit/issues",
   "scripts": {
+    "preinstall": "npx lerna bootstrap",
     "start": "node packages/app",
     "dev": "nodemon packages/app",
     "test": "ava --verbose",
@@ -22,21 +23,15 @@
     "node": "11.x"
   },
   "dependencies": {
-    "@indiekit/app": "file:packages/app",
-    "@indiekit/config-jekyll": "file:packages/config-jekyll",
-    "@indiekit/indieauth": "file:packages/indieauth",
-    "@indiekit/microformats": "file:packages/microformats",
-    "@indiekit/micropub": "file:packages/micropub",
-    "@indiekit/publication": "file:packages/publication",
-    "@indiekit/publisher-github": "file:packages/publisher-github",
-    "@indiekit/support": "file:packages/support",
-    "@indiekit/templates-yaml": "file:packages/templates-yaml"
+    "lerna": "^3.16.4"
   },
   "devDependencies": {
+    "@indiekit/app": "file:packages/app",
+    "@indiekit/config-jekyll": "file:packages/config-jekyll",
+    "@indiekit/publisher-github": "file:packages/publisher-github",
     "ava": "^2.3.0",
     "coveralls": "^3.0.6",
     "dotenv": "^8.1.0",
-    "lerna": "^3.16.4",
     "nock": "^11.3.3",
     "nodemon": "^1.19.2",
     "nyc": "^14.0.0",
@@ -91,11 +86,8 @@
           "packageDir": [
             "./",
             "./packages/app",
-            "./packages/microformats",
-            "./packages/micropub",
-            "./packages/publication",
-            "./packages/publisher-github",
-            "./packages/support"
+            "./packages/config-jekyll",
+            "./packages/publisher-github"
           ]
         }
       ]
