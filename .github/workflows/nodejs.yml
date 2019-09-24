@@ -17,7 +17,9 @@ jobs:
     - name: Install, test and run coverage checks
       env:
         INDIEKIT_URL: ${{ secrets.INDIEKIT_URL }}
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         TEST_INDIEAUTH_TOKEN: ${{ secrets.TEST_INDIEAUTH_TOKEN }}
+        TEST_INDIEAUTH_TOKEN_NOSCOPE: ${{ secrets.TEST_INDIEAUTH_TOKEN_NOSCOPE }}
       run: |
         npm install
         npm run coverage
