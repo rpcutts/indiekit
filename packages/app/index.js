@@ -5,7 +5,7 @@ const favicon = require('serve-favicon');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
-const publication = require('@indiekit/publication');
+const Publication = require('@indiekit/publication');
 const {ServerError, logger} = require('@indiekit/support');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -67,19 +67,18 @@ app.use(session({
 }));
 
 // Add application and publication data to locals
-app.use(async (req, res, next) => {
+app.use((req, res, next) => {
   const url = `${req.protocol}://${req.headers.host}`;
-  const pub = await publication.configure({
-    configPath: config.publication.configPath,
-    defaults: config.publication.defaults,
-    endpointUrl: url,
-    publisher: config.publisher
-  });
 
   app.locals.app = config;
   app.locals.app.url = url;
-  app.locals.pub = pub;
-  app.locals.pub.url = config.publication.url;
+  app.locals.pub = new Publication({
+    configPath: config.publication.configPath,
+    defaults: config.publication.defaults,
+    endpointUrl: url,
+    publisher: config.publisher,
+    url: config.publication.url
+  });
 
   next();
 });

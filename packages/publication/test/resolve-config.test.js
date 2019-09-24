@@ -3,29 +3,41 @@ const test = require('ava');
 const defaults = require('@indiekit/config-jekyll');
 const publisher = require('@indiekit/publisher-github');
 
-const publication = require('../.');
+const Publication = require('../.');
 
-test.serial('Returns default configuration if none provided', async t => {
+test('Returns default configuration if none provided', async t => {
   // Setup result
-  const result = await publication.configure({defaults});
+  const publication = new Publication({defaults});
+  const result = await publication.getConfig();
 
   // Test assertions
-  t.log('result', result['post-types']);
-  t.log('default', defaults['post-types']);
-  t.deepEqual(result.config.categories, defaults.categories);
-  t.deepEqual(result.config['syndicate-to'], defaults['syndicate-to']);
   t.deepEqual(result['post-types'], defaults['post-types']);
+  t.falsy(result.publisher);
   t.deepEqual(result['slug-separator'], defaults['slug-separator']);
+  t.falsy(result.url);
+});
+
+test.serial('Returns default configuration for endpoint queries', async t => {
+  // Setup result
+  const publication = new Publication({defaults});
+  const result = await publication.queryConfig();
+
+  // Test assertions
+  t.deepEqual(result.categories, defaults.categories);
+  t.false(result['media-endpoint']);
+  t.deepEqual(result['post-types'][0].name, defaults['post-types'].article.name);
+  t.deepEqual(result['syndicate-to'], defaults['syndicate-to']);
 });
 
 test('Merges publisher configuration with defaults', async t => {
   // Setup result
-  const result = await publication.configure({
+  const publication = new Publication({
     config: {
       'slug-separator': 'foo'
     },
     defaults
   });
+  const result = await publication.getConfig();
 
   // Test assertions
   t.is(result['slug-separator'], 'foo');
@@ -45,11 +57,12 @@ test('Merges remote publisher configuration file with defaults', async t => {
     });
 
   // Setup result
-  const result = await publication.configure({
+  const pub = new Publication({
     configPath: 'config.json',
     defaults,
     publisher
   });
+  const result = await pub.getConfig();
 
   // Test assertions
   t.is(result['slug-separator'], 'foo');
@@ -63,11 +76,13 @@ test('Throws error getting remote publisher configuration file', async t => {
     .replyWithError('not found');
 
   // Setup result
-  const error = await t.throwsAsync(publication.configure({
+  const pub = new Publication({
     configPath: 'config.json',
     defaults,
     publisher
-  }));
+  });
+
+  const error = await t.throwsAsync(pub.getConfig());
 
   // Test assertions
   t.is(error.message, 'config.json could not be found in the cache or at the specified remote location');
@@ -76,7 +91,7 @@ test('Throws error getting remote publisher configuration file', async t => {
 
 test('Merge publisher post types with defaults', async t => {
   // Setup result
-  const result = await publication.configure({
+  const pub = new Publication({
     config: {
       'post-types': {
         note: {
@@ -86,14 +101,15 @@ test('Merge publisher post types with defaults', async t => {
     },
     defaults
   });
+  const result = await pub.getConfig();
 
   // Test assertions
   t.is(result['post-types'].note.name, 'Foobar');
 });
 
-test.serial('Throws error if `post-types` is not an object', async t => {
+test('Throws error if `post-types` is not an object', async t => {
   // Setup error
-  const error = await t.throwsAsync(publication.configure({
+  const pub = new Publication({
     config: {
       'post-types': [{
         type: 'note',
@@ -104,7 +120,8 @@ test.serial('Throws error if `post-types` is not an object', async t => {
       }]
     },
     defaults
-  }));
+  });
+  const error = await t.throwsAsync(pub.getConfig());
 
   // Test assertions
   t.is(error.message, '`post-types` should be an object');
@@ -112,14 +129,15 @@ test.serial('Throws error if `post-types` is not an object', async t => {
 
 test('Throws error if post type value is not an object', async t => {
   // Setup error
-  const error = await t.throwsAsync(publication.configure({
+  const pub = new Publication({
     config: {
       'post-types': {
         note: true
       }
     },
     defaults
-  }));
+  });
+  const error = await t.throwsAsync(pub.getConfig());
 
   // Test assertions
   t.is(error.message, 'Post type should be an object');
@@ -134,7 +152,7 @@ test('Updates `template` value with cache key', async t => {
     });
 
   // Setup result
-  const result = await publication.configure({
+  const pub = new Publication({
     config: {
       'post-types': {
         note: {
@@ -146,6 +164,7 @@ test('Updates `template` value with cache key', async t => {
     defaults,
     publisher
   });
+  const result = await pub.getConfig();
 
   // Test assertions
   t.is(result['post-types'].note.template.cacheKey, 'foobar.njk');

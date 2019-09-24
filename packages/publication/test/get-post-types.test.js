@@ -1,8 +1,8 @@
 const test = require('ava');
-const publication = require('../.');
+const getPostTypes = require('../lib/get-post-types');
 
 test('Returns array of post types if provided in object', async t => {
-  const result = await publication.getPostTypes({
+  const result = await getPostTypes({
     note: {
       type: 'note',
       name: 'Note'
@@ -12,6 +12,6 @@ test('Returns array of post types if provided in object', async t => {
 });
 
 test('Returns empty array if no post types provided', async t => {
-  const result = await publication.getPostTypes(null);
+  const result = await getPostTypes(null);
   t.deepEqual(result, []);
 });

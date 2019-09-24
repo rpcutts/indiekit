@@ -2,13 +2,14 @@ const nock = require('nock');
 const sinon = require('sinon');
 const test = require('ava');
 const validUrl = require('valid-url');
+const defaults = require('@indiekit/config-jekyll');
+const Publication = require('@indiekit/publication');
 const publisher = require('@indiekit/publisher-github');
-const config = require('@indiekit/config-jekyll');
 const {cache} = require('@indiekit/support');
 
 const {createPost} = require('../.');
 
-const mockRequest = postTypes => {
+const mockRequest = config => {
   const req = {};
   req.body = {
     type: ['h-entry'],
@@ -22,15 +23,21 @@ const mockRequest = postTypes => {
   req.session = sinon.stub().returns(req);
   req.status = sinon.stub().returns(req);
   req.json = sinon.stub().returns(req);
-  req.app = {locals: {pub: {
-    publisher,
-    'post-types': postTypes || config['post-types'],
-    url: process.env.INDIEKIT_URL
-  }}};
+  req.app = {
+    locals: {
+      pub: new Publication({
+        config,
+        defaults,
+        endpointUrl: 'https://endpoint.example',
+        publisher,
+        url: process.env.INDIEKIT_URL
+      })
+    }
+  };
   return req;
 };
 
-test('Creates a note post', async t => {
+test.serial('Creates a note post', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/[\d\w]{5}/g)
@@ -44,7 +51,7 @@ test('Creates a note post', async t => {
   scope.done();
 });
 
-test('Throws publisher error creating a post', async t => {
+test.serial('Throws publisher error creating a post', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/[\d\w]{5}/g)
@@ -58,7 +65,7 @@ test('Throws publisher error creating a post', async t => {
   scope.done();
 });
 
-test('Gets configured template from cache', async t => {
+test.serial('Gets configured template from cache', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/[\d\w]{5}/g)
@@ -85,48 +92,49 @@ test('Gets configured template from cache', async t => {
   scope.done();
 });
 
-test('Throws error getting configured template', async t => {
+test.serial('Throws error getting configured template', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/[\d\w]{5}/g)
     .replyWithError('not found');
 
   // Setup
-  cache.set('foobar.njk', 'foobar');
-  const postTypes = {
-    note: {
-      name: 'Foobar',
-      template: {
-        cacheKey: 'foobar.njk'
-      },
-      post: {
-        path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
-        url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
+  const config = {
+    'post-types': {
+      note: {
+        name: 'Foobar',
+        template: 'foobar.njk',
+        post: {
+          path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
+          url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
+        }
       }
     }
   };
-  const error = await t.throwsAsync(createPost(mockRequest(postTypes)));
+  const error = await t.throwsAsync(createPost(mockRequest(config)));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);
   scope.done();
 });
 
-test('Throws error if `template.cacheKey` value is invalid', async t => {
+test.serial('Throws error if `template.cacheKey` value is invalid', async t => {
   // Setup
-  const postTypes = {
-    note: {
-      name: 'Foobar',
-      template: {
-        cacheKey: null
-      },
-      post: {
-        path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
-        url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
+  const config = {
+    'post-types': {
+      note: {
+        name: 'Foobar',
+        template: {
+          cacheKey: null
+        },
+        post: {
+          path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
+          url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
+        }
       }
     }
   };
-  const error = await t.throwsAsync(createPost(mockRequest(postTypes)));
+  const error = await t.throwsAsync(createPost(mockRequest(config)));
 
   // Test assertions
   t.is(error.message, 'The "path" argument must be one of type string, Buffer, or URL. Received type object');

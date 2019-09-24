@@ -58,7 +58,7 @@ module.exports = async (req, posts, media) => {
       }
 
       case 'update': {
-        const updated = await updatePost(req, postData).catch(error => {
+        const updated = await updatePost(req, postData, posts).catch(error => {
           throw new Error(error.message);
         });
 

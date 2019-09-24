@@ -2,7 +2,6 @@ const camelcaseKeys = require('camelcase-keys');
 const derivePostType = require('post-type-discovery');
 const microformats = require('@indiekit/microformats');
 const {utils} = require('@indiekit/support');
-const publication = require('@indiekit/publication');
 const createData = require('./create-data');
 
 /**
@@ -15,41 +14,44 @@ const createData = require('./create-data');
  */
 module.exports = async (req, posts) => {
   try {
-    const {pub} = req.app.locals;
-    const {publisher} = pub;
     const {body} = req;
     const mf2 = req.is('json') ? body : microformats.formEncodedToMf2(body);
 
-    // Derive type
-    const type = derivePostType(mf2);
+    // Publication
+    const {pub} = req.app.locals;
+    const pubConfig = pub ? await pub.getConfig() : false;
 
-    // Get type config
-    const typeConfig = pub['post-types'][type];
+    if (!pubConfig) {
+      throw new Error('Publication config not found');
+    }
+
+    // Post type
+    const type = derivePostType(mf2);
+    const typeConfig = pubConfig['post-types'][type];
+    const typeTemplate = await pub.getPostTypeTemplate(typeConfig);
 
     // Derive properties
     const {properties} = mf2;
     properties.content = microformats.deriveContent(mf2);
     properties.photo = await microformats.derivePhoto(mf2);
     properties.published = microformats.derivePublished(mf2);
-    properties.slug = microformats.deriveSlug(mf2, pub['slug-separator']);
-
-    // Get template
-    const template = await publication.getPostTypeTemplate(typeConfig);
+    properties.slug = microformats.deriveSlug(mf2, pubConfig['slug-separator']);
 
     // Render publish path and public url
     let path = utils.render(typeConfig.post.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.post.url, properties);
-    url = utils.derivePermalink(pub.url, url);
+    url = utils.derivePermalink(pubConfig.url, url);
 
     // Render content
-    const content = utils.render(template, camelcaseKeys(properties));
-
-    // Compose commit message
-    const message = `${typeConfig.icon} Created ${type} post`;
+    const content = utils.render(typeTemplate, camelcaseKeys(properties));
 
     // Create post file
+    const {publisher} = pubConfig;
+    const message = `${typeConfig.icon} Created ${type} post`;
     const response = await publisher.createFile(path, content, message);
+
+    // Return post data
     if (response) {
       const postData = createData(type, path, url, properties);
       posts = utils.addToArray(posts, postData);

@@ -1,8 +1,9 @@
 const nock = require('nock');
 const sinon = require('sinon');
 const test = require('ava');
+const defaults = require('@indiekit/config-jekyll');
+const Publication = require('@indiekit/publication');
 const publisher = require('@indiekit/publisher-github');
-const config = require('@indiekit/config-jekyll');
 
 const {updatePost} = require('../.');
 
@@ -12,11 +13,16 @@ const mockRequest = body => {
   req.session = sinon.stub().returns(req);
   req.status = sinon.stub().returns(req);
   req.json = sinon.stub().returns(req);
-  req.app = {locals: {pub: {
-    publisher,
-    'post-types': config['post-types'],
-    url: process.env.INDIEKIT_URL
-  }}};
+  req.app = {
+    locals: {
+      pub: new Publication({
+        defaults,
+        endpointUrl: 'https://endpoint.example',
+        publisher,
+        url: process.env.INDIEKIT_URL
+      })
+    }
+  };
   return req;
 };
 

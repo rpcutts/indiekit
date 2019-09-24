@@ -1,5 +1,4 @@
 const camelcaseKeys = require('camelcase-keys');
-const publication = require('@indiekit/publication');
 const {utils} = require('@indiekit/support');
 
 /**
@@ -13,33 +12,35 @@ const {utils} = require('@indiekit/support');
 
 module.exports = async (req, postData) => {
   try {
+    // Publication
     const {pub} = req.app.locals;
-    const {publisher} = pub;
+    const pubConfig = pub ? await pub.getConfig() : false;
 
-    // Get type
+    if (!pubConfig) {
+      throw new Error('Publication config not found');
+    }
+
+    // Post type
     const {type} = postData;
+    const typeConfig = pubConfig['post-types'][type];
+    const typeTemplate = await pub.getPostTypeTemplate(typeConfig);
 
     // Get properties
     const {properties} = postData.mf2;
-
-    // Get type config
-    const typeConfig = pub['post-types'][type];
-
-    // Get template
-    const template = await publication.getPostTypeTemplate(typeConfig);
 
     // Get publish path
     let {path} = postData;
     path = utils.normalizePath(path);
 
     // Render content
-    const content = utils.render(template, camelcaseKeys(properties));
-
-    // Compose commit message
-    const message = `${typeConfig.icon} Undeleted ${type} post`;
+    const content = utils.render(typeTemplate, camelcaseKeys(properties));
 
     // Undelete post file
+    const {publisher} = pubConfig;
+    const message = `${typeConfig.icon} Undeleted ${type} post`;
     const response = await publisher.createFile(path, content, message);
+
+    // Return post data
     if (response) {
       return postData;
     }

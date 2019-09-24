@@ -37,11 +37,10 @@ module.exports = opts => {
   post.get('/',
     urlencodedParser,
     async (req, res, next) => {
-      const {pub} = req.app.locals;
       const {posts} = req.session;
 
       try {
-        const response = await queryEndpoint(req, posts, pub.config);
+        const response = await queryEndpoint(req, posts);
         return res.json(response);
       } catch (error) {
         return next(error);

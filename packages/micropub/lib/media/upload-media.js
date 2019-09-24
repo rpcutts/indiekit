@@ -15,14 +15,17 @@ module.exports = async (req, file, media) => {
       throw new Error('No file included in request');
     }
 
+    // Publication
     const {pub} = req.app.locals;
-    const {publisher} = pub;
+    const pubConfig = pub ? await pub.getConfig() : false;
 
-    // Derive type
+    if (!pubConfig) {
+      throw new Error('Publication config not found');
+    }
+
+    // Post type
     const type = utils.deriveMediaType(file);
-
-    // Get type config
-    const typeConfig = pub['post-types'][type];
+    const typeConfig = pubConfig['post-types'][type];
 
     // Derive properties
     const properties = utils.deriveFileProperties(file);
@@ -31,13 +34,14 @@ module.exports = async (req, file, media) => {
     let path = utils.render(typeConfig.media.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.media.url || typeConfig.media.path, properties);
-    url = utils.derivePermalink(pub.url, url);
-
-    // Compose commit message
-    const message = `:framed_picture: Uploaded ${type}`;
+    url = utils.derivePermalink(pubConfig.url, url);
 
     // Upload media file
+    const {publisher} = pubConfig;
+    const message = `:framed_picture: Uploaded ${type}`;
     const response = await publisher.createFile(path, file.buffer, message);
+
+    // Return media data
     if (response) {
       const mediaData = createData(type, path, url);
       media = utils.addToArray(media, mediaData);

@@ -9,20 +9,26 @@ const {utils} = require('@indiekit/support');
  */
 module.exports = async (req, postData) => {
   try {
+    // Publication
     const {pub} = req.app.locals;
-    const {publisher} = pub;
+    const pubConfig = pub ? await pub.getConfig() : false;
 
-    // Get type
+    if (!pubConfig) {
+      throw new Error('Publication config not found');
+    }
+
+    // Post type
     const {type} = postData;
 
     // Get publish path
     const path = utils.normalizePath(postData.path);
 
-    // Compose commit message
-    const message = `:x: Deleted ${type} post`;
-
     // Delete post file
+    const {publisher} = pubConfig;
+    const message = `:x: Deleted ${type} post`;
     const response = await publisher.deleteFile(path, message);
+
+    // Return
     if (response) {
       return true;
     }

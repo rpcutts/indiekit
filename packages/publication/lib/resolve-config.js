@@ -1,7 +1,5 @@
 const _ = require('lodash');
 const {getFile, logger} = require('@indiekit/support');
-const getCategories = require('./get-categories');
-const getPostTypes = require('./get-post-types');
 
 /**
  * Merge publication’s configured post types (caching any referenced templates)
@@ -26,7 +24,8 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
     for (const key in configPostTypes) {
       if (typeof configPostTypes[key] === 'object') {
         const configPostType = configPostTypes[key];
-        if (configPostType.template) {
+        if (typeof configPostType.template === 'string') {
+          // Template has yet to be cached
           cachedTemplates.push(
             getFile(configPostType.template, opts.publisher)
           );
@@ -56,12 +55,11 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
 /**
  * Merge publication’s configuration with default values set by application.
  *
- * @private
  * @exports resolveConfig
  * @param {Object} opts Module options
  * @returns {Promise} Resolved configuration object
  */
-async function resolveConfig(opts) {
+module.exports = async opts => {
   const {defaults} = opts;
   const {configPath} = opts;
 
@@ -104,28 +102,4 @@ async function resolveConfig(opts) {
   } catch (error) {
     throw new Error(error.message);
   }
-}
-
-/**
- * Get publication’s configuration.
- *
- * @exports getConfig
- * @param {Object} opts Module options
- * @returns {Object} Configuration object
- */
-module.exports = async opts => {
-  const resolvedConfig = await resolveConfig(opts);
-
-  return {
-    config: {
-      categories: await getCategories(resolvedConfig.categories),
-      'media-endpoint': resolvedConfig['media-endpoint'] || `${opts.endpointUrl}/media`,
-      'post-types': getPostTypes(resolvedConfig['post-types']),
-      'syndicate-to': resolvedConfig['syndicate-to']
-    },
-    'post-types': resolvedConfig['post-types'],
-    publisher: opts.publisher,
-    'slug-separator': resolvedConfig['slug-separator'],
-    url: opts.url
-  };
 };

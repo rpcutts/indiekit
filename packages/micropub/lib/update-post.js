@@ -1,5 +1,4 @@
 const camelcaseKeys = require('camelcase-keys');
-const publication = require('@indiekit/publication');
 const {utils} = require('@indiekit/support');
 const createData = require('./create-data');
 
@@ -9,16 +8,25 @@ const createData = require('./create-data');
  * @exports update
  * @param {Object} req Request
  * @param {Object} postData Stored post data object
+ * @param {Object} posts Post data store
  * @returns {String} Location of undeleted post
 */
-module.exports = async (req, postData) => {
+module.exports = async (req, postData, posts) => {
   try {
-    const {pub} = req.app.locals;
-    const {publisher} = pub;
     const {body} = req;
 
-    // Get type
+    // Publication
+    const {pub} = req.app.locals;
+    const pubConfig = pub ? await pub.getConfig() : false;
+
+    if (!pubConfig) {
+      throw new Error('Publication config not found');
+    }
+
+    // Post type
     const {type} = postData;
+    const typeConfig = pubConfig['post-types'][type];
+    const typeTemplate = await pub.getPostTypeTemplate(typeConfig);
 
     // Get properties
     let {properties} = postData.mf2;
@@ -42,29 +50,24 @@ module.exports = async (req, postData) => {
       }
     }
 
-    // Get type config
-    const typeConfig = pub['post-types'][type];
-
-    // Get template
-    const template = await publication.getPostTypeTemplate(typeConfig);
-
     // Update publish path and public url
     let path = utils.render(typeConfig.post.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.post.url, properties);
-    url = utils.derivePermalink(pub.url, url);
+    url = utils.derivePermalink(pubConfig.url, url);
 
     // Update content
-    const content = utils.render(template, camelcaseKeys(properties));
-
-    // Compose commit message
-    const message = `${typeConfig.icon} Updated ${type} post`;
+    const content = utils.render(typeTemplate, camelcaseKeys(properties));
 
     // Update (or create new) post file
+    const {publisher} = pubConfig;
+    const message = `${typeConfig.icon} Updated ${type} post`;
     const response = await publisher.updateFile(path, content, message);
+
+    // Return post data
     if (response) {
       const postData = createData(type, path, url, properties);
-      utils.addToArray(req.session.posts, {[url]: postData});
+      utils.addToArray(posts, {[url]: postData});
       return postData;
     }
   } catch (error) {

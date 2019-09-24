@@ -9,11 +9,16 @@ const {ServerError} = require('@indiekit/support');
  * @param {Object} config Publication config
  * @returns {Object} Requested information
  */
-module.exports = async (req, posts, config) => {
-  const {query} = req;
+module.exports = async (req, posts) => {
   try {
-    if (!config) {
-      throw new Error('Configuration not available');
+    const {query} = req;
+
+    // Publication
+    const {pub} = req.app.locals;
+    const pubConfig = pub ? await pub.queryConfig() : false;
+
+    if (!pubConfig) {
+      throw new Error('Publication config not found');
     }
 
     if (!query) {
@@ -26,12 +31,12 @@ module.exports = async (req, posts, config) => {
 
     switch (query.q) {
       case 'config': {
-        return config;
+        return pubConfig;
       }
 
       case 'category': {
         return {
-          categories: config.categories
+          categories: pubConfig.categories
         };
       }
 
@@ -52,10 +57,10 @@ module.exports = async (req, posts, config) => {
       }
 
       default: {
-        if (config[query.q]) {
+        if (pubConfig[query.q]) {
           // Return configured property if matches provided query
           return {
-            [query.q]: config[query.q]
+            [query.q]: pubConfig[query.q]
           };
         }
 

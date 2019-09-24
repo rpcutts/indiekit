@@ -4,8 +4,9 @@ const nock = require('nock');
 const sinon = require('sinon');
 const test = require('ava');
 const validUrl = require('valid-url');
+const defaults = require('@indiekit/config-jekyll');
+const Publication = require('@indiekit/publication');
 const publisher = require('@indiekit/publisher-github');
-const config = require('@indiekit/config-jekyll');
 
 const {uploadMedia} = require('../../.').media;
 
@@ -19,11 +20,16 @@ test.beforeEach(t => {
   t.context.req = () => {
     const req = {};
     req.session = sinon.stub().returns(req);
-    req.app = {locals: {pub: {
-      publisher,
-      'post-types': config['post-types'],
-      url: process.env.INDIEKIT_URL
-    }}};
+    req.app = {
+      locals: {
+        pub: new Publication({
+          defaults,
+          endpointUrl: 'https://endpoint.example',
+          publisher,
+          url: process.env.INDIEKIT_URL
+        })
+      }
+    };
     return req;
   };
 });
