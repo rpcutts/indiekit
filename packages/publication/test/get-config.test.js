@@ -1,13 +1,17 @@
 const nock = require('nock');
 const test = require('ava');
+const defaults = require('@indiekit/config-jekyll');
+const publisher = require('@indiekit/publisher-github');
+
 const publication = require('../.');
 
-test('Returns default configuration if none provided', async t => {
+test.serial('Returns default configuration if none provided', async t => {
   // Setup result
-  const defaults = require('@indiekit/config-jekyll');
   const result = await publication.configure({defaults});
 
   // Test assertions
+  t.log('result', result['post-types']);
+  t.log('default', defaults['post-types']);
   t.deepEqual(result.config.categories, defaults.categories);
   t.deepEqual(result.config['syndicate-to'], defaults['syndicate-to']);
   t.deepEqual(result['post-types'], defaults['post-types']);
@@ -20,7 +24,7 @@ test('Merges publisher configuration with defaults', async t => {
     config: {
       'slug-separator': 'foo'
     },
-    defaults: require('@indiekit/config-jekyll')
+    defaults
   });
 
   // Test assertions
@@ -43,8 +47,8 @@ test('Merges remote publisher configuration file with defaults', async t => {
   // Setup result
   const result = await publication.configure({
     configPath: 'config.json',
-    defaults: require('@indiekit/config-jekyll'),
-    publisher: require('@indiekit/publisher-github')
+    defaults,
+    publisher
   });
 
   // Test assertions
@@ -61,8 +65,8 @@ test('Throws error getting remote publisher configuration file', async t => {
   // Setup result
   const error = await t.throwsAsync(publication.configure({
     configPath: 'config.json',
-    defaults: require('@indiekit/config-jekyll'),
-    publisher: require('@indiekit/publisher-github')
+    defaults,
+    publisher
   }));
 
   // Test assertions
@@ -80,14 +84,14 @@ test('Merge publisher post types with defaults', async t => {
         }
       }
     },
-    defaults: require('@indiekit/config-jekyll')
+    defaults
   });
 
   // Test assertions
   t.is(result['post-types'].note.name, 'Foobar');
 });
 
-test('Throws error if `post-types` is not an object', async t => {
+test.serial('Throws error if `post-types` is not an object', async t => {
   // Setup error
   const error = await t.throwsAsync(publication.configure({
     config: {
@@ -99,7 +103,7 @@ test('Throws error if `post-types` is not an object', async t => {
         name: 'bar'
       }]
     },
-    defaults: require('@indiekit/config-jekyll')
+    defaults
   }));
 
   // Test assertions
@@ -114,7 +118,7 @@ test('Throws error if post type value is not an object', async t => {
         note: true
       }
     },
-    defaults: require('@indiekit/config-jekyll')
+    defaults
   }));
 
   // Test assertions
@@ -139,8 +143,8 @@ test('Updates `template` value with cache key', async t => {
         }
       }
     },
-    defaults: require('@indiekit/config-jekyll'),
-    publisher: require('@indiekit/publisher-github')
+    defaults,
+    publisher
   });
 
   // Test assertions
