@@ -8,15 +8,26 @@
     "indieweb",
     "microformats"
   ],
-  "author": "Paul Robert Lloyd",
+  "author": {
+    "name": "Paul Robert Lloyd",
+    "url": "https://paulrobertlloyd.com"
+  },
   "license": "MIT",
   "main": "index.js",
   "files": [
     "index.js",
     "lib"
   ],
+  "bugs": {
+    "url": "https://github.com/paulrobertlloyd/indiekit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulrobertlloyd/indiekit.git",
+    "directory": "packages/microformats"
+  },
   "scripts": {
-    "test": "ava --verbose"
+    "test": "echo \"Run tests from root\" && exit 1"
   },
   "dependencies": {
     "@indiekit/support": "0.1.0",

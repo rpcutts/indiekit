@@ -7,13 +7,24 @@
     "indiekit",
     "indieweb"
   ],
-  "author": "Paul Robert Lloyd",
+  "author": {
+    "name": "Paul Robert Lloyd",
+    "url": "https://paulrobertlloyd.com"
+  },
   "license": "MIT",
   "main": "index.js",
   "files": [
     "index.js",
     "lib"
   ],
+  "bugs": {
+    "url": "https://github.com/paulrobertlloyd/indiekit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulrobertlloyd/indiekit.git",
+    "directory": "packages/publication"
+  },
   "scripts": {
     "test": "ava --verbose"
   },

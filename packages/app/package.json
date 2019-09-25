@@ -8,7 +8,10 @@
     "indieweb",
     "micropub"
   ],
-  "author": "Paul Robert Lloyd",
+  "author": {
+    "name": "Paul Robert Lloyd",
+    "url": "https://paulrobertlloyd.com"
+  },
   "license": "MIT",
   "main": "index.js",
   "files": [
@@ -17,8 +20,16 @@
     "static",
     "views"
   ],
+  "bugs": {
+    "url": "https://github.com/paulrobertlloyd/indiekit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulrobertlloyd/indiekit.git",
+    "directory": "packages/app"
+  },
   "scripts": {
-    "test": "ava --verbose"
+    "test": "echo \"Run tests from root\" && exit 1"
   },
   "dependencies": {
     "@indiekit/config-jekyll": "0.1.0",
