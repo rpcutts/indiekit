@@ -1,10 +1,18 @@
+require('dotenv').config();
+
 const nock = require('nock');
 const sinon = require('sinon');
 const test = require('ava');
 const validUrl = require('valid-url');
 const defaults = require('@indiekit/config-jekyll');
 const Publication = require('@indiekit/publication');
-const publisher = require('@indiekit/publisher-github');
+const Publisher = require('@indiekit/publisher-github');
+
+const github = new Publisher({
+  token: 'abc123',
+  user: 'user',
+  repo: 'repo'
+});
 
 const {undeletePost} = require('../.');
 
@@ -17,7 +25,7 @@ const mockRequest = () => {
       pub: new Publication({
         defaults,
         endpointUrl: 'https://endpoint.example',
-        publisher,
+        publisher: github,
         url: process.env.INDIEKIT_URL
       })
     }

@@ -1,5 +1,7 @@
 const test = require('ava');
 const nock = require('nock');
+const Publisher = require('@indiekit/publisher-github');
+
 const {getFile} = require('../.');
 
 test('Throws error if file can’t be fetched from GitHub', async t => {
@@ -9,9 +11,13 @@ test('Throws error if file can’t be fetched from GitHub', async t => {
     .replyWithError('not found');
 
   // Setup
-  const publisher = require('@indiekit/publisher-github');
+  const github = new Publisher({
+    token: 'abc123',
+    user: 'user',
+    repo: 'repo'
+  });
   const error = await t.throwsAsync(async () => {
-    await getFile('foo.txt', publisher);
+    await getFile('foo.txt', github);
   });
 
   // Test assertions

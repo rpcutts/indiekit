@@ -1,6 +1,12 @@
 const nock = require('nock');
 const test = require('ava');
-const github = require('../.');
+const Publisher = require('../.');
+
+const github = new Publisher({
+  token: 'abc123',
+  user: 'user',
+  repo: 'repo'
+});
 
 test('Deletes a file in a GitHub repository', async t => {
   // Mock request

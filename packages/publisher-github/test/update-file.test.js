@@ -1,6 +1,12 @@
 const nock = require('nock');
 const test = require('ava');
-const github = require('../.');
+const Publisher = require('../.');
+
+const github = new Publisher({
+  token: 'abc123',
+  user: 'user',
+  repo: 'repo'
+});
 
 test('Updates a file in a repository', async t => {
   // Mock request

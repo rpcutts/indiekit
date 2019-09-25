@@ -1,6 +1,14 @@
 require('dotenv').config();
 
 const pkg = require(process.env.PWD + '/package');
+const Publisher = require('@indiekit/publisher-github');
+
+const github = new Publisher({
+  token: process.env.GITHUB_TOKEN || console.warn('Missing GITHUB_TOKEN'),
+  user: process.env.GITHUB_USER || console.warn('Missing GITHUB_USER'),
+  repo: process.env.GITHUB_REPO || console.warn('Missing GITHUB_REPO'),
+  branch: process.env.GITHUB_BRANCH || 'master'
+});
 
 const config = module.exports;
 
@@ -19,7 +27,7 @@ config.locale = process.env.INDIEKIT_LOCALE || 'en';
 config.themeColor = '#f60';
 
 // Publisher
-config.publisher = require('@indiekit/publisher-github');
+config.publisher = github;
 
 // Publication
 config.publication = {

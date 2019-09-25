@@ -1,7 +1,13 @@
 const nock = require('nock');
 const test = require('ava');
 const defaults = require('@indiekit/config-jekyll');
-const publisher = require('@indiekit/publisher-github');
+const Publisher = require('@indiekit/publisher-github');
+
+const github = new Publisher({
+  token: 'abc123',
+  user: 'user',
+  repo: 'repo'
+});
 
 const Publication = require('../.');
 
@@ -60,7 +66,7 @@ test('Merges remote publisher configuration file with defaults', async t => {
   const pub = new Publication({
     configPath: 'config.json',
     defaults,
-    publisher
+    publisher: github
   });
   const result = await pub.getConfig();
 
@@ -79,7 +85,7 @@ test('Throws error getting remote publisher configuration file', async t => {
   const pub = new Publication({
     configPath: 'config.json',
     defaults,
-    publisher
+    publisher: github
   });
 
   const error = await t.throwsAsync(pub.getConfig());
@@ -162,7 +168,7 @@ test('Updates `template` value with cache key', async t => {
       }
     },
     defaults,
-    publisher
+    publisher: github
   });
   const result = await pub.getConfig();
 
