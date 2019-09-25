@@ -19,8 +19,15 @@ test('Application displays a home page', async t => {
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
+test('Application displays a documentation page', async t => {
+  const response = await app.get('/docs/welcome');
+
+  t.is(response.status, 200);
+  t.regex(response.header['content-type'], /^text\/html/);
+});
+
 test('Application responds to 404 errors', async t => {
-  const response = await app.get('/foobar');
+  const response = await app.get('/docs/foobar');
 
   t.is(response.status, 404);
   t.regex(response.header['content-type'], /^text\/html/);

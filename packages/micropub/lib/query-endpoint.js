@@ -17,10 +17,6 @@ module.exports = async (req, posts) => {
     const {pub} = req.app.locals;
     const pubConfig = pub ? await pub.queryConfig() : false;
 
-    if (!pubConfig) {
-      throw new Error('Publication config not found');
-    }
-
     if (!query) {
       throw new Error('Request is missing query string');
     }

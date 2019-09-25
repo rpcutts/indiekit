@@ -70,12 +70,6 @@ test('Returns any available configuration value', async t => {
   t.truthy(result2['post-types']);
 });
 
-test('Throws error if configuration not available', async t => {
-  const error = await t.throwsAsync(queryEndpoint(t.context.req({q: 'config'}, null), t.context.posts));
-  t.is(error.name, 'Invalid request');
-  t.is(error.message, 'Publication config not found');
-});
-
 test('Throws error if request is missing query string', async t => {
   const error = await t.throwsAsync(queryEndpoint(t.context.req(null), t.context.posts));
   t.is(error.name, 'Invalid request');

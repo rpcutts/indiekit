@@ -13,13 +13,13 @@ module.exports = async (req, posts, media) => {
   if (action && url) {
     // If no post data has been recorded, throw error
     if (!posts) {
-      throw new ServerError('Not found', 404, 'No records found');
+      throw new ServerError('Not found', 404, `Can’t ${action} post. No records found`);
     }
 
     // If no post data has been recorded for this URL, throw error
     const postData = posts.filter(post => post.url === url);
     if (postData === undefined) {
-      throw new ServerError('Not found', 404, `No record found for ${url}`);
+      throw new ServerError('Not found', 404, `Can’t ${action} post. No record found for ${url}`);
     }
 
     // Determine action to perform

@@ -14,7 +14,8 @@ module.exports = (mf2, locale = 'en-GB') => {
 
   if (published) {
     published = DateTime.fromISO(published[0], {
-      locale
+      locale,
+      zone: 'utc'
     }).toISO();
     return new Array(published);
   }

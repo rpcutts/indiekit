@@ -79,8 +79,7 @@ test.serial('Returns 500 if problem creating post', async t => {
   scope.done();
 });
 
-// Action
-test('Returns 404 if no post records found to perform action', async t => {
+test('Returns 404 if no post records found to perform delete action', async t => {
   // Setup
   const response = await app.post('/micropub')
     .set('Accept', 'application/json')
@@ -92,7 +91,25 @@ test('Returns 404 if no post records found to perform action', async t => {
 
   // Test assertions
   t.is(response.status, 404);
-  t.is(response.body.error_description, 'No records found');
+  t.is(response.body.error_description, 'Can’t delete post. No records found');
+});
+
+test('Returns 404 if no post records found to perform update action', async t => {
+  // Setup
+  const response = await app.post('/micropub')
+    .set('Accept', 'application/json')
+    .set('Authorization', `Bearer ${t.context.token}`)
+    .send({
+      action: 'update',
+      url: t.context.postUrl,
+      replace: {
+        content: ['hello moon']
+      }
+    });
+
+  // Test assertions
+  t.is(response.status, 404);
+  t.is(response.body.error_description, 'Can’t update post. No records found');
 });
 
 // Delete post

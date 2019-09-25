@@ -6,14 +6,13 @@ const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
 const Publication = require('@indiekit/publication');
-const {ServerError, logger} = require('@indiekit/support');
+const {ServerError, logger, utils} = require('@indiekit/support');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 
 const admin = require('./lib/admin');
 const config = require('./config');
-const filters = require('./lib/filters');
 const routes = require('./routes');
 
 const app = express();
@@ -30,7 +29,7 @@ const env = nunjucks.configure([viewsDir, staticDir], {
   express: app,
   watch: true
 });
-env.addFilter('markdown', filters.markdown);
+env.addFilter('markdown', utils.renderMarkdown);
 app.set('view engine', 'njk');
 
 // Serve static files and paths

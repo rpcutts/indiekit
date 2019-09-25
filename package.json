@@ -53,7 +53,7 @@
   },
   "nyc": {
     "exclude": [
-      "app/config.js",
+      "packages/app/index.js",
       "packages/support/lib/logger.js",
       "packages/**/*.test.js"
     ],

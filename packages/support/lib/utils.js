@@ -4,6 +4,7 @@ const _ = require('lodash');
 const {DateTime} = require('luxon');
 const fileType = require('file-type');
 const frontmatter = require('front-matter');
+const markdown = require('./markdown');
 const nunjucks = require('nunjucks');
 
 const utils = {
@@ -314,7 +315,7 @@ const utils = {
   },
 
   /**
-   * Render a document with YAML frontmatter and Nunjucks variables
+   * Render a document which has YAML frontmatter and Nunjucks variables.
    *
    * @function renderDocument
    * @param {String} file File to parse
@@ -343,7 +344,23 @@ const utils = {
   },
 
   /**
-   * Resolves a URL path to either named file, or index in named folder.
+   * Render Markdown string as HTML
+   *
+   * @param {String} str Markdown
+   * @param {String} value If 'inline', HTML rendered without paragraph tags
+   * @return {String} HTML
+   *
+   */
+  renderMarkdown(str, value) {
+    if (value === 'inline') {
+      return markdown.renderInline(str);
+    }
+
+    return markdown.render(str);
+  },
+
+  /**
+   * Resolve a URL path to either named file, or index in named folder.
    *
    * @function resolveFilePath
    * @param {String} urlpath Path to file

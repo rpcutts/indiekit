@@ -13,10 +13,6 @@ module.exports = async (req, postData) => {
     const {pub} = req.app.locals;
     const pubConfig = pub ? await pub.getConfig() : false;
 
-    if (!pubConfig) {
-      throw new Error('Publication config not found');
-    }
-
     // Post type
     const {type} = postData;
 
