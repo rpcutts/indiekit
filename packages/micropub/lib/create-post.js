@@ -1,3 +1,4 @@
+const fsp = require('fs').promises;
 const camelcaseKeys = require('camelcase-keys');
 const derivePostType = require('post-type-discovery');
 const microformats = require('@indiekit/microformats');
@@ -19,31 +20,31 @@ module.exports = async (req, posts) => {
 
     // Publication
     const {pub} = req.app.locals;
-    const pubConfig = pub ? await pub.getConfig() : false;
 
     // Post type
     const type = derivePostType(mf2);
-    const typeConfig = pubConfig['post-types'][type];
-    const typeTemplate = await pub.getPostTypeTemplate(typeConfig);
+    const typeConfig = pub['post-type-config'][type];
+    const typeTemplateFile = await fsp.readFile(typeConfig.template);
+    const typeTemplate = Buffer.from(typeTemplateFile).toString('utf-8');
 
     // Derive properties
     const {properties} = mf2;
     properties.content = microformats.deriveContent(mf2);
     properties.photo = await microformats.derivePhoto(mf2);
     properties.published = microformats.derivePublished(mf2);
-    properties.slug = microformats.deriveSlug(mf2, pubConfig['slug-separator']);
+    properties.slug = microformats.deriveSlug(mf2, pub['slug-separator']);
 
     // Render publish path and public url
     let path = utils.render(typeConfig.post.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.post.url, properties);
-    url = utils.derivePermalink(pubConfig.url, url);
+    url = utils.derivePermalink(pub.url, url);
 
     // Render content
     const content = utils.render(typeTemplate, camelcaseKeys(properties));
 
     // Create post file
-    const {publisher} = pubConfig;
+    const {publisher} = pub;
     const message = `${typeConfig.icon} Created ${type} post`;
     const response = await publisher.createFile(path, content, message);
 
@@ -54,6 +55,6 @@ module.exports = async (req, posts) => {
       return postData;
     }
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 };

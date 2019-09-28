@@ -17,11 +17,10 @@ module.exports = async (req, file, media) => {
 
     // Publication
     const {pub} = req.app.locals;
-    const pubConfig = pub ? await pub.getConfig() : false;
 
     // Post type
     const type = utils.deriveMediaType(file);
-    const typeConfig = pubConfig['post-types'][type];
+    const typeConfig = pub['post-type-config'][type];
 
     // Derive properties
     const properties = utils.deriveFileProperties(file);
@@ -30,10 +29,10 @@ module.exports = async (req, file, media) => {
     let path = utils.render(typeConfig.media.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.media.url || typeConfig.media.path, properties);
-    url = utils.derivePermalink(pubConfig.url, url);
+    url = utils.derivePermalink(pub.url, url);
 
     // Upload media file
-    const {publisher} = pubConfig;
+    const {publisher} = pub;
     const message = `:framed_picture: Uploaded ${type}`;
     const response = await publisher.createFile(path, file.buffer, message);
 

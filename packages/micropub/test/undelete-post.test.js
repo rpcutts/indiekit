@@ -14,24 +14,14 @@ const github = new Publisher({
   repo: 'repo'
 });
 
-const {undeletePost} = require('../.');
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  publisher: github,
+  url: process.env.INDIEKIT_URL
+});
 
-const mockRequest = () => {
-  const req = {};
-  req.status = sinon.stub().returns(req);
-  req.json = sinon.stub().returns(req);
-  req.app = {
-    locals: {
-      pub: new Publication({
-        defaults,
-        endpointUrl: 'https://endpoint.example',
-        publisher: github,
-        url: process.env.INDIEKIT_URL
-      })
-    }
-  };
-  return req;
-};
+const {undeletePost} = require('../.');
 
 test.before(t => {
   t.context.postData = {
@@ -46,6 +36,18 @@ test.before(t => {
       slug: ['baz']
     }
   };
+  t.context.req = async body => {
+    const req = {};
+    req.body = body;
+    req.status = sinon.stub().returns(req);
+    req.json = sinon.stub().returns(req);
+    req.app = {
+      locals: {
+        pub: await pub.getConfig()
+      }
+    };
+    return req;
+  };
 });
 
 test('Undeletes a post', async t => {
@@ -55,7 +57,11 @@ test('Undeletes a post', async t => {
     .reply(200);
 
   // Setup
-  const undeleted = await undeletePost(mockRequest(), t.context.postData);
+  const req = await t.context.req({
+    action: 'undelete',
+    url: 'https://foo.bar/baz'
+  });
+  const undeleted = await undeletePost(req, t.context.postData);
 
   // Test assertions
   t.truthy(validUrl.isUri(undeleted.url));
@@ -69,7 +75,11 @@ test('Throws error if GitHub responds with an error', async t => {
     .replyWithError('not found');
 
   // Setup
-  const error = await t.throwsAsync(undeletePost(mockRequest(), t.context.postData));
+  const req = await t.context.req({
+    action: 'delete',
+    url: 'https://foo.bar/baz'
+  });
+  const error = await t.throwsAsync(undeletePost(req, t.context.postData));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);

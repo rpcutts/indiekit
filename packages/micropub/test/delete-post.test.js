@@ -13,24 +13,14 @@ const github = new Publisher({
   repo: 'repo'
 });
 
-const {deletePost} = require('../.');
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  publisher: github,
+  url: process.env.INDIEKIT_URL
+});
 
-const mockRequest = () => {
-  const req = {};
-  req.status = sinon.stub().returns(req);
-  req.json = sinon.stub().returns(req);
-  req.app = {
-    locals: {
-      pub: new Publication({
-        defaults,
-        endpointUrl: 'https://endpoint.example',
-        publisher: github,
-        url: process.env.INDIEKIT_URL
-      })
-    }
-  };
-  return req;
-};
+const {deletePost} = require('../.');
 
 test.before(t => {
   t.context.postData = {
@@ -44,6 +34,18 @@ test.before(t => {
       },
       slug: ['baz']
     }
+  };
+  t.context.req = async body => {
+    const req = {};
+    req.body = body;
+    req.status = sinon.stub().returns(req);
+    req.json = sinon.stub().returns(req);
+    req.app = {
+      locals: {
+        pub: await pub.getConfig()
+      }
+    };
+    return req;
   };
 });
 
@@ -64,7 +66,11 @@ test('Deletes a post', async t => {
     });
 
   // Setup
-  const deleted = await deletePost(mockRequest(), t.context.postData);
+  const req = await t.context.req({
+    action: 'delete',
+    url: 'https://foo.bar/baz'
+  });
+  const deleted = await deletePost(req, t.context.postData);
 
   // Test assertions
   t.true(deleted);
@@ -83,7 +89,11 @@ test('Throws publisher error deleting a post', async t => {
     .replyWithError('not found');
 
   // Setup
-  const error = await t.throwsAsync(deletePost(mockRequest(), t.context.postData));
+  const req = await t.context.req({
+    action: 'delete',
+    url: 'https://foo.bar/baz'
+  });
+  const error = await t.throwsAsync(deletePost(req, t.context.postData));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);

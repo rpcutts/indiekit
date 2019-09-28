@@ -32,7 +32,6 @@
   "dependencies": {
     "@indiekit/indieauth": "0.1.0",
     "@indiekit/microformats": "0.1.0",
-    "@indiekit/publication": "0.1.0",
     "@indiekit/support": "0.1.0",
     "camelcase-keys": "^6.0.1",
     "express": "^4.17.1",

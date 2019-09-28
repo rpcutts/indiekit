@@ -28,8 +28,6 @@ A [list of categories clients can expose in their publishing interface](https://
   }
   ```
 
-  The category list will be updated whenever {{ app.name }} refreshes its cache (see: [`INDIEKIT_CACHE_EXPIRES`]({{ app.url }}/docs/server-configuration#environment-variables))
-
 #### `media-endpoint`
 
 The URL for your preferred [media endpoint](https://www.w3.org/TR/micropub/#media-endpoint). Use this if you want another endpoint to respond to media upload requests. Defaults to `{{ app.url }}/media`.

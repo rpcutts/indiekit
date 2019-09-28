@@ -15,7 +15,6 @@ module.exports = async (req, posts) => {
 
     // Publication
     const {pub} = req.app.locals;
-    const pubConfig = pub ? await pub.queryConfig() : false;
 
     if (!query) {
       throw new Error('Request is missing query string');
@@ -27,12 +26,17 @@ module.exports = async (req, posts) => {
 
     switch (query.q) {
       case 'config': {
-        return pubConfig;
+        return {
+          categories: pub.categories,
+          'media-endpoint': pub['media-endpoint'],
+          'post-types': pub['post-types'],
+          'syndicate-to': pub['syndicate-to']
+        };
       }
 
       case 'category': {
         return {
-          categories: pubConfig.categories
+          categories: pub.categories
         };
       }
 
@@ -53,10 +57,10 @@ module.exports = async (req, posts) => {
       }
 
       default: {
-        if (pubConfig[query.q]) {
+        if (pub[query.q]) {
           // Return configured property if matches provided query
           return {
-            [query.q]: pubConfig[query.q]
+            [query.q]: pub[query.q]
           };
         }
 

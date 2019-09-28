@@ -1,8 +1,10 @@
+const os = require('os');
+const path = require('path');
 const _ = require('lodash');
 const {getFile, logger} = require('@indiekit/support');
 
 /**
- * Merge publication’s configured post types (caching any referenced templates)
+ * Merge publication’s configured post types (saving any referenced templates)
  * with default values set by application.
  *
  * @private
@@ -20,28 +22,27 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
     }
 
     // Cache configured templates
-    const cachedTemplates = [];
+    const savedTemplates = [];
     for (const key in configPostTypes) {
       if (typeof configPostTypes[key] === 'object') {
         const configPostType = configPostTypes[key];
-        if (typeof configPostType.template === 'string') {
-          // Template has yet to be cached
-          cachedTemplates.push(
+        if (configPostType.template && !configPostType.resolved) {
+          // Fetch template and save locally
+          savedTemplates.push(
             getFile(configPostType.template, opts.publisher)
           );
 
-          // Update `template` with `cacheKey` value
-          configPostType.template = {
-            cacheKey: configPostType.template
-          };
+          // Update `template` with path to saved file
+          configPostType.template = path.join(os.tmpdir(), configPostType.template);
+
+          // Flag as resolved
+          configPostType.resolved = true;
         }
-      } else {
-        throw new TypeError('Post type should be an object');
       }
     }
 
-    // Wait for all templates to be cached
-    await Promise.all(cachedTemplates);
+    // Wait for all template files to be saved
+    await Promise.all(savedTemplates);
 
     // Merge default and publication post types
     const resolvedPostTypes = _.merge(defaultPostTypes, configPostTypes);
@@ -62,33 +63,30 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
 module.exports = async opts => {
   const {defaults} = opts;
   const {configPath} = opts;
+  const {publisher} = opts;
 
   let config;
   if (configPath) {
     // Get remote configuration file (if provided)
-    try {
-      const configFile = await getFile(configPath, opts.publisher);
-      config = JSON.parse(configFile);
-    } catch (error) {
+    const contents = await publisher.getContents(configPath).catch(error => {
       throw new Error(error.message);
-    }
-  } else {
+    });
+    config = JSON.parse(contents.data.content);
+  } else if (opts.config) {
     // Use provided configuration (if provided)
     config = opts.config;
+  } else {
+    // Return default configuration if no customisation values found
+    logger.info('Configuration not found. Using defaults');
+
+    return defaults;
   }
 
   try {
-    // Return default configuration if provided value not found
-    if (!config) {
-      logger.info('Configuration not found. Using defaults');
-
-      return defaults;
-    }
-
     // Merge publisher settings with default config
     const resolvedConfig = _.merge(defaults, config);
 
-    // Merge publisher post types (with cached templates) with default config
+    // Merge publisher post types (with saved templates) with default config
     const configPostTypes = config['post-types'];
     if (configPostTypes) {
       const defaultPostTypes = defaults['post-types'];

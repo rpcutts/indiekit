@@ -11,7 +11,6 @@ module.exports = async (req, postData) => {
   try {
     // Publication
     const {pub} = req.app.locals;
-    const pubConfig = pub ? await pub.getConfig() : false;
 
     // Post type
     const {type} = postData;
@@ -20,7 +19,7 @@ module.exports = async (req, postData) => {
     const path = utils.normalizePath(postData.path);
 
     // Delete post file
-    const {publisher} = pubConfig;
+    const {publisher} = pub;
     const message = `:x: Deleted ${type} post`;
     const response = await publisher.deleteFile(path, message);
 

@@ -11,7 +11,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 
-const admin = require('./lib/admin');
 const config = require('./config');
 const routes = require('./routes');
 
@@ -66,18 +65,18 @@ app.use(session({
 }));
 
 // Add application and publication data to locals
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const url = `${req.protocol}://${req.headers.host}`;
 
   app.locals.app = config;
   app.locals.app.url = url;
-  app.locals.pub = new Publication({
+  app.locals.pub = await new Publication({
     configPath: config.publication.configPath,
     defaults: config.publication.defaults,
     endpointUrl: url,
     publisher: config.publisher,
     url: config.publication.url
-  });
+  }).getConfig();
 
   next();
 });
@@ -101,11 +100,6 @@ app.use('/micropub', micropub.post({
 
 // Micropub media endpoint
 app.use('/media', micropub.media({
-  me: config.publication.url
-}));
-
-// Admin endpoint
-app.use('/admin', admin({
   me: config.publication.url
 }));
 

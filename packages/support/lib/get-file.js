@@ -1,30 +1,34 @@
-const cache = require('./cache');
+const fsp = require('fs').promises;
+const os = require('os');
+const path = require('path');
 const utils = require('./utils');
 
 /**
- * Gets file from publisher and saves it to cache.
+ * Gets file from publisher and saves it to filesystem.
  *
  * @exports getFile
- * @param {Object} path Path to remote file
+ * @param {Object} basepath Path to remote file
  * @param {Function} publisher Publishing function
  * @returns {String|Object} Cache value
  */
-module.exports = async (path, publisher) => {
-  path = utils.normalizePath(path);
-  let value;
+module.exports = async (basepath, publisher) => {
+  basepath = utils.normalizePath(basepath);
+  const filePath = path.join(os.tmpdir(), basepath);
+  let content;
 
   try {
-    // Fetch from cache
-    value = cache.get(path, true);
-  } catch (error) {
+    // Fetch from filesystem
+    const data = await fsp.readFile(filePath);
+    content = Buffer.from(data).toString('utf-8');
+  } catch {
     // Fetch from publisher
-    const contents = await publisher.getContents(path).catch(() => {
-      throw new Error(`${path} could not be found in the cache or at the specified remote location`);
+    const contents = await publisher.getContents(basepath).catch(error => {
+      throw new Error(error.message);
     });
+    content = contents.data.content;
 
-    value = contents.data.content;
-    cache.set(path, value);
+    fsp.writeFile(filePath, content);
   }
 
-  return value;
+  return content;
 };

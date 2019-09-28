@@ -15,22 +15,24 @@ const github = new Publisher({
   repo: 'repo'
 });
 
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  publisher: github,
+  url: process.env.INDIEKIT_URL
+});
+
 const {uploadAttachments} = require('../.');
 
 test.before(t => {
   const image = fs.readFileSync(path.resolve(__dirname, 'fixtures/image.gif'));
   t.context.media = [];
-  t.context.req = () => {
+  t.context.req = async () => {
     const req = {};
     req.session = sinon.stub().returns(req);
     req.app = {
       locals: {
-        pub: new Publication({
-          defaults,
-          endpointUrl: 'https://endpoint.example',
-          publisher: github,
-          url: process.env.INDIEKIT_URL
-        })
+        pub: await pub.getConfig()
       }
     };
     req.files = [{
@@ -47,7 +49,8 @@ test('Uploads an attachment', async t => {
   const scope = nock('https://api.github.com')
     .put(/\b[\d\w]{5}\b/g)
     .reply(200);
-  const result = await uploadAttachments(t.context.req(), t.context.media);
+  const req = await t.context.req();
+  const result = await uploadAttachments(req, t.context.media);
 
   // Test assertions
   t.is(result[0].type, 'photo');

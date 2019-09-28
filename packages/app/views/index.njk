@@ -3,17 +3,17 @@
 {% block content %}
 <h2>{{ __("This is the %s endpoint for", "<a href=\"https://www.w3.org/TR/micropub/\">Micropub</a>") | safe }} <a href="{{ pub.url }}">{{ pub.url | replace('https://', '')}}</a>.</h2>
 <dl>
-{% if pub.config["media-endpoint"] %}
+{% if pub["media-endpoint"] %}
   <dt>{{ __("Media endpoint") }}</dt>
-  <dd><a href="{{ pub.config["media-endpoint"] }}">{{ pub.config["media-endpoint"] }}</a></dd>
+  <dd><a href="{{ pub["media-endpoint"] }}">{{ pub["media-endpoint"] }}</a></dd>
 {% endif %}
   <dt>{{ __("Supported post types") }}</dt>
-  <dd>{% for item in pub.config["post-types"] %}
+  <dd>{% for item in pub["post-types"] %}
     <a href="https://indieweb.org/{{ item.type }}">{{ item.name }}</a>{{ '' if loop.last else ', ' }}
   {% endfor %}</dd>
 {% if pub.config["syndicate-to"].length >= 1 %}
   <dt>{{ __("Syndication targets") }}</dt>
-  <dd>{% for item in pub.config["syndicate-to"] %}
+  <dd>{% for item in pub["syndicate-to"] %}
     <a href="{{ item.uid }}">{{ item.name }}</a>{{ '' if loop.last else ', ' }}
   {% endfor %}</dd>
 {% endif %}

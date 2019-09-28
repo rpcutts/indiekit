@@ -15,10 +15,17 @@ const github = new Publisher({
   repo: 'repo'
 });
 
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  publisher: github,
+  url: process.env.INDIEKIT_URL
+});
+
 const {action} = require('../.');
 
 test.before(t => {
-  t.context.req = file => {
+  t.context.req = async file => {
     const req = {};
     req.body = {
       type: ['h-entry'],
@@ -40,12 +47,7 @@ test.before(t => {
     req.json = sinon.stub().returns(req);
     req.app = {
       locals: {
-        pub: new Publication({
-          defaults,
-          endpointUrl: 'https://endpoint.example',
-          publisher: github,
-          url: process.env.INDIEKIT_URL
-        })
+        pub: await pub.getConfig()
       }
     };
     return req;
@@ -58,7 +60,8 @@ test.serial('Creates a post file', async t => {
     .put(/\b[\d\w]{5}\b/g)
     .reply(201);
 
-  const result = await action(t.context.req());
+  const req = await t.context.req();
+  const result = await action(req);
 
   // Test assertions
   t.is(result.status, 202);
@@ -77,7 +80,8 @@ test.serial('Creates a post file with attachment', async t => {
 
   // Setup
   const file = fs.readFileSync(path.resolve(__dirname, 'fixtures/image.gif'));
-  const result = await action(t.context.req(file));
+  const req = await t.context.req(file);
+  const result = await action(req);
 
   // Test assertions
   t.is(result.status, 202);

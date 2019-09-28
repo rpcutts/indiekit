@@ -2,14 +2,15 @@ const defaults = require('@indiekit/config-jekyll');
 const Publication = require('@indiekit/publication');
 const test = require('ava');
 
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  url: process.env.INDIEKIT_URL
+});
+
 const {queryEndpoint} = require('../.');
 
 test.before(t => {
-  const testPub = new Publication({
-    defaults,
-    endpointUrl: 'https://endpoint.example',
-    url: process.env.INDIEKIT_URL
-  });
   t.context.posts = [{
     mf2: {
       type: ['h-entry'],
@@ -21,11 +22,11 @@ test.before(t => {
       }
     }
   }];
-  t.context.req = (query, pub = testPub) => {
+  t.context.req = async query => {
     const req = {};
     req.app = {
       locals: {
-        pub
+        pub: await pub.getConfig()
       }
     };
     req.query = query;
@@ -34,56 +35,67 @@ test.before(t => {
 });
 
 test('Returns publication configuration', async t => {
-  const result = await queryEndpoint(t.context.req({q: 'config'}), t.context.posts);
+  const query = await t.context.req({q: 'config'});
+  const result = await queryEndpoint(query, t.context.posts);
   t.is(result['media-endpoint'], 'https://endpoint.example/media');
 });
 
 test('Returns publication categories', async t => {
-  const result = await queryEndpoint(t.context.req({q: 'category'}), t.context.posts);
+  const query = await t.context.req({q: 'category'});
+  const result = await queryEndpoint(query, t.context.posts);
   t.deepEqual(result.categories, []);
 });
 
 test('Returns list of previously published posts', async t => {
-  const result = await queryEndpoint(t.context.req({q: 'source'}), t.context.posts);
+  const query = await t.context.req({q: 'source'});
+  const result = await queryEndpoint(query, t.context.posts);
   t.truthy(result.items[0].properties.content[0]);
 });
 
 test('Returns source (as mf2 object) for given URL', async t => {
-  const result = await queryEndpoint(t.context.req({q: 'source', url: 'https://paulrobertlloyd.com/2018/11/warp_and_weft'}), t.context.posts);
+  const query = await t.context.req({q: 'source', url: 'https://paulrobertlloyd.com/2018/11/warp_and_weft'});
+  const result = await queryEndpoint(query, t.context.posts);
   t.truthy(result.properties);
 });
 
 test('Returns source (name property) for given URL', async t => {
-  const result = await queryEndpoint(t.context.req({q: 'source', url: 'https://paulrobertlloyd.com/2018/11/warp_and_weft', properties: 'name'}), t.context.posts);
+  const query = await t.context.req({q: 'source', url: 'https://paulrobertlloyd.com/2018/11/warp_and_weft', properties: 'name'});
+  const result = await queryEndpoint(query, t.context.posts);
   t.is(result.name[0], 'Warp and Weft');
 });
 
 test('Throws error if source URL cannot be found', async t => {
-  const error = await t.throwsAsync(queryEndpoint(t.context.req({q: 'source', url: 'https://website.example'}), t.context.posts));
+  const query = await t.context.req({q: 'source', url: 'https://website.example'});
+  const error = await t.throwsAsync(queryEndpoint(query, t.context.posts));
   t.regex(error.message, /^FetchError/);
 });
 
 test('Returns any available configuration value', async t => {
-  const result1 = await queryEndpoint(t.context.req({q: 'categories'}), t.context.posts);
-  const result2 = await queryEndpoint(t.context.req({q: 'post-types'}), t.context.posts);
+  const query1 = await t.context.req({q: 'categories'});
+  const result1 = await queryEndpoint(query1, t.context.posts);
+  const query2 = await t.context.req({q: 'post-types'});
+  const result2 = await queryEndpoint(query2, t.context.posts);
   t.truthy(result1.categories);
   t.truthy(result2['post-types']);
 });
 
 test('Throws error if request is missing query string', async t => {
-  const error = await t.throwsAsync(queryEndpoint(t.context.req(null), t.context.posts));
+  const query = await t.context.req(null);
+  const error = await t.throwsAsync(queryEndpoint(query, t.context.posts));
   t.is(error.name, 'Invalid request');
   t.is(error.message, 'Request is missing query string');
 });
 
 test('Throws error if unsupported query provided', async t => {
-  const error = await t.throwsAsync(queryEndpoint(t.context.req({foo: 'bar'}), t.context.posts, t.context.config));
+  const query = await t.context.req({foo: 'bar'});
+  const error = await t.throwsAsync(queryEndpoint(query, t.context.posts, t.context.config));
   t.is(error.name, 'Invalid request');
   t.is(error.message, 'Invalid query');
 });
 
 test('Throws error if unsupported parameter provided', async t => {
-  const error = await t.throwsAsync(queryEndpoint(t.context.req({q: 'foo'}), t.context.posts, t.context.config));
+  const query = await t.context.req({q: 'foo'});
+  const error = await t.throwsAsync(queryEndpoint(query, t.context.posts, t.context.config));
   t.is(error.name, 'Invalid request');
   t.is(error.message, 'Invalid parameter: foo');
 });

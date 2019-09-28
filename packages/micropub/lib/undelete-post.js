@@ -1,3 +1,4 @@
+const fs = require('fs');
 const camelcaseKeys = require('camelcase-keys');
 const {utils} = require('@indiekit/support');
 
@@ -14,12 +15,12 @@ module.exports = async (req, postData) => {
   try {
     // Publication
     const {pub} = req.app.locals;
-    const pubConfig = pub ? await pub.getConfig() : false;
 
     // Post type
     const {type} = postData;
-    const typeConfig = pubConfig['post-types'][type];
-    const typeTemplate = await pub.getPostTypeTemplate(typeConfig);
+    const typeConfig = pub['post-type-config'][type];
+    const typeTemplateFile = fs.readFileSync(typeConfig.template);
+    const typeTemplate = Buffer.from(typeTemplateFile).toString('utf-8');
 
     // Get properties
     const {properties} = postData.mf2;
@@ -32,7 +33,7 @@ module.exports = async (req, postData) => {
     const content = utils.render(typeTemplate, camelcaseKeys(properties));
 
     // Undelete post file
-    const {publisher} = pubConfig;
+    const {publisher} = pub;
     const message = `${typeConfig.icon} Undeleted ${type} post`;
     const response = await publisher.createFile(path, content, message);
 

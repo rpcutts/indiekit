@@ -16,6 +16,13 @@ const github = new Publisher({
   repo: 'repo'
 });
 
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  publisher: github,
+  url: process.env.INDIEKIT_URL
+});
+
 const {uploadMedia} = require('../../.').media;
 
 test.beforeEach(t => {
@@ -25,17 +32,12 @@ test.beforeEach(t => {
     mimetype: 'image/gif',
     originalname: 'image.gif'
   };
-  t.context.req = () => {
+  t.context.req = async () => {
     const req = {};
     req.session = sinon.stub().returns(req);
     req.app = {
       locals: {
-        pub: new Publication({
-          defaults,
-          endpointUrl: 'https://endpoint.example',
-          publisher: github,
-          url: process.env.INDIEKIT_URL
-        })
+        pub: await pub.getConfig()
       }
     };
     return req;
@@ -47,7 +49,8 @@ test('Uploads a media file', async t => {
   const scope = nock('https://api.github.com')
     .put(/\b[\d\w]{5}\b/g)
     .reply(200);
-  const response = await uploadMedia(t.context.req(), t.context.file);
+  const req = await t.context.req();
+  const response = await uploadMedia(req, t.context.file);
 
   // Test assertions
   t.truthy(validUrl.isUri(response.url));
@@ -55,7 +58,8 @@ test('Uploads a media file', async t => {
 });
 
 test('Throws error if problem with specified file', async t => {
-  const error = await t.throwsAsync(uploadMedia(t.context.req(), null));
+  const req = await t.context.req();
+  const error = await t.throwsAsync(uploadMedia(req, null));
   t.is(error.message, 'No file included in request');
 });
 
@@ -64,7 +68,8 @@ test('Throws publisher error uploading media', async t => {
   const scope = nock('https://api.github.com')
     .put(/\b[\d\w]{5}\b/g)
     .replyWithError('not found');
-  const error = await t.throwsAsync(uploadMedia(t.context.req(), t.context.file));
+  const req = await t.context.req();
+  const error = await t.throwsAsync(uploadMedia(req, t.context.file));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);
