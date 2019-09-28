@@ -26,7 +26,7 @@
     "coverage": "nyc ava"
   },
   "engines": {
-    "node": "11.x"
+    "node": "12.x"
   },
   "dependencies": {
     "lerna": "^3.16.4"
