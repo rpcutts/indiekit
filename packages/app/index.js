@@ -58,8 +58,11 @@ if (config.mongoDbUri) {
 
 // Session
 app.use(session({
+  cookie: {
+    secure: false
+  },
   secret: process.env.SESSION_SECRET,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   store
 }));
@@ -67,6 +70,8 @@ app.use(session({
 // Add application and publication data to locals
 app.use(async (req, res, next) => {
   const url = `${req.protocol}://${req.headers.host}`;
+
+  app.locals.session = req.session;
 
   app.locals.app = config;
   app.locals.app.url = url;
@@ -82,16 +87,16 @@ app.use(async (req, res, next) => {
 });
 
 // Log requests
-app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.originalUrl}`, {
-    headers: req.headers,
-    body: req.body,
-    params: req.params,
-    query: req.query
-  });
-
-  next();
-});
+// app.use((req, res, next) => {
+//   logger.info(`${req.method} ${req.originalUrl}`, {
+//     headers: req.headers,
+//     body: req.body,
+//     params: req.params,
+//     query: req.query
+//   });
+//
+//   next();
+// });
 
 // Micropub endpoint
 app.use('/micropub', micropub.post({

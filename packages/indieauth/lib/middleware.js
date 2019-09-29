@@ -1,3 +1,4 @@
+const authenticate = require('./authenticate');
 const checkTokenScope = require('./check-token-scope');
 const requestToken = require('./request-token');
 const verifyToken = require('./verify-token');
@@ -6,6 +7,44 @@ const verifyToken = require('./verify-token');
  * Express middleware functions for performing IndieAuth operations.
  */
 module.exports = {
+  /**
+   * @exports login
+   * @param {Object} code Code returned from IndieLogin
+   * @param {Object} state Random check value
+   * @param {Object} me Publication URL
+   * @param {Object} opts Authentication values
+   * @param {Object} req Express request
+   * @param {Object} res Express response
+   * @param {Function} next Express callback
+   * @return {Function} next Express callback
+   */
+  login: (code, state, me, opts) => async (req, res, next) => {
+    console.log('LOGIN MIDDLEWARE');
+
+    // Check that state provided matches that in session
+    verifyState(req.session.state, state).catch(error => {
+      return next(error);
+    });
+
+    const authenticated = await authenticate({
+      code,
+      client_id: opts.client_id,
+      redirect_uri: opts.redirect_uri,
+      me
+    }).catch(error => {
+      console.error(error);
+      return next(error);
+    });
+
+    if (authenticated) {
+      console.log('req.session, before', req.session);
+      console.log('authenticated.me', authenticated.me);
+      req.session.me = authenticated.me;
+      console.log('req.session, after', req.session);
+      res.redirect(opts.redirect_uri);
+    }
+  },
+
   /**
    * @exports authorize
    * @param {Object} me Publication URL
