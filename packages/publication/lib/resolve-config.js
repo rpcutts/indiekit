@@ -68,10 +68,10 @@ module.exports = async opts => {
   let config;
   if (configPath) {
     // Get remote configuration file (if provided)
-    const contents = await publisher.getContents(configPath).catch(error => {
+    const content = await publisher.readFile(configPath).catch(error => {
       throw new Error(error.message);
     });
-    config = JSON.parse(contents.data.content);
+    config = JSON.parse(content);
   } else if (opts.config) {
     // Use provided configuration (if provided)
     config = opts.config;

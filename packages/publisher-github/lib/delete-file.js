@@ -1,20 +1,29 @@
 const Octokit = require('@octokit/rest');
 
 /**
- * Deletes a file in a GitHub repository.
+ * @typedef Response
+ * @property {Object} response
+ * @see {@link
+    https://developer.github.com/v3/repos/contents/#delete-a-file
+    GitHub REST API v3: Contents - Delete a file
+  }
+ */
+
+/**
+ * Deletes a file in a repository.
  *
  * @exports deleteFile
  * @param {Object} opts Module options
  * @param {String} path Path to file
  * @param {String} message Commit message
- * @return {Promise} GitHub HTTP response
+ * @return {Promise<Response>} HTTP response
  */
 module.exports = async (opts, path, message) => {
-  const octokit = new Octokit({
+  const github = new Octokit({
     auth: `token ${opts.token}`
   });
 
-  const contents = await octokit.repos.getContents({
+  const contents = await github.repos.getContents({
     owner: opts.user,
     repo: opts.repo,
     ref: opts.branch,
@@ -23,7 +32,7 @@ module.exports = async (opts, path, message) => {
     throw new Error(error);
   });
 
-  const deletedFile = await octokit.repos.deleteFile({
+  const response = await github.repos.deleteFile({
     owner: opts.user,
     repo: opts.repo,
     branch: opts.branch,
@@ -34,5 +43,5 @@ module.exports = async (opts, path, message) => {
     throw new Error(error);
   });
 
-  return deletedFile;
+  return response;
 };

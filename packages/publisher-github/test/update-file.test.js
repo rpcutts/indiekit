@@ -26,9 +26,7 @@ test('Updates a file in a repository', async t => {
     });
 
   // Setup
-  const response = await github.updateFile('foo.txt', 'foo', {
-    message: 'Update message'
-  });
+  const response = await github.updateFile('foo.txt', 'foo', 'Update message');
 
   // Test assertions
   t.is(response.status, 200);
@@ -36,7 +34,7 @@ test('Updates a file in a repository', async t => {
   scope.done();
 });
 
-test('Creates a file if original file not found', async t => {
+test('Creates a file if original not found in repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
@@ -49,9 +47,7 @@ test('Creates a file if original file not found', async t => {
     });
 
   // Setup
-  const response = await github.updateFile('foo.txt', 'foo', {
-    message: 'Update message'
-  });
+  const response = await github.updateFile('foo.txt', 'foo', 'Update message');
 
   // Test assertions
   t.is(response.status, 200);
@@ -59,7 +55,7 @@ test('Creates a file if original file not found', async t => {
   scope.done();
 });
 
-test('Throws error if GitHub can’t update file', async t => {
+test('Throws error updating a file in a repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))

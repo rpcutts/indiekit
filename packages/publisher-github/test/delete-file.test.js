@@ -8,7 +8,7 @@ const github = new Publisher({
   repo: 'repo'
 });
 
-test('Deletes a file in a GitHub repository', async t => {
+test('Deletes a file in a repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
@@ -25,9 +25,7 @@ test('Deletes a file in a GitHub repository', async t => {
     });
 
   // Setup
-  const response = await github.deleteFile('foo.txt', {
-    message: 'Delete message'
-  });
+  const response = await github.deleteFile('foo.txt', 'Delete message');
 
   // Test assertions
   t.is(response.status, 200);
@@ -35,23 +33,21 @@ test('Deletes a file in a GitHub repository', async t => {
   scope.done();
 });
 
-test('Throws error if file not found', async t => {
+test('Throws error if file not found in repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
     .replyWithError('not found');
 
   // Setup
-  const error = await t.throwsAsync(github.deleteFile('foo.txt', {
-    message: 'Delete message'
-  }));
+  const error = await t.throwsAsync(github.deleteFile('foo.txt', 'Delete message'));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);
   scope.done();
 });
 
-test('Throws error if GitHub can’t delete file', async t => {
+test('Throws error deleting a file in a repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
@@ -63,9 +59,7 @@ test('Throws error if GitHub can’t delete file', async t => {
     .replyWithError('unknown error');
 
   // Setup
-  const error = await t.throwsAsync(github.deleteFile('foo.txt', {
-    message: 'Delete message'
-  }));
+  const error = await t.throwsAsync(github.deleteFile('foo.txt', 'Delete message'));
 
   // Test assertions
   t.regex(error.message, /\bunknown error\b/);

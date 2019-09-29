@@ -18,14 +18,12 @@ module.exports = async (basepath, publisher) => {
 
   try {
     // Fetch from filesystem
-    const data = await fsp.readFile(filePath);
-    content = Buffer.from(data).toString('utf-8');
+    content = await fsp.readFile(filePath, {encoding: 'utf-8'});
   } catch {
     // Fetch from publisher
-    const contents = await publisher.getContents(basepath).catch(error => {
+    content = await publisher.readFile(basepath).catch(error => {
       throw new Error(error.message);
     });
-    content = contents.data.content;
 
     fsp.writeFile(filePath, content);
   }

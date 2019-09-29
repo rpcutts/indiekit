@@ -11,8 +11,8 @@ module.exports = class {
     return require('./lib/delete-file')(this.opts, path, message);
   }
 
-  getContents(path) {
-    return require('./lib/get-contents')(this.opts, path);
+  readFile(path) {
+    return require('./lib/read-file')(this.opts, path);
   }
 
   updateFile(path, content, message) {

@@ -9,12 +9,11 @@
 ## Configuration
 
 ```js
-// indiekit.config.js
-module.exports = {
-  adapter: require('@indiekit/publisher-github')({
-    // config options here
-  })
-};
+const Publisher = require('@indiekit/publisher-github');
+
+const github = new Publisher({
+  // config options here
+});
 ```
 
 ### Options

@@ -8,7 +8,7 @@ const github = new Publisher({
   repo: 'repo'
 });
 
-test('Reads content of a file in a repository', async t => {
+test('Reads a file in a repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
@@ -19,15 +19,14 @@ test('Reads content of a file in a repository', async t => {
     });
 
   // Setup
-  const response = await github.getContents('foo.txt');
+  const response = await github.readFile('foo.txt');
 
   // Test assertions
-  t.is(response.status, 200);
-  t.is(response.data.name, 'foo.txt');
+  t.is(response, 'foobar');
   scope.done();
 });
 
-test('Throws error if GitHub responds with an error', async t => {
+test('Throws error reading a file in a repository', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
@@ -35,7 +34,7 @@ test('Throws error if GitHub responds with an error', async t => {
 
   // Setup
   const error = await t.throwsAsync(async () => {
-    await github.getContents('bar/foo.txt');
+    await github.readFile('bar/foo.txt');
   });
 
   // Test assertions
