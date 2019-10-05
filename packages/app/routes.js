@@ -45,11 +45,15 @@ router.get('/',
   }
 );
 
-// Private
-router.get('/private',
-  authenticate,
+// Share
+router.get('/share',
+  // authenticate,
   (req, res) => {
-    res.render('private');
+    res.render('share', {
+      content: req.query.content,
+      name: req.query.name,
+      url: req.query.url
+    });
   }
 );
 

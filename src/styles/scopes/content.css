@@ -7,7 +7,7 @@
   max-width: 45rem;
 }
 
-@media (--from-small-viewport) {
+@media (--from-medium-viewport) {
   .content {
     padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
   }

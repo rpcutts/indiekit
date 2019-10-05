@@ -266,6 +266,23 @@ const utils = {
   },
 
   /**
+   * Format date
+   * @param {String} str ISO 8601 date
+   * @param {String} format Tokenised date format
+   * @return {String} Formatted date
+   */
+  formatDate(str, format) {
+    const date = (str === 'now') ? DateTime.local() : str;
+
+    const datetime = DateTime.fromISO(date, {
+      locale: 'en-GB',
+      zone: 'utc'
+    }).toFormat(format);
+
+    return datetime;
+  },
+
+  /**
    * Remove ‘/’ from beginning and end of string. Useful for constructing paths.
    *
    * @function normalizePath
@@ -307,9 +324,7 @@ const utils = {
   render(string, context) {
     const env = new nunjucks.Environment();
 
-    env.addFilter('date', (date, format) => {
-      return DateTime.fromISO(date).toFormat(format);
-    });
+    env.addFilter('date', module.exports.formatDate);
 
     return env.renderString(string, context);
   },

@@ -3,9 +3,9 @@
 {% set title = "Sign in" %}
 
 {% block content %}
-<div>
-  <label for="url">{{ __("Web address") }}</label>
-  <input id="url" type="url" name="url" value="{{ pub.url }}"/>
+<div class="field">
+  <label class="field__label" for="url">{{ __("Web address") }}</label>
+  <input class="field__input" id="url" type="url" name="url" value="{{ pub.url }}"/>
   <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}"/>
 </div>
 <button class="button" type="submit">{{ __("Sign in") }}</button>

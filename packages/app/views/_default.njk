@@ -31,7 +31,8 @@
       {% block main %}{% endblock %}
     </main>
     <footer class="contentinfo">
-      <a href="https://github.com/{{ app.repository | replace('github:', '') }}/releases/tag/v{{ app.version }}">v{{ app.version }}</a>
+      <a href="{{ app.repository.url | replace('.git', '') }}/releases/tag/v{{ app.version }}">v{{ app.version }}</a>
     </footer>
   </body>
+  {% block scripts %}{% endblock %}
 </html>

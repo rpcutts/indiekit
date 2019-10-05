@@ -3,6 +3,7 @@
   --color-accent: hsl(24, 100%, 50%);
   --color-neutral-darkest: hsl(216, 12%, 16%);
   --color-neutral-dark: hsl(216, 12%, 48%);
+  --color-neutral: hsl(216, 12%, 64%);
   --color-neutral-light: hsl(216, 12%, 84%);
   --color-neutral-lightest: hsl(216, 12%, 96%);
 
@@ -19,7 +20,7 @@
   --font-family-system: system-ui, -apple-system, sans-serif;
   --font-family-monospace: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
   --font-size-title: calc(1.75rem + 1vmin);
-  --font-size-lede: calc(1.125rem);
+  --font-size-lede: calc(1.125rem + 0.25vmin);
   --font-size-heading: calc(1.25rem + 0.75vmin);
   --font-size-subhead: calc(1.125rem + 0.25vmin);
   --font-size-body: calc(1rem + 0.375vmin);
@@ -99,6 +100,7 @@ input,
 select,
 textarea {
   font: inherit;
+  margin: 0;
 }
 /*
  * 1. Correct inability to style clickable types in Safari
@@ -345,7 +347,7 @@ mark {
 .content {
   max-width: 45rem;
 }
-@media (min-width: 30em) {
+@media (min-width: 48em) {
   .content {
     padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
   }
@@ -458,6 +460,24 @@ mark {
 .contentinfo a {
   padding: var(--inset-small-squished);
 }
+.field__label {
+  font-size: var(--font-size-subhead);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+  margin-block-start: 1.5em;
+}
+.field__label {
+  display: block;
+  padding: var(--inset-squished);
+  padding-inline-start: 0;
+}
+.field__input {
+  border: var(--border-width-thin) solid var(--color-neutral);
+  border-radius: var(--border-radius-small);
+  padding: var(--inset-squished);
+  width: 100%;
+}
 .form {
   --flow-inset: 1.5em;
   --flow-space: 0.75em;
@@ -475,7 +495,7 @@ mark {
 .form {
   max-width: 45rem;
 }
-@media (min-width: 30em) {
+@media (min-width: 48em) {
   .form {
     padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
   }
@@ -493,6 +513,34 @@ mark {
   flex: 1;
   margin: 0 var(--space-block-small);
   padding: var(--space-block-small) 0;
+}
+.preview {
+  --flow-space: var(space-block-medium);
+  background-color: var(--color-neutral-lightest);
+  border-radius: var(--border-radius-small);
+  margin: var(--space-block-small) 0;
+  padding: var(--inset);
+}
+.preview__title {
+  font-size: var(--font-size-subhead);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+  margin-block-start: 1.5em;
+}
+.preview__content {
+  color: var(--color-neutral-darker);
+  font-size: var(--font-size-lede);
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+}
+.preview__date {
+  font-size: var(--font-size-reference);
+  font-variant: oldstyle-nums;
+  hanging-punctuation: first;
+  hyphens: auto;
+  line-height: var(--line-height-reference);
+  word-spacing: var(--word-spacing);
 }
 .header-anchor {
   font-family: var(--font-family-monospace);

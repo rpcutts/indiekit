@@ -8,7 +8,7 @@ const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
 const Publication = require('@indiekit/publication');
-const {ServerError, utils} = require('@indiekit/support');
+const {ServerError, logger, utils} = require('@indiekit/support');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
@@ -30,11 +30,17 @@ const env = nunjucks.configure([viewsDir, staticDir], {
   watch: true
 });
 env.addFilter('markdown', utils.renderMarkdown);
+env.addFilter('date', utils.formatDate);
 app.set('view engine', 'njk');
 
 // Serve static files and paths
 app.use(express.static(staticDir));
 app.use(favicon(`${staticDir}/favicon.ico`));
+
+// Parse application/x-www-form-urlencoded requests
+app.use(express.urlencoded({
+  extended: true
+}));
 
 // Internationalisation
 i18n.configure({
@@ -83,6 +89,18 @@ app.use(async (req, res, next) => {
     publisher: config.publisher,
     url: config.publication.url
   }).getConfig();
+
+  next();
+});
+
+// Log requests
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.originalUrl}`, {
+    headers: req.headers,
+    body: req.body,
+    params: req.params,
+    query: req.query
+  });
 
   next();
 });

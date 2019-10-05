@@ -1,0 +1,13 @@
+.field__label {
+  @extend %subhead;
+  display: block;
+  padding: var(--inset-squished);
+  padding-inline-start: 0;
+}
+
+.field__input {
+  border: var(--border-width-thin) solid var(--color-neutral);
+  border-radius: var(--border-radius-small);
+  padding: var(--inset-squished);
+  width: 100%;
+}

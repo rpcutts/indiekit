@@ -3,6 +3,7 @@
   --color-accent: hsl(24, 100%, 50%);
   --color-neutral-darkest: hsl(216, 12%, 16%);
   --color-neutral-dark: hsl(216, 12%, 48%);
+  --color-neutral: hsl(216, 12%, 64%);
   --color-neutral-light: hsl(216, 12%, 84%);
   --color-neutral-lightest: hsl(216, 12%, 96%);
 
@@ -19,7 +20,7 @@
   --font-family-system: system-ui, -apple-system, sans-serif;
   --font-family-monospace: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
   --font-size-title: calc(1.75rem + 1vmin);
-  --font-size-lede: calc(1.125rem);
+  --font-size-lede: calc(1.125rem + 0.25vmin);
   --font-size-heading: calc(1.25rem + 0.75vmin);
   --font-size-subhead: calc(1.125rem + 0.25vmin);
   --font-size-body: calc(1rem + 0.375vmin);

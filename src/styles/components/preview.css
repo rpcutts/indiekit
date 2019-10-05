@@ -1,0 +1,19 @@
+.preview {
+  --flow-space: var(space-block-medium);
+  background-color: var(--color-neutral-lightest);
+  border-radius: var(--border-radius-small);
+  margin: var(--space-block-small) 0;
+  padding: var(--inset);
+}
+
+.preview__title {
+  @extend %subhead;
+}
+
+.preview__content {
+  @extend %lede;
+}
+
+.preview__date {
+  @extend %reference;
+}
