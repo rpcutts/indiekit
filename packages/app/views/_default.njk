@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ locale }}" class="h-x-app">
+<html lang="{{ locale }}" dir="ltr" class="h-x-app">
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
@@ -20,11 +20,15 @@
       <p class="banner__description p-summary">{{ app.description }}</p>
       <nav class="banner__navigation" aria-label="site">
         <a href="/docs">Docs</a>
+      {% if session.me %}
+        <a href="/sign-out">Sign out</a>
+      {% else %}
+        <a href="/sign-in">Sign in</a>
+      {% endif %}
       </nav>
     </header>
-    <main class="content">
-      {% if title %}<h2>{{ title }}</h2>{% endif %}
-      {% block content %}{% endblock %}
+    <main class="main">
+      {% block main %}{% endblock %}
     </main>
     <footer class="contentinfo">
       <a href="https://github.com/{{ app.repository | replace('github:', '') }}/releases/tag/v{{ app.version }}">v{{ app.version }}</a>

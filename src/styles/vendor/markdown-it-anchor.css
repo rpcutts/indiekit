@@ -1,0 +1,13 @@
+.header-anchor {
+  font-family: var(--font-family-monospace);
+  float: left;
+  inline-size: var(--font-size-default);
+  margin-inline-start: calc(var(--font-size-default) * -1);
+  opacity: 0;
+  text-decoration: none;
+}
+
+*:hover > .header-anchor {
+  color: inherit;
+  opacity: 0.5;
+}

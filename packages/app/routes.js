@@ -16,9 +16,14 @@ router.use(
   async (req, res, next) => {
     const {app} = req.app.locals;
     const {redirect} = req.query;
+    let redirectUri = `${app.url}/auth`;
+
+    if (redirect) {
+      redirectUri = `${redirectUri}?redirect=${redirect}`;
+    }
 
     auth.options.clientId = app.url;
-    auth.options.redirectUri = `${app.url}/auth?redirect=${redirect}`;
+    auth.options.redirectUri = redirectUri;
     next();
   }
 );
@@ -100,7 +105,7 @@ router.get('/docs*', (req, res, next) => {
     const file = utils.resolveFilePath(filepath, 'md');
     const content = utils.renderDocument(file, req.app.locals);
 
-    res.render('document', {
+    res.render('_document', {
       body: content.body,
       page: content.page,
       title: content.title

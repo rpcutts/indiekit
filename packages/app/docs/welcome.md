@@ -1,7 +1,7 @@
 ---
-title: Welcome to {{ app.name }}!
+title: Welcome to {{ app.name }}! 👋
 ---
-🎉 Congratulations, you now have successfuly created your very own Micropub endpoint. Before using it to post to your website, there are a few things you will need to set up.
+Congratulations, you now have successfuly created your very own Micropub endpoint. Before using it to post to your website, there are a few things you will need to set up.
 
 ### Enable automatic discovery
 

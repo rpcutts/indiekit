@@ -1,17 +1,12 @@
-{% extends "_default.njk" %}
+{% extends "_form.njk" %}
 
 {% set title = "Sign in" %}
 
 {% block content %}
-<form method="post">
-  <fieldset>
-    <legend>{{ __("Sign in") }}</legend>
-    <div>
-      <label for="url">{{ __("Web address") }}</label>
-      <input id="url" type="url" name="url" value="{{ pub.url }}"/>
-      <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}"/>
-    </div>
-    <button type="submit">{{ __("Sign in") }}</button>
-  </fieldset>
-</form>
+<div>
+  <label for="url">{{ __("Web address") }}</label>
+  <input id="url" type="url" name="url" value="{{ pub.url }}"/>
+  <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}"/>
+</div>
+<button class="button" type="submit">{{ __("Sign in") }}</button>
 {% endblock %}

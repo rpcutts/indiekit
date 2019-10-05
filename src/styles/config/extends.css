@@ -1,0 +1,58 @@
+%title {
+  font-size: var(--font-size-title);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-solid);
+}
+
+%lede {
+  color: var(--color-neutral-darker);
+  font-size: var(--font-size-lede);
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+}
+
+%heading {
+  font-size: var(--font-size-heading);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+  margin-block-start: 2em;
+}
+
+%subhead {
+  font-size: var(--font-size-subhead);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+  margin-block-start: 1.5em;
+}
+
+%body {
+  font-size: var(--font-size-body);
+  font-variant: oldstyle-nums;
+  hanging-punctuation: first;
+  hyphens: auto;
+  line-height: var(--line-height-loose);
+  word-spacing: var(--word-spacing);
+}
+
+%reference {
+  font-size: var(--font-size-reference);
+  font-variant: oldstyle-nums;
+  hanging-punctuation: first;
+  hyphens: auto;
+  line-height: var(--line-height-reference);
+  word-spacing: var(--word-spacing);
+}
+
+%visually-hidden {
+  block-size: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  inline-size: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}

@@ -1,0 +1,12 @@
+{% extends "_default.njk" %}
+
+{% block main %}
+<form class="form" method="post">
+  <fieldset>
+    <legend class="form__title">{{ __(title) }}</legend>
+    {% block content %}
+      {{ body | markdown | safe }}
+    {% endblock %}
+  </fieldset>
+</form>
+{% endblock %}

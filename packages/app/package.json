@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@indiekit/app",
+  "name": "app",
   "version": "0.1.0",
   "description": "An IndieWeb publishing toolkit",
   "keywords": [

@@ -1,4 +1,6 @@
+const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const _ = require('lodash');
 const express = require('express');
 const favicon = require('serve-favicon');
@@ -6,7 +8,7 @@ const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
 const Publication = require('@indiekit/publication');
-const {ServerError, logger, utils} = require('@indiekit/support');
+const {ServerError, utils} = require('@indiekit/support');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
@@ -15,7 +17,6 @@ const config = require('./config');
 const routes = require('./routes');
 
 const app = express();
-const {port} = config;
 
 // Correctly report secure connections
 app.enable('trust proxy');
@@ -59,7 +60,7 @@ if (config.mongoDbUri) {
 // Session
 app.use(session({
   cookie: {
-    secure: false
+    secure: true
   },
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -85,18 +86,6 @@ app.use(async (req, res, next) => {
 
   next();
 });
-
-// Log requests
-// app.use((req, res, next) => {
-//   logger.info(`${req.method} ${req.originalUrl}`, {
-//     headers: req.headers,
-//     body: req.body,
-//     params: req.params,
-//     query: req.query
-//   });
-//
-//   next();
-// });
 
 // Micropub endpoint
 app.use('/micropub', micropub.post({
@@ -127,10 +116,10 @@ app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
   });
 });
 
-app.listen(port, function () {
-  if (process.env.NODE_ENV !== 'test') {
-    console.info(`Starting ${config.name} on port ${this.address().port}`);
-  }
-});
+https.createServer({
+  key: fs.readFileSync('./ssl/key.pem'),
+  cert: fs.readFileSync('./ssl/cert.pem'),
+  passphrase: process.env.PASSPHRASE
+}, app).listen(config.port);
 
 module.exports = app;

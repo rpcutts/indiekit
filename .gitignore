@@ -15,5 +15,8 @@ coverage
 node_modules/
 package-lock.json
 
+# SSL
+ssl
+
 # Environment variables
 .env

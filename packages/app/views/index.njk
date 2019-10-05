@@ -1,4 +1,4 @@
-{% extends "_default.njk" %}
+{% extends "_document.njk" %}
 
 {% block content %}
 <h2>{{ __("This is the %s endpoint for", "<a href=\"https://www.w3.org/TR/micropub/\">Micropub</a>") | safe }} <a href="{{ pub.url }}">{{ pub.url | replace('https://', '')}}</a>.</h2>

@@ -1,25 +1,66 @@
 :root {
-  --flow-inset: 1.5em;
-  --flow-space: 0.5em;
-  --spacing-block: 1.5rem;
-  --spacing-inline: 0.25rem;
-  --spacing-inset-tiny: 0.125rem;
-  --spacing-inset: 0.5rem;
-  --color-background: white;
+  /* Colour palette */
+  --color-accent: hsl(24, 100%, 50%);
   --color-neutral-darkest: hsl(216, 12%, 16%);
   --color-neutral-dark: hsl(216, 12%, 48%);
   --color-neutral-light: hsl(216, 12%, 84%);
   --color-neutral-lightest: hsl(216, 12%, 96%);
-  --color-primary: hsl(24, 100%, 50%);
+
+  /* Colour assignments */
+  --color-background: white;
+  --color-text: var(--color-neutral-darkest);
+  --color-link: var(--color-accent);
+  --color-delete: hsla(0, 100%, 80%, 0.75);
+  --color-highlight: hsla(60, 100%, 80%, 0.75);
+  --color-insert: hsla(120, 100%, 80%, 0.75);
+  --color-focus: var(--color-accent);
+
+  /* Typography */
   --font-family-system: system-ui, -apple-system, sans-serif;
   --font-family-monospace: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  --font-size-title: calc(1.75rem + 1vmin);
+  --font-size-lede: calc(1.125rem);
+  --font-size-heading: calc(1.25rem + 0.75vmin);
+  --font-size-subhead: calc(1.125rem + 0.25vmin);
+  --font-size-body: calc(1rem + 0.375vmin);
+  --font-size-reference: calc(0.875rem + 0.25vmin);
   --font-size-default: 1rem;
-  --font-size-largest: calc(1.25rem + 1vmin);
-  --font-size-large: calc(1.125rem + 1vmin);
-  --font-size-medium: calc(0.875rem + 1vmin);
-  --font-size-small: 0.875rem;
-}
+  --line-height-solid: 1em;
+  --line-height-tight: calc(1.25em + 0.25vw);
+  --line-height-loose: calc(1.4em + 0.25vw);
+  --word-spacing: 0;
 
+  /* Borders */
+  --border-radius-xsmall: 0.125rem;
+  --border-radius-small: 0.25rem;
+  --border-width-thin: 1px;
+  --border-width-thick: 0.125rem;
+  --border-width-thickest: 0.5rem;
+
+  /* Sizing */
+  --size-icon-small: 1rem;
+  --size-icon-medium: 2rem;
+  --size-icon-large: 3rem;
+
+  /* Spacing > Block */
+  --space-block-large: calc(2rem + 6vh);
+  --space-block-medium: calc(1rem + 3vh);
+  --space-block-small: calc(0.75rem + 1.5vmin);
+  --space-block-xsmall: calc(0.25rem + 0.5vh);
+
+  /* Spacing > Inline */
+  --space-inline-xsmall: 0.25rem;
+  --space-inline-small: 0.375rem;
+  --space-inline: 0.75rem;
+
+  /* Inset spacing */
+  --inset: calc(0.5rem + 0.25vw);
+  --inset-squished: calc(var(--inset) / 2) var(--inset);
+  --inset-small: calc(var(--inset) / 2);
+  --inset-small-squished: calc(var(--inset-small) / 2) var(--inset-small);
+  --inset-large: calc(var(--inset) * 2);
+  --inset-large-squished: calc(var(--inset-large) / 2) var(--inset-large);
+}
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: black;
@@ -27,169 +68,432 @@
     --color-neutral-light: hsl(216, 12%, 48%);
     --color-neutral-dark: hsl(216, 12%, 84%);
     --color-neutral-darkest: hsl(216, 12%, 96%);
+
+    /* Typography */
+    --word-spacing: 0.05em;
   }
 }
-
+/*
+ * Embedded content
+ * ================
+ * https://w3c.github.io/html/semantics-embedded-content
+ */
+img,
+embed,
+object {
+  display: block;
+  page-break-inside: avoid;
+}
+img,
+object {
+  block-size: auto;
+  max-inline-size: 100%;
+}
+/*
+ * Forms
+ * =====
+ * https://w3c.github.io/html/sec-forms
+ */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+/*
+ * 1. Correct inability to style clickable types in Safari
+ * 2. Reset appearance
+ */
+button,
+[type=button],
+[type=submit] {
+  -webkit-appearance: button; /* 1 */
+  background: none;
+  border: 0; /* 2 */
+  padding: 0; /* 2 */
+}
+/*
+ * 1. Correct odd appearance in Chrome and Safari
+ * 2. Correct outline style in Safari
+ */
+[type="search"] {
+  -webkit-appearance: none; /* 1 */
+  border-radius: 0; /* 1 */
+  outline-offset: 0; /* 2 */
+}
+/*
+ * Remove inner padding in Chrome and Safari on macOS
+ */
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+/*
+ * http://thatemil.com/blog/2015/01/03/reset-your-fieldset/
+ * 1. Reset minimum width based on content inside fieldset
+ *    in WebKit, Blink and Firefox
+ * 2. Adjust display mode to ensure [1] works in Firefox
+ * 3. Remove default margin and border
+ * 4. Fix margin-collapsing behavior coupled with rendering
+ *    of legend element
+ */
+fieldset {
+  border: 0; /* 3 */
+  margin: 0; /* 3 */
+  min-inline-size: 0; /* 1 */
+  padding: 0.01em 0 0; /* 4 */
+}
+body:not(:-moz-handler-blocked) fieldset {
+  display: table-cell; /* 2 */
+}
+/*
+ * 1. Correct text wrapping in Edge and IE
+ * 2. Correct `fieldset` color inheritance in IE
+ * 3. Remove padding so developers are not caught out when
+ *    they zero out `fieldset` elements
+ */
+legend {
+  box-sizing: border-box; /* 1 */
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-inline-size: 100%; /* 1 */
+  padding: 0; /* 3 */
+  white-space: normal; /* 1 */
+}
+/*
+ * Grouping content
+ * ================
+ * https://w3c.github.io/html/grouping-content
+ */
+hr {
+  border: 0;
+}
+pre {
+  hanging-punctuation: none;
+  hyphens: none;
+  tab-size: 2;
+  white-space: pre;
+}
+figure,
+blockquote,
+p,
+dl,
+ol,
+ul,
+address {
+  margin: 0 0 var(--flow-space, 0) 0;
+  orphans: 2;
+  widows: 2;
+}
+dl[class],
+ol[class],
+ul[class] {
+  margin: 0 0 var(--flow-space, 0) 0;
+  padding: 0;
+}
+li {
+  display: var(--list-display, block);
+  margin-inline-start: var(--flow-inset, 0);
+}
+dd {
+  margin-inline-start: var(--flow-inset, 0);
+}
+dd + dt {
+  margin-block-start: calc(var(--flow-space, 0) / 2);
+}
+/*
+ * Sections
+ * ========
+ * https://w3c.github.io/html/sections
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+::selection {
+  background-color: var(--color-highlight);
+}
+:focus {
+  outline-color: var(--color-focus);
+}
+html {
+  block-size: 100vh;
+  scroll-behavior: smooth;
+}
 body {
   background-color: var(--color-background);
-  color: var(--color-neutral-darkest);
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
   font-family: var(--font-family-system);
   margin: 0;
   min-block-size: 100vh;
-  padding: 0;
+  text-rendering: optimizeSpeed;
 }
-
-header,
-main,
-footer {
-  margin: 0 var(--spacing-block);
-  padding: var(--spacing-block) 0;
+h1,h2,h3,h4,h5,h6,legend {
+  break-after: avoid;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0 0 var(--flow-space, 0) 0;
+  text-rendering: optimizeLegibility;
 }
-
-main {
-  flex: 1;
+/*
+ * Tablular data
+ * =============
+ * https://w3c.github.io/html/tabular-data
+ */
+table {
+  border-spacing: 0;
+  break-inside: avoid;
+  font-size: inherit;
+  font-variant-numeric: tabular-nums diagonal-fractions;
 }
-
-pre {
-  background-color: var(--color-neutral-lightest);
-  padding: var(--spacing-inset);
-  overflow: scroll;
+tr {
+  break-inside: avoid;
 }
-
-pre code {
-  background-color: none;
+td,
+th {
+  text-align: start;
+  vertical-align: top;
 }
-
+thead th {
+  font-weight: 600;
+}
+tbody th {
+  font-weight: normal;
+}
+/*
+ * Text-level semantics
+ * ====================
+ * https://w3c.github.io/html/textlevel-semantics
+ */
 a {
+  color: inherit;
   -webkit-text-decoration-color: var(--color-neutral-light);
   text-decoration-color: var(--color-neutral-light);
-  color: inherit;
 }
-
 a:hover {
+  color: var(--color-accent);
   -webkit-text-decoration-color: var(--color-primary);
   text-decoration-color: var(--color-primary);
-  color: var(--color-primary);
 }
-
-code,
-samp {
-  font-family: var(--font-family-monospace);
-  font-size: 85%;
-  hanging-punctuation: none;
+a[aria-current] {
+  font-weight: 500;
 }
-
-code {
-  background-color: var(--color-neutral-lightest);
-  padding: var(--spacing-inset-tiny);
-}
-
-/*
- * Banner
- */
-.banner {
-  align-items: center;
-  display: flex;
-  border-bottom: 1px solid var(--color-neutral-lightest);
-  flex-wrap: wrap;
-}
-
-.banner__title {
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--font-size-default);
-  margin: 0;
-  margin-inline-end: calc(var(--spacing-inline) * 2);
-  padding: var(--spacing-inset-tiny) 0;
-}
-
-.banner__title a {
-  align-items: center;
-  display: inline-flex;
+a[class] {
   text-decoration: none;
 }
-
-.banner__title svg {
-  inline-size: var(--font-size-default);
-  block-size: var(--font-size-default);
-  margin-inline-end: var(--spacing-inline);
+/* Reset font size for smallprint/legal text */
+small {
+  font-size: 100%;
 }
-
-.banner__description {
-  color: var(--color-neutral-dark);
-  margin: 0;
-  margin-inline-end: auto;
-  padding: var(--spacing-inset-tiny) 0;
+/* Correct text decoration in Chrome/Edge/IE/Opera/Safari */
+abbr[title] {
+  text-decoration: none;
 }
-
-.banner__navigation {
-  padding: var(--spacing-inset) 0;
+/* Prevent `sub` and `sup` from affecting line height */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
 }
-
-/*
- * Content
- */
+sub {
+  inset-block-end: -0.25em;
+}
+sup {
+  inset-block-start: -0.5em;
+}
+cite {
+  font-style: italic;
+}
+code,
+samp,
+var {
+  font-family: var(--font-family-monospace);
+  hanging-punctuation: none;
+}
+code,
+samp {
+  font-size: var(--font-size-default);
+}
+del {
+  background-color: var(--color-delete);
+}
+ins {
+  background-color: var(--color-insert);
+  text-decoration: none;
+}
+mark {
+  background-color: var(--color-highlight);
+}
 .content {
-  padding-left: calc(var(--font-size-default) + var(--spacing-inline));
-  line-height: 1.5;
+  --flow-inset: 1.5em;
+  --flow-space: 0.75em;
+  --list-display: list-item;
+  --linear-measure: var(--line-measure);
+}
+.content {
+  font-size: var(--font-size-body);
+  font-variant: oldstyle-nums;
+  hanging-punctuation: first;
+  hyphens: auto;
+  line-height: var(--line-height-loose);
+  word-spacing: var(--word-spacing);
+}
+.content {
   max-width: 45rem;
 }
-
-.content > * + * {
-  margin-block-start: var(--flow-space);
-  margin-block-end: 0;
+@media (min-width: 30em) {
+  .content {
+    padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
+  }
 }
-
-.content > *:first-child {
-  font-size: var(--font-size-largest);
-  line-height: 1;
-  margin-block-end: calc(var(--flow-space) * 4);
-  margin-block-start: 0;
-}
-
 .content h2 {
-  font-size: var(--font-size-large);
-  margin: 0;
+  font-size: var(--font-size-title);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-solid);
 }
-
+.content h2 {
+  --flow-space: var(--space-block-medium);
+}
 .content h3 {
-  font-size: var(--font-size-medium);
-  margin-block-start: calc(var(--flow-space) * 3);
+  font-size: var(--font-size-heading);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+  margin-block-start: 2em;
 }
-
+.content h3 {
+  --flow-space: var(--space-block-small);
+}
 .content h4 {
-  margin-block-start: calc(var(--flow-space) * 2);
+  font-size: var(--font-size-subhead);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
+  margin-block-start: 1.5em;
 }
-
+.content h4 {
+  --flow-space: var(--space-block-xsmall);
+}
 .content pre {
-  --flow-space: calc(var(--spacing-block) / 2);
-  margin-block-end: var(--spacing-block);
+  --flow-space: var(space-block-medium);
+  background-color: var(--color-neutral-lightest);
+  border-radius: var(--border-radius-small);
+  margin: var(--space-block-small) 0;
+  padding: var(--inset-small);
+  overflow: scroll;
 }
-
+.content pre code {
+  background-color: none;
+  padding: 0;
+}
 .content dt {
   font-weight: 500;
 }
-
-.content dd,
-.content li {
-  margin-inline-start: var(--flow-inset);
-}
-
-.content dd + dt {
-  margin-block-start: calc(var(--flow-space) * 2);
-}
-
 .content dl,
 .content ol,
 .content ul {
   padding: 0;
 }
-
-/*
- * Header anchor
- */
+.content code,
+.content samp {
+  border-radius: var(--border-radius-small);
+  font-size: 85%;
+  hanging-punctuation: none;
+}
+.content code {
+  background-color: var(--color-neutral-lightest);
+  padding: var(--inset-small-squished);
+}
+.banner {
+  align-items: center;
+  border-bottom: var(--border-width-thin) solid var(--color-neutral-lightest);
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 var(--space-block-small);
+  padding: var(--space-block-small) 0;
+}
+.banner a {
+  align-items: center;
+  display: inline-flex;
+  padding: var(--inset-small-squished);
+}
+.banner__title {
+  align-items: center;
+  display: inline-flex;
+  font-size: var(--font-size-default);
+  font-weight: 800;
+}
+.banner__title svg {
+  block-size: var(--size-icon-small);
+  inline-size: var(--size-icon-small);
+  margin-inline-end: var(--space-inline-small);
+}
+.banner__description {
+  color: var(--color-neutral-dark);
+  margin-inline-end: auto;
+  padding: var(--inset-small-squished);
+}
+.button {
+  color: var(--color-background);
+  background-color: var(--color-neutral-dark);
+  border-radius: var(--border-radius-small);
+  padding: var(--inset-squished);
+}
+.button:hover {
+  background-color: var(--color-accent);
+}
+.contentinfo {
+  color: var(--color-neutral-dark);
+  display: flex;
+  font-size: var(--font-size-reference);
+  justify-content: flex-end;
+  margin: 0 var(--space-block-small);
+  padding: var(--space-block-small) 0;
+}
+.contentinfo a {
+  padding: var(--inset-small-squished);
+}
+.form {
+  --flow-inset: 1.5em;
+  --flow-space: 0.75em;
+  --list-display: list-item;
+  --linear-measure: var(--line-measure);
+}
+.form {
+  font-size: var(--font-size-body);
+  font-variant: oldstyle-nums;
+  hanging-punctuation: first;
+  hyphens: auto;
+  line-height: var(--line-height-loose);
+  word-spacing: var(--word-spacing);
+}
+.form {
+  max-width: 45rem;
+}
+@media (min-width: 30em) {
+  .form {
+    padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
+  }
+}
+.form__title {
+  font-size: var(--font-size-title);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-solid);
+}
+.form__title {
+  --flow-space: var(--space-block-medium);
+}
+.main {
+  flex: 1;
+  margin: 0 var(--space-block-small);
+  padding: var(--space-block-small) 0;
+}
 .header-anchor {
   font-family: var(--font-family-monospace);
   float: left;
@@ -198,25 +502,10 @@ code {
   opacity: 0;
   text-decoration: none;
 }
-
 *:hover > .header-anchor {
   color: inherit;
   opacity: 0.5;
 }
-
-/*
- * Content info
- */
-.contentinfo {
-  display: flex;
-  justify-content: flex-end;
-  font-size: var(--font-size-small);
-  color: var(--color-neutral-dark)
-}
-
-/*
- * Vendor: Prism JS
-*/
 .token {
   --color-token-comment: var(--color-neutral);
   --color-token-operator: var(--color-neutral-dark);
@@ -226,7 +515,6 @@ code {
   --color-token-string: #c06;
   --color-token-variable: #399;
 }
-
 @media (prefers-color-scheme: dark) {
   .token {
     --color-token-function: #f99;
@@ -236,11 +524,9 @@ code {
     --color-token-variable: #9ff;
   }
 }
-
 .token.namespace {
   opacity: 0.7;
 }
-
 .token.cdata,
 .token.comment,
 .token.doctype,
@@ -248,33 +534,27 @@ code {
   color: var(--color-token-comment);
   font-style: italic;
 }
-
 .token.operator,
 .token.punctuation {
   color: var(--color-token-operator);
 }
-
 .token.deleted,
 .token.function {
   color: var(--color-token-function);
 }
-
 .token.atrule,
 .token.attr-name,
 .token.keyword {
   color: var(--color-token-keyword);
 }
-
 .token.selector,
 .token.tag {
   color: var(--color-token-selector);
 }
-
 .token.attr-value,
 .token.string {
   color: var(--color-token-string);
 }
-
 .token.boolean,
 .token.constant,
 .token.entity,
@@ -287,13 +567,11 @@ code {
 .token.variable {
   color: var(--color-token-variable);
 }
-
 .token.bold,
 .token.function,
 .token.important {
   font-weight: bold;
 }
-
 .token.italic {
   font-style: italic;
 }

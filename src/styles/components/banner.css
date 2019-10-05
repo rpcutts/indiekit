@@ -1,0 +1,33 @@
+.banner {
+  align-items: center;
+  border-bottom: var(--border-width-thin) solid var(--color-neutral-lightest);
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 var(--space-block-small);
+  padding: var(--space-block-small) 0;
+}
+
+.banner a {
+  align-items: center;
+  display: inline-flex;
+  padding: var(--inset-small-squished);
+}
+
+.banner__title {
+  align-items: center;
+  display: inline-flex;
+  font-size: var(--font-size-default);
+  font-weight: 800;
+}
+
+.banner__title svg {
+  block-size: var(--size-icon-small);
+  inline-size: var(--size-icon-small);
+  margin-inline-end: var(--space-inline-small);
+}
+
+.banner__description {
+  color: var(--color-neutral-dark);
+  margin-inline-end: auto;
+  padding: var(--inset-small-squished);
+}

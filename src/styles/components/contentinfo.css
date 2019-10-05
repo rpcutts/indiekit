@@ -1,0 +1,12 @@
+.contentinfo {
+  color: var(--color-neutral-dark);
+  display: flex;
+  font-size: var(--font-size-reference);
+  justify-content: flex-end;
+  margin: 0 var(--space-block-small);
+  padding: var(--space-block-small) 0;
+}
+
+.contentinfo a {
+  padding: var(--inset-small-squished);
+}
