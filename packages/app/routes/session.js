@@ -56,6 +56,7 @@ router.get('/auth', async (req, res) => {
       const token = await auth.getToken(code);
       req.session.me = auth.options.me;
       req.session.indieauthToken = token;
+      req.app.locals.session = true; // Show correct link in navigation
       res.redirect(redirect);
     } catch (error) {
       console.log(error);

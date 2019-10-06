@@ -33,13 +33,11 @@
       }, {
         href: "/sign-in",
         text: __("Sign in")
-      } if not session.me, {
+      } if not session, {
         href: "/sign-out",
         text: __("Sign out")
-      } if session.me]
+      } if session]
     }) | indent(4) }}
-
-    {{ session.me }}
 
     {%- block main %}{% endblock %}
 
