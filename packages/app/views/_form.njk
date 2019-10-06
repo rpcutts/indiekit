@@ -1,12 +1,14 @@
 {% extends "_default.njk" %}
 
 {% block main %}
-<form class="form" method="post">
-  <fieldset>
-    <legend class="form__title">{{ __(title) }}</legend>
-    {% block content %}
-      {{ body | markdown | safe }}
-    {% endblock %}
-  </fieldset>
-</form>
+    <form class="form" method="post">
+      {% call fieldset({
+        legend: {
+          text: title,
+          isPageHeading: true
+        },
+        indent: 6
+      }) %}{% block fieldset %}
+      {% endblock %}{% endcall %}
+    </form>
 {% endblock %}

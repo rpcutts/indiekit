@@ -1,0 +1,11 @@
+{%- if opts.html or opts.text -%}
+{%- set labelHtml -%}
+{%- set classes = "label" + (" " + opts.classes if opts.classes) -%}
+<label class="{{ classes }}"
+  {%- for attribute, value in opts.attributes %} {{attribute}}="{{value}}"{% endfor %}
+  {%- if opts.for %} for="{{ opts.for }}"{% endif %}>
+  {{- opts.html | safe if opts.html else opts.text -}}
+</label>
+{%- endset -%}
+{{ labelHtml | safe }}
+{%- endif -%}

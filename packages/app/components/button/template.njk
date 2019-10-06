@@ -1,0 +1,5 @@
+{%- set classes = "button" + (" " + opts.classes if opts.classes) -%}
+<button class="{{ classes }}" type="{{ opts.type or "submit" }}"
+  {%- for attr, value in opts.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
+  {{- opts.text -}}
+</button>

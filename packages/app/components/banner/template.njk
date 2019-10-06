@@ -1,0 +1,16 @@
+<header class="banner">
+  <h1 class="banner__title">
+    <a class="u-url" href="{{ opts.url }}">
+      {% include "logo.svg" %}
+      <span class="p-name">{{ opts.name }}</span>
+    </a>
+  </h1>
+  <p class="banner__description p-summary">{{ opts.description }}</p>
+{%- if opts.navigation %}
+  <nav class="banner__navigation" aria-label="site">
+  {%- for item in opts.navigation %}
+    <a href="{{ item.href }}">{{ item.label }}</a>
+  {%- endfor %}
+  </nav>
+{%- endif %}
+</header>

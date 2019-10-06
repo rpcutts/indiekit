@@ -22,9 +22,10 @@ const app = express();
 app.enable('trust proxy');
 
 // Parse Nunjucks templates
+const componentsDir = path.join(__dirname, 'components');
 const viewsDir = path.join(__dirname, 'views');
 const staticDir = path.join(__dirname, 'static');
-const env = nunjucks.configure([viewsDir, staticDir], {
+const env = nunjucks.configure([componentsDir, viewsDir, staticDir], {
   autoescape: true,
   express: app,
   watch: true

@@ -1,0 +1,6 @@
+.textarea {
+  border: var(--border-width-thin) solid var(--color-neutral);
+  border-radius: var(--border-radius-small);
+  padding: var(--inset-squished);
+  width: 100%;
+}

@@ -1,5 +1,4 @@
-.form {
-  --flow-inset: 1.5em;
+.fieldset {
   --flow-space: 0.75em;
   --list-display: list-item;
   --linear-measure: var(--line-measure);
@@ -8,12 +7,12 @@
 }
 
 @media (--from-medium-viewport) {
-  .form {
+  .fieldset {
     padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
   }
 }
 
-.form__title {
+.fieldset__title {
   @extend %title;
   --flow-space: var(--space-block-medium);
 }

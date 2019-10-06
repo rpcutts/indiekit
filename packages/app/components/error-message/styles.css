@@ -1,0 +1,7 @@
+.error-message {
+
+}
+
+.error-message__label {
+  @extend %visually-hidden;
+}

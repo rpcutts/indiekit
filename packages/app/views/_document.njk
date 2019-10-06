@@ -1,10 +1,8 @@
 {% extends "_default.njk" %}
 
 {% block main %}
-<article class="content">
-  {% if title %}<h2>{{ title }}</h2>{% endif %}
-  {% block content %}
-    {{ body | markdown | safe }}
-  {% endblock %}
-</article>
+    {{ article({
+      title: title,
+      content: body
+    }) | indent(4) }}
 {% endblock %}

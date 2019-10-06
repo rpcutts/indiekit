@@ -1,0 +1,11 @@
+<div class="preview">
+  <h3 class="preview__title">
+    <output for="title" id="title-preview">{{ opts.title }}</output>
+  </h3>
+  <p class="preview__content">
+    <output for="content" id="content-preview">{{ opts.content }}</output>
+  </p>
+  <p class="preview__date">
+    <date>{{ opts.date | date("fff") }}</date>
+  </p>
+</div>

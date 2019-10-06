@@ -1,0 +1,6 @@
+{%- set classes = "error-message" + (" " + opts.classes if opts.classes) -%}
+<dl class="{{ classes }}" id="{{ opts.id }}"
+  {%- for attr, value in opts.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
+  <dt class="error-message__label">{{ opts.label | default("Error") }}:</dt>
+  <dd>{{ opts.html | safe if opts.html else opts.text }}</dd>
+</dl>

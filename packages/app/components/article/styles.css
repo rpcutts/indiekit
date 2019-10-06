@@ -1,34 +1,37 @@
-.content {
+.article {
   --flow-inset: 1.5em;
   --flow-space: 0.75em;
   --list-display: list-item;
   --linear-measure: var(--line-measure);
   @extend %body;
+  flex: 1;
+  margin: 0 var(--space-block-small);
   max-width: 45rem;
+  padding: var(--space-block-small) 0;
 }
 
 @media (--from-medium-viewport) {
-  .content {
+  .article {
     padding-left: calc(var(--size-icon-small) + var(--space-inline-small) + var(--inset-small));
   }
 }
 
-.content h2 {
+.article h2 {
   @extend %title;
   --flow-space: var(--space-block-medium);
 }
 
-.content h3 {
+.article h3 {
   @extend %heading;
   --flow-space: var(--space-block-small);
 }
 
-.content h4 {
+.article h4 {
   @extend %subhead;
   --flow-space: var(--space-block-xsmall);
 }
 
-.content pre {
+.article pre {
   --flow-space: var(space-block-medium);
   background-color: var(--color-neutral-lightest);
   border-radius: var(--border-radius-small);
@@ -37,29 +40,29 @@
   overflow: scroll;
 }
 
-.content pre code {
+.article pre code {
   background-color: none;
   padding: 0;
 }
 
-.content dt {
+.article dt {
   font-weight: 500;
 }
 
-.content dl,
-.content ol,
-.content ul {
+.article dl,
+.article ol,
+.article ul {
   padding: 0;
 }
 
-.content code,
-.content samp {
+.article code,
+.article samp {
   border-radius: var(--border-radius-small);
   font-size: 85%;
   hanging-punctuation: none;
 }
 
-.content code {
+.article code {
   background-color: var(--color-neutral-lightest);
   padding: var(--inset-small-squished);
 }

@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 const nock = require('nock');
 const test = require('ava');
 const Publisher = require('../.');

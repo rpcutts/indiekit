@@ -1,38 +1,58 @@
+{% from "preview/macro.njk" import preview %}
+
 {% extends "_form.njk" %}
 
 {% set title = "Share" %}
 
 {% block content %}
-<div class="preview">
-  <h3 class="preview__title">
-    <output for="title" id="title-preview">{{ title }}</output>
-  </h3>
-  <p class="preview__content">
-    <output for="content" id="content-preview">{{ content }}</output>
-  </p>
-  <p class="preview__date">
-    <date>{{ "now" | date("fff") }}</date>
-  </p>
-</div>
+  {{ preview({
+    title: name,
+    content: content,
+    date: "now"
+  }) }}
 
-<div class="field">
-  <label class="field__label" for="title">{{ __("Title") }}</label>
-  <input class="field__input" id="title" value="{{ name }}" name="name"/>
-</div>
+  {{ input ({
+    label: {
+      text: __("Title")
+    },
+    name: "name",
+    value: name
+  }) }}
 
-<div class="field">
-  <label class="field__label" for="url">{{ __("URL") }}</label>
-  <input class="field__input" id="url" value="{{ url }}" name="bookmark-of"/>
-</div>
+  {{ input ({
+    label: {
+      text: __("URL")
+    },
+    name: "bookmark-of",
+    value: url
+  }) }}
 
-<div class="field">
-  <label class="field__label" for="content">{{ __("Content") }}</label>
-  <textarea class="field__input" id="content" name="content" rows="5">{{ content }}</textarea>
-</div>
+  {{ textarea({
+    label: {
+      text: __("Content")
+    },
+    name: "content",
+    value: content
+  }) | indent(8) }}
 
-<input type="hidden" name="access_token" value="{{ session.indieauthToken }}"/>
-<input type="hidden" name="h" value="entry"/>
-<button class="button" type="submit" formaction="/micropub">{{ __("Publish") }}</button>
+  {{ input({
+    type: "hidden",
+    name: "access_token-of",
+    value: session.indieauthToken
+  }) }}
+
+  {{ input({
+    type: "hidden",
+    name: "h",
+    value: entry
+  }) }}
+
+  {{ button({
+    attributes: {
+      formaction: "/micropub"
+    },
+    text: __("Publish")
+  }) }}
 {% endblock %}
 
 {% block scripts %}

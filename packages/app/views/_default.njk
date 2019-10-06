@@ -1,3 +1,10 @@
+{%- from "article/macro.njk" import article -%}
+{%- from "banner/macro.njk" import banner -%}
+{%- from "button/macro.njk" import button -%}
+{%- from "contentinfo/macro.njk" import contentinfo -%}
+{%- from "fieldset/macro.njk" import fieldset -%}
+{%- from "input/macro.njk" import input -%}
+{%- from "textarea/macro.njk" import textarea -%}
 <!DOCTYPE html>
 <html lang="{{ locale }}" dir="ltr" class="h-x-app">
   <head>
@@ -10,29 +17,30 @@
     <title>{{ title + " - " if title }}{{ app.name }}</title>
   </head>
   <body>
-    <header class="banner">
-      <h1 class="banner__title">
-        <a class="u-url" href="{{ app.url }}">
-          {% include 'logo.svg' %}
-          <span class="p-name">{{ app.name }}</span>
-        </a>
-      </h1>
-      <p class="banner__description p-summary">{{ app.description }}</p>
-      <nav class="banner__navigation" aria-label="site">
-        <a href="/docs">Docs</a>
-      {% if session.me %}
-        <a href="/sign-out">Sign out</a>
-      {% else %}
-        <a href="/sign-in">Sign in</a>
-      {% endif %}
-      </nav>
-    </header>
-    <main class="main">
-      {% block main %}{% endblock %}
-    </main>
-    <footer class="contentinfo">
-      <a href="{{ app.repository.url | replace('.git', '') }}/releases/tag/v{{ app.version }}">v{{ app.version }}</a>
-    </footer>
+    {{ banner({
+      url: app.url,
+      name: app.name,
+      description: app.description,
+      navigation: [{
+        href: "/docs",
+        label: __("Help")
+      }, {
+        href: "/sign-in",
+        label: __("Sign in")
+      } if not session.me, {
+        href: "/sign-out",
+        label: __("Sign out")
+      } if session.me]
+    }) | indent(4) }}
+
+    {%- block main %}{% endblock %}
+
+    {{ contentinfo({
+      navigation: [{
+        href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,
+        label: "v" + app.version
+      }]
+    }) | indent(4) }}
   </body>
-  {% block scripts %}{% endblock %}
+  {%- block scripts %}{% endblock %}
 </html>

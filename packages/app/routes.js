@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
 const {ServerError, utils} = require('@indiekit/support');
 
@@ -75,25 +76,34 @@ router.get('/auth', async (req, res) => {
 });
 
 // Sign in
-router.post('/sign-in', async (req, res) => {
-  const {url} = req.body;
-  if (url) {
-    auth.options.me = url;
+router.get('/sign-in', (req, res) => {
+  res.render('sign-in');
+});
 
+router.post('/sign-in', [
+  check('url')
+    .isURL({require_protocol: true}).withMessage((value, {req, path}) => {
+      return req.__(`error.validation.${path}`);
+    })
+], async (req, res) => {
+  const {url} = req.body;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.render('sign-in', {
+      errors: errors.mapped(),
+      url
+    });
+  } else if (url) {
     try {
+      auth.options.me = url;
       const authUrl = await auth.getAuthUrl('code', ['create']);
       return res.redirect(authUrl);
     } catch (error) {
       console.error(error);
       res.end('Error getting auth url, check logs');
     }
-  } else {
-    res.render('sign-in');
   }
-});
-
-router.get('/sign-in', (req, res) => {
-  res.render('sign-in');
 });
 
 // Sign out

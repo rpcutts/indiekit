@@ -18,5 +18,20 @@
     "reply": "Antworten-post",
     "repost": "Repost",
     "like": "„Gefällt mir“-Post"
+  },
+  "Help": "Help",
+  "Sign out": "Abmelden",
+  "Sign in": "Anmelden",
+  "Web address": "Webadresse",
+  "Share": "Teilhaben",
+  "Title": "Titel",
+  "URL": "URL",
+  "Content": "Inhalt",
+  "Publish": "Publizieren",
+  "Error": "Fehler",
+  "error": {
+    "validation": {
+      "url": "Geben Sie eine Webadresse mit einer vollständigen URL, wie https://example.org"
+    }
   }
 }
