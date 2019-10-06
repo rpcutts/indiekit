@@ -3,24 +3,27 @@
 {% set title = "Server settings" %}
 
 {% block fieldset %}
-  {{ input ({
-    classes: "input--width-5",
+  {{ select({
     label: {
       text: __("server.configure.locale.label")
     },
-    attributes: {
-      spellcheck: "false"
-    },
     id: "locale",
     name: "locale",
-    value: locale or "en-GB",
+    items: [{
+      value: "de",
+      text: "Deutsch"
+    }, {
+      value: "en-GB",
+      text: "English (British)",
+      selected: true
+    }],
     errorMessage: {
       text: errors.locale.msg,
       label: __("Error")
     } if errors.locale
   }) | indent(2) }}
 
-  {{ input ({
+  {{ input({
     classes: "input--width-5",
     label: {
       text: __("server.configure.color.label")
@@ -28,7 +31,7 @@
     id: "color",
     name: "color",
     type: "color",
-    value: color or "#00e",
+    value: app.themeColor,
     errorMessage: {
       text: errors.color.msg,
       label: __("Error")

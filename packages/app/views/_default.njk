@@ -4,6 +4,7 @@
 {%- from "contentinfo/macro.njk" import contentinfo -%}
 {%- from "fieldset/macro.njk" import fieldset -%}
 {%- from "input/macro.njk" import input -%}
+{%- from "select/macro.njk" import select -%}
 {%- from "textarea/macro.njk" import textarea -%}
 <!DOCTYPE html>
 <html lang="{{ locale }}" dir="ltr" class="h-x-app">
@@ -14,6 +15,11 @@
     <link rel="mask-icon" href="{{ app.url }}/logo.svg" color="{{ app.themeColor }}" class="u-logo"/>
     <link rel="stylesheet" href="{{ app.url }}/app.css"/>
     <link rel="stylesheet" href="{{ app.url }}/app.css"/>
+    <style>
+      :root {
+        --color-accent: {{ app.themeColor }}
+      }
+    </style>
     <title>{{ title + " - " if title }}{{ app.name }}</title>
   </head>
   <body>

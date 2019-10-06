@@ -1,0 +1,30 @@
+{% extends "_form.njk" %}
+
+{% set title = "Publisher" %}
+
+{% block fieldset %}
+  {{ select({
+    label: {
+      text: __("publisher.configure.provider.label")
+    },
+    id: "publisher",
+    name: "publisher",
+    items: [{
+      value: "github",
+      text: "GitHub",
+      selected: true
+    }, {
+      value: "gitlab",
+      text: "GitLab",
+      disabled: true
+    }],
+    errorMessage: {
+      text: errors.publisher.msg,
+      label: __("Error")
+    } if errors.publisher
+  }) | indent(2) }}
+
+  {{ button({
+    text: __("Continue")
+  }) | indent(2) }}
+{% endblock %}

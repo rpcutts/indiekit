@@ -112,7 +112,7 @@ const authenticate = async (req, res, next) => {
 };
 
 // Routes
-app.use('/configure', require('./routes/configure'));
+app.use('/configure', authenticate, require('./routes/configure'));
 app.use('/share', authenticate, require('./routes/share'));
 app.use('/docs', require('./routes/docs'));
 app.use(require('./routes/session'));

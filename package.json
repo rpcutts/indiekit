@@ -40,7 +40,6 @@
     "postcss-custom-selectors": "^5.1.2",
     "postcss-easy-import": "^3.0.0",
     "postcss-extend-rule": "^3.0.0",
-    "postcss-logical": "^4.0.2",
     "postcss-media-minmax": "^4.0.0"
   },
   "devDependencies": {

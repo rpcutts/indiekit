@@ -7,7 +7,7 @@ Congratulations, you now have successfuly created your very own Micropub endpoin
 
 First, you should provide {{ app.name }} with the details of where and how you would like to publish files.
 
-[Configure {{ app.name }} →](/configure/publisher/github)
+[Configure {{ app.name }} →](/configure)
 
 ### Enable automatic discovery
 

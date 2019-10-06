@@ -1,6 +1,5 @@
 :root {
   /* Colour palette */
-  --color-accent: hsl(24, 100%, 50%);
   --color-neutral-darkest: hsl(216, 12%, 16%);
   --color-neutral-dark: hsl(216, 12%, 48%);
   --color-neutral: hsl(216, 12%, 64%);

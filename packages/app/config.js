@@ -24,7 +24,7 @@ config.mongoDbUri = process.env.MONGODB_URI;
 
 // Customisation
 config.locale = process.env.INDIEKIT_LOCALE || 'en';
-config.themeColor = '#f60';
+config.themeColor = process.env.THEME_COLOR || '#0000ee';
 
 // Publisher
 config.publisher = github;

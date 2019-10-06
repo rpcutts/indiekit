@@ -3,7 +3,7 @@
 {% set title = "Sign in" %}
 
 {% block fieldset %}
-  {{ input ({
+  {{ input({
     label: {
       text: __("Web address")
     },
@@ -17,7 +17,7 @@
     } if errors.url
   }) | indent(2) }}
 
-  {{ input ({
+  {{ input({
     field: {
       classes: "visually-hidden"
     },

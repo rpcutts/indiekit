@@ -1,0 +1,14 @@
+{% extends "_document.njk" %}
+
+{% set title = "Done" %}
+
+{% set body %}
+`locale`
+: {{ app.locale }}
+
+`color`
+: {{ app.themeColor }}
+
+`publisher`
+: {{ app.publisher | dump }}
+{% endset %}

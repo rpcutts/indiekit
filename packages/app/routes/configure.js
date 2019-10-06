@@ -1,12 +1,43 @@
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 
+const config = require('../config');
+
 const router = new express.Router();
 
 // Server
 router.get('/',
   (req, res) => {
     res.render('configure/index');
+  }
+);
+
+router.post('/',
+  (req, res) => {
+    const {locale, color} = req.body;
+    req.session.locale = locale;
+
+    // Update environment vars (persistant) and config (now)
+    process.env.THEME_COLOR = color;
+    config.themeColor = color;
+
+    // Redirect to next item
+    res.redirect('/configure/publisher');
+  }
+);
+
+// Publisher
+router.get('/publisher',
+  (req, res) => {
+    res.render('configure/publisher');
+  }
+);
+
+router.post('/publisher',
+  (req, res) => {
+    const {publisher} = req.body;
+    req.session.publisher = publisher;
+    res.redirect(`/configure/publisher/${publisher}`);
   }
 );
 
@@ -50,8 +81,15 @@ router.post('/publisher/github', [
     process.env.GITHUB_REPO = repo;
     process.env.GITHUB_BRANCH = branch;
     process.env.GITHUB_TOKEN = token;
-    res.redirect('docs');
+    res.redirect('/configure/done');
   }
 });
+
+// Done
+router.get('/done',
+  (req, res) => {
+    res.render('configure/done');
+  }
+);
 
 module.exports = router;
