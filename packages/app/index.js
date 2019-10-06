@@ -1,20 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const _ = require('lodash');
 const express = require('express');
 const favicon = require('serve-favicon');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
 const Publication = require('@indiekit/publication');
-const {ServerError, logger, utils} = require('@indiekit/support');
+const {utils} = require('@indiekit/support');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 
 const config = require('./config');
-const routes = require('./routes');
 
 const app = express();
 
@@ -79,8 +77,6 @@ app.use(session({
 app.use(async (req, res, next) => {
   const url = `${req.protocol}://${req.headers.host}`;
 
-  app.locals.session = req.session;
-
   app.locals.app = config;
   app.locals.app.url = url;
   app.locals.pub = await new Publication({
@@ -90,18 +86,6 @@ app.use(async (req, res, next) => {
     publisher: config.publisher,
     url: config.publication.url
   }).getConfig();
-
-  next();
-});
-
-// Log requests
-app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.originalUrl}`, {
-    headers: req.headers,
-    body: req.body,
-    params: req.params,
-    query: req.query
-  });
 
   next();
 });
@@ -117,23 +101,22 @@ app.use('/media', micropub.media({
 }));
 
 // Routes
-app.use('/', routes);
-
-// Errors
-app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
-  if (error instanceof ServerError) {
-    return res.status(error.status).send({
-      error: _.snakeCase(error.name),
-      error_description: error.message,
-      error_uri: error.uri
-    });
+const authenticate = async (req, res, next) => {
+  // If current session, proceed to next middleware
+  if (req.session && req.session.me) {
+    return next();
   }
 
-  return res.status(500).send({
-    error: 'Internal server error',
-    error_description: error.message
-  });
-});
+  // No current session
+  res.redirect(`/sign-in?redirect=${req.originalUrl}`);
+};
+
+// Routes
+app.use('/configure', require('./routes/configure'));
+app.use('/share', authenticate, require('./routes/share'));
+app.use('/docs', require('./routes/docs'));
+app.use(require('./routes/session'));
+app.use(require('./routes/error'));
 
 https.createServer({
   key: fs.readFileSync('./ssl/key.pem'),

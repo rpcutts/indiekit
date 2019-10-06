@@ -3,9 +3,15 @@ title: Welcome to {{ app.name }}! 👋
 ---
 Congratulations, you now have successfuly created your very own Micropub endpoint. Before using it to post to your website, there are a few things you will need to set up.
 
+### Configure {{ app.name }}
+
+First, you should provide {{ app.name }} with the details of where and how you would like to publish files.
+
+[Configure {{ app.name }} →](/configure/publisher/github)
+
 ### Enable automatic discovery
 
-First, you’ll need to ensure this endpoint can be discovered by Micropub clients. You can do this by adding the follow value to your website’s `<head>`:
+Next, you’ll need to ensure this endpoint can be discovered by Micropub clients. You can do this by adding the follow value to your website’s `<head>`:
 
 ```html
 <link rel="micropub" href="{{ app.url }}/micropub">

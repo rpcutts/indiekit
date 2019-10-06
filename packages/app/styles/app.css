@@ -1,10 +1,22 @@
 @import "./config/*.css";
 @import "./base/*.css";
 @import "../components/**/*.css";
+@import "./helpers/*.css";
 @import "./vendor/*.css";
 
 .form {
   flex: 1;
-  margin: 0 var(--space-block-small);
-  padding: var(--space-block-small) 0;
+  margin: 0 var(--space-block-medium);
+  padding: var(--space-block-medium) 0;
+}
+
+.form__field > * + * {
+  margin-block-start: var(--space-block-small);
+}
+
+.form__field--error {
+  border-inline-start-color: var(--color-error);
+  border-inline-start-width: var(--border-width-thick);
+  border-inline-start-style: solid;
+  padding-inline-start: var(--space-inline);
 }

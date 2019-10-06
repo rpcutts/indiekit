@@ -1,3 +1,4 @@
 .hint {
   @extend %reference;
+  color: var(--color-neutral-dark);
 }

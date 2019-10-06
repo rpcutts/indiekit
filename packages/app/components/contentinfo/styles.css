@@ -3,8 +3,8 @@
   display: flex;
   font-size: var(--font-size-reference);
   justify-content: flex-end;
-  margin: 0 var(--space-block-small);
-  padding: var(--space-block-small) 0;
+  margin: 0 var(--space-block-medium);
+  padding: var(--space-block-medium) 0;
 }
 
 .contentinfo a {

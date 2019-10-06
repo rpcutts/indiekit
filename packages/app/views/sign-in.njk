@@ -4,22 +4,25 @@
 
 {% block fieldset %}
   {{ input ({
-    errorMessage: {
-      classes: "foo bar",
-      text: errors.url.msg,
-      label: __("Error")
-    } if errors.url,
     label: {
       text: __("Web address")
     },
     id: "url",
     name: "url",
-    value: errors.url.value
+    type: "url",
+    value: errors.url.value,
+    errorMessage: {
+      text: errors.url.msg,
+      label: __("Error")
+    } if errors.url
   }) | indent(2) }}
 
   {{ input ({
-    type: "hidden",
+    field: {
+      classes: "visually-hidden"
+    },
     name: "redirect_uri",
+    type: "hidden",
     value: redirect_uri
   }) | indent(2) }}
 

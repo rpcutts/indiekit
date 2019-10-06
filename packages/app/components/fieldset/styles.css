@@ -1,9 +1,10 @@
 .fieldset {
-  --flow-space: 0.75em;
-  --list-display: list-item;
-  --linear-measure: var(--line-measure);
   @extend %body;
   max-width: 45rem;
+}
+
+.fieldset > * + * {
+  margin-block-start: var(--space-block-medium);
 }
 
 @media (--from-medium-viewport) {
@@ -14,5 +15,5 @@
 
 .fieldset__title {
   @extend %title;
-  --flow-space: var(--space-block-medium);
+  padding-block-end: var(--space-block-large);
 }

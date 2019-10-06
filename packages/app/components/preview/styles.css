@@ -1,9 +1,11 @@
 .preview {
-  --flow-space: var(space-block-medium);
   background-color: var(--color-neutral-lightest);
   border-radius: var(--border-radius-small);
-  margin: var(--space-block-small) 0;
   padding: var(--inset);
+}
+
+.preview > * + * {
+  margin-block-start: var(--space-block-small);
 }
 
 .preview__title {
@@ -11,7 +13,7 @@
 }
 
 .preview__content {
-  @extend %lede;
+  @extend %body;
 }
 
 .preview__date {

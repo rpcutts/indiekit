@@ -18,15 +18,15 @@ pre {
 figure,
 blockquote,
 :--flow {
-  margin: 0 0 var(--flow-space, 0) 0;
+  margin: 0;
   orphans: 2;
   widows: 2;
 }
 
-dl[class],
-ol[class],
-ul[class] {
-  margin: 0 0 var(--flow-space, 0) 0;
+dl,
+ol,
+ul {
+  margin: 0;
   padding: 0;
 }
 

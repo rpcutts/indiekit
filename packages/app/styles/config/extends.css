@@ -7,7 +7,7 @@
 
 %lede {
   color: var(--color-neutral-darker);
-  font-size: var(--font-size-lede);
+  font-size: var(--font-size-heading);
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
 }
@@ -17,7 +17,6 @@
   font-weight: 700;
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
-  margin-block-start: 2em;
 }
 
 %subhead {
@@ -25,7 +24,13 @@
   font-weight: 700;
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
-  margin-block-start: 1.5em;
+}
+
+%label {
+  font-size: var(--font-size-body);
+  font-weight: 700;
+  hanging-punctuation: first;
+  line-height: var(--line-height-tight);
 }
 
 %body {
@@ -42,7 +47,7 @@
   font-variant: oldstyle-nums;
   hanging-punctuation: first;
   hyphens: auto;
-  line-height: var(--line-height-reference);
+  line-height: var(--line-height-loose);
   word-spacing: var(--word-spacing);
 }
 

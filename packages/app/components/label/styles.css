@@ -1,6 +1,4 @@
 .label {
-  @extend %subhead;
+  @extend %label;
   display: block;
-  padding: var(--inset-squished);
-  padding-inline-start: 0;
 }

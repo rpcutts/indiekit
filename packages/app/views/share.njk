@@ -4,7 +4,7 @@
 
 {% set title = "Share" %}
 
-{% block content %}
+{% block fieldset %}
   {{ preview({
     title: name,
     content: content,
@@ -15,6 +15,7 @@
     label: {
       text: __("Title")
     },
+    id: "name",
     name: "name",
     value: name
   }) }}
@@ -23,28 +24,36 @@
     label: {
       text: __("URL")
     },
+    id: "bookmark-of",
     name: "bookmark-of",
-    value: url
+    value: bookmark-of
   }) }}
 
   {{ textarea({
     label: {
       text: __("Content")
     },
+    id: "content",
     name: "content",
     value: content
   }) | indent(8) }}
 
   {{ input({
+    field: {
+      classes: "visually-hidden"
+    },
     type: "hidden",
-    name: "access_token-of",
+    name: "access_token",
     value: session.indieauthToken
   }) }}
 
   {{ input({
+    field: {
+      classes: "visually-hidden"
+    },
     type: "hidden",
     name: "h",
-    value: entry
+    value: "entry"
   }) }}
 
   {{ button({
@@ -58,13 +67,13 @@
 {% block scripts %}
 <script>
   let share = document.querySelector('.form');
-  let title = document.getElementById('title');
-  let titlePreview = document.querySelector('output[for="title"]');
+  let name = document.getElementById('name');
+  let namePreview = document.querySelector('output[for="name"]');
   let content = document.getElementById('content');
   let contentPreview = document.querySelector('output[for="content"]');
   share.oninput = handleInput;
   function handleInput(e) {
-    titlePreview.value = decodeURIComponent(title.value);
+    namePreview.value = decodeURIComponent(name.value);
     contentPreview.value = content.value;
   }
 </script>

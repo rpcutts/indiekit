@@ -2,7 +2,9 @@
 {%- from "../hint/macro.njk" import hint -%}
 {%- from "../label/macro.njk" import label -%}
 {%- set describedBy = opts.describedBy if opts.describedBy else "" -%}
-<div class="form__item {%- if opts.errorMessage %} form__item--error{% endif %}">
+{%- set fieldClasses = "form__field" + (" " + opts.field.classes if opts.field.classes) -%}
+<div class="{{ fieldClasses + (" " + "form__field--error" if opts.errorMessage) }}">
+{%- if opts.label %}
   {{ label({
     html: opts.label.html,
     text: opts.label.text,
@@ -10,6 +12,7 @@
     attributes: opts.label.attributes,
     for: opts.id
   }) | indent(2) | trim }}
+{%- endif %}
 {%- if opts.hint %}
   {%- set hintId = opts.id + "-hint" %}
   {%- set describedBy = describedBy + " " + hintId if describedBy else hintId %}
@@ -33,7 +36,8 @@
     visuallyHiddenText: opts.errorMessage.visuallyHiddenText
   }) | indent(2) | trim }}
 {%- endif %}
-  <textarea class="textarea {{- " textarea--error" if opts.errorMessage }} {{- " " + opts.classes if opts.classes}}" id="{{ opts.id }}" name="{{ opts.name }}"
+{%- set classes = "textarea" + (" " + opts.classes if opts.classes) -%}
+  <textarea class="{{ classes + (" " + "textarea--error" if opts.errorMessage) }}"id="{{ opts.id }}" name="{{ opts.name }}"
   rows="{{ opts.rows or 5 }}"
   {%- if describedBy %} aria-describedby="{{ describedBy }}"{% endif %}
   {%- if opts.autocomplete %} autocomplete="{{ opts.autocomplete}}"{% endif %}

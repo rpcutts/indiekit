@@ -1,10 +1,10 @@
 {% extends "_document.njk" %}
 
 {% set title = status + " - " + error %}
-
-{% block content %}
-<p>{{ error_description }}</p>
+{% set body %}
+{{ error_description }}
 {% if error_uri %}
-<p><small><a href="{{ error_uri }}">{{ error_uri }}</a></small></p>
+{{ error_uri }}
+[{{ error_uri }}]({{ error_uri }})
 {% endif %}
-{% endblock %}
+{% endset %}

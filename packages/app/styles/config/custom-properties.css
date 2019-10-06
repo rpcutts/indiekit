@@ -15,16 +15,16 @@
   --color-highlight: hsla(60, 100%, 80%, 0.75);
   --color-insert: hsla(120, 100%, 80%, 0.75);
   --color-focus: var(--color-accent);
+  --color-error: hsl(0, 100%, 40%);
 
   /* Typography */
   --font-family-system: system-ui, -apple-system, sans-serif;
   --font-family-monospace: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
-  --font-size-title: calc(1.75rem + 1vmin);
-  --font-size-lede: calc(1.125rem + 0.25vmin);
-  --font-size-heading: calc(1.25rem + 0.75vmin);
-  --font-size-subhead: calc(1.125rem + 0.25vmin);
-  --font-size-body: calc(1rem + 0.375vmin);
-  --font-size-reference: calc(0.875rem + 0.25vmin);
+  --font-size-title: calc(1.75rem + 1vw);
+  --font-size-heading: calc(1.125rem + 0.5vw);
+  --font-size-subhead: calc(1rem + 0.5vw);
+  --font-size-body: calc(0.875rem + 0.5vw);
+  --font-size-reference: calc(0.75rem + 0.25vw);
   --font-size-default: 1rem;
   --line-height-solid: 1em;
   --line-height-tight: calc(1.25em + 0.25vw);
@@ -44,10 +44,10 @@
   --size-icon-large: 3rem;
 
   /* Spacing > Block */
-  --space-block-large: calc(2rem + 6vh);
-  --space-block-medium: calc(1rem + 3vh);
-  --space-block-small: calc(0.75rem + 1.5vmin);
-  --space-block-xsmall: calc(0.25rem + 0.5vh);
+  --space-block-large: 3rem;
+  --space-block-medium: 1.5rem;
+  --space-block-small: 0.5rem;
+  --space-block-xsmall: 0.25rem;
 
   /* Spacing > Inline */
   --space-inline-xsmall: 0.25rem;
@@ -55,7 +55,7 @@
   --space-inline: 0.75rem;
 
   /* Inset spacing */
-  --inset: calc(0.5rem + 0.25vw);
+  --inset: 0.75rem;
   --inset-squished: calc(var(--inset) / 2) var(--inset);
   --inset-small: calc(var(--inset) / 2);
   --inset-small-squished: calc(var(--inset-small) / 2) var(--inset-small);

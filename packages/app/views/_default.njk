@@ -23,22 +23,24 @@
       description: app.description,
       navigation: [{
         href: "/docs",
-        label: __("Help")
+        text: __("Documentation")
       }, {
         href: "/sign-in",
-        label: __("Sign in")
+        text: __("Sign in")
       } if not session.me, {
         href: "/sign-out",
-        label: __("Sign out")
+        text: __("Sign out")
       } if session.me]
     }) | indent(4) }}
+
+    {{ session.me }}
 
     {%- block main %}{% endblock %}
 
     {{ contentinfo({
       navigation: [{
         href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,
-        label: "v" + app.version
+        text: "v" + app.version
       }]
     }) | indent(4) }}
   </body>

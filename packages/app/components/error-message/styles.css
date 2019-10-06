@@ -1,5 +1,7 @@
 .error-message {
-
+  @extend %reference;
+  color: var(--color-error);
+  font-weight: 500;
 }
 
 .error-message__label {

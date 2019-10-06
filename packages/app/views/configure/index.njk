@@ -1,0 +1,41 @@
+{% extends "_form.njk" %}
+
+{% set title = "Server settings" %}
+
+{% block fieldset %}
+  {{ input ({
+    classes: "input--width-5",
+    label: {
+      text: __("server.configure.locale.label")
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "locale",
+    name: "locale",
+    value: locale or "en-GB",
+    errorMessage: {
+      text: errors.locale.msg,
+      label: __("Error")
+    } if errors.locale
+  }) | indent(2) }}
+
+  {{ input ({
+    classes: "input--width-5",
+    label: {
+      text: __("server.configure.color.label")
+    },
+    id: "color",
+    name: "color",
+    type: "color",
+    value: color or "#00e",
+    errorMessage: {
+      text: errors.color.msg,
+      label: __("Error")
+    } if errors.color
+  }) | indent(2) }}
+
+  {{ button({
+    text: __("Continue")
+  }) | indent(2) }}
+{% endblock %}

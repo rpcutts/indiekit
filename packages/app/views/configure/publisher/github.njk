@@ -1,0 +1,82 @@
+{% extends "_form.njk" %}
+
+{% set title = "Publish to GitHub" %}
+
+{% block fieldset %}
+  {{ input ({
+    label: {
+      text: __("publisher-github.configure.user.label")
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "user",
+    name: "user",
+    value: user,
+    errorMessage: {
+      text: errors.user.msg,
+      label: __("Error")
+    } if errors.user
+  }) | indent(2) }}
+
+  {{ input ({
+    label: {
+      text: __("publisher-github.configure.repo.label")
+    },
+    hint: {
+      text: __("publisher-github.configure.repo.hint")
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "repo",
+    name: "repo",
+    value: repo,
+    errorMessage: {
+      text: errors.repo.msg,
+      label: __("Error")
+    } if errors.repo
+  }) | indent(2) }}
+
+  {{ input ({
+    label: {
+      text: __("publisher-github.configure.branch.label")
+    },
+    hint: {
+      text: __("publisher-github.configure.branch.hint")
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "branch",
+    name: "branch",
+    value: branch or "master",
+    errorMessage: {
+      text: errors.branch.msg,
+      label: __("Error")
+    } if errors.branch
+  }) | indent(2) }}
+
+  {{ input ({
+    label: {
+      text: __("publisher-github.configure.token.label")
+    },
+    hint: {
+      html: "<a href=\"https://github.com/settings/tokens\">" + __("publisher-github.configure.token.hint") + "</a>"
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "token",
+    name: "token",
+    value: token,
+    errorMessage: {
+      text: errors.token.msg,
+      label: __("Error")
+    } if errors.token
+  }) | indent(2) }}
+
+  {{ button({
+    text: __("Continue")
+  }) | indent(2) }}
+{% endblock %}

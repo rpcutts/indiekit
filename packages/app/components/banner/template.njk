@@ -9,7 +9,9 @@
 {%- if opts.navigation %}
   <nav class="banner__navigation" aria-label="site">
   {%- for item in opts.navigation %}
-    <a href="{{ item.href }}">{{ item.label }}</a>
+    {%- if item.href and item.text %}
+    <a href="{{ item.href }}">{{ item.text }}</a>
+    {%- endif %}
   {%- endfor %}
   </nav>
 {%- endif %}
