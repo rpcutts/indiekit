@@ -1,38 +1,39 @@
 const test = require('ava');
-const {checkTokenScope} = require('../.');
 
-test('Returns true if required scope is provided by token', t => {
-  const hasScope = checkTokenScope('update', 'create update');
+const checkTokenScope = require('../lib/check-token-scope');
+
+test('Returns true if required scope is provided by token', async t => {
+  const opts = {token: {scope: 'create update'}};
+  const hasScope = await checkTokenScope(opts, 'update');
   t.true(hasScope);
 });
 
-test('Returns true if required scope is `create` but token provides `post`', t => {
-  const hasScope = checkTokenScope('create', 'post');
+test('Returns true if required scope is `create` but token provides `post`', async t => {
+  const opts = {token: {scope: 'post'}};
+  const hasScope = await checkTokenScope(opts, 'create');
   t.true(hasScope);
 });
 
-test('Returns true if required scope is `post` but token provides `create`', t => {
-  const hasScope = checkTokenScope('post', 'create');
+test('Returns true if required scope is `post` but token provides `create`', async t => {
+  const opts = {token: {scope: 'create'}};
+  const hasScope = await checkTokenScope(opts, 'post');
   t.true(hasScope);
 });
 
-test('Throws error if no scope provided in access token', t => {
-  const error = t.throws(() => {
-    checkTokenScope('delete', null);
-  });
-  t.is(error.message, 'Access token does not provide any scope(s)');
+test('Throws error if no scope provided in access token', async t => {
+  const opts = {token: {}};
+  const error = await t.throwsAsync(checkTokenScope(opts, 'delete'));
+  t.is(error.message, 'No scope(s) provided by access token');
 });
 
-test('Throws error if required scope not provided', t => {
-  const error = t.throws(() => {
-    checkTokenScope(null, 'create update');
-  });
-  t.is(error.message, 'No scope was provided in request');
+test('Throws error if required scope not provided', async t => {
+  const opts = {token: {scope: 'create update'}};
+  const error = await t.throwsAsync(checkTokenScope(opts, null));
+  t.is(error.message, 'No scope provided in request');
 });
 
-test('Throws error if required scope not provided by access token', t => {
-  const error = t.throws(() => {
-    checkTokenScope('delete', 'create update');
-  });
+test('Throws error if required scope not provided by access token', async t => {
+  const opts = {token: {scope: 'create update'}};
+  const error = await t.throwsAsync(checkTokenScope(opts, 'delete'));
   t.is(error.message, 'Access token does not meet requirements for requested scope (delete)');
 });

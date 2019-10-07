@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const express = require('express');
 const {ServerError} = require('@indiekit/support');
 
@@ -20,21 +19,6 @@ router.use((req, res) => {
       error_description: req.__('The requested resource was not found')
     });
   }
-});
-
-router.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
-  if (error instanceof ServerError) {
-    return res.status(error.status).send({
-      error: _.snakeCase(error.name),
-      error_description: error.message,
-      error_uri: error.uri
-    });
-  }
-
-  return res.status(500).send({
-    error: 'Internal server error',
-    error_description: error.message
-  });
 });
 
 module.exports = router;

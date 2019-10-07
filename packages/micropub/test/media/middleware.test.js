@@ -26,7 +26,7 @@ test('Returns 400 in response to unknown endpoint query', async t => {
   t.is(response.body.error, 'invalid_request');
 });
 
-test('Uploads a media file', async t => {
+test.serial('Uploads a media file', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/\b[\d\w]{5}\b/g)
@@ -56,7 +56,7 @@ test('Throws error creating media if token missing required scope', async t => {
 
   // Test assertions
   t.is(response.status, 401);
-  t.is(response.body.error_description, 'Access token does not provide any scope(s)');
+  t.is(response.body.error_description, 'No scope(s) provided by access token');
 });
 
 test('Throws error if problem creating media', async t => {

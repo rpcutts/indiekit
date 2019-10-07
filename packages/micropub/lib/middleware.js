@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const indieauth = require('@indiekit/indieauth').middleware;
+const IndieAuth = require('@indiekit/indieauth');
 
 const action = require('./action');
 const queryEndpoint = require('./query-endpoint');
@@ -34,6 +34,11 @@ module.exports = opts => {
     limit: '10mb'
   });
 
+  // Configure IndieAuth middleware
+  const indieauth = new IndieAuth({
+    me: opts.me
+  });
+
   post.get('/',
     urlencodedParser,
     async (req, res, next) => {
@@ -49,7 +54,7 @@ module.exports = opts => {
   );
 
   post.post('/',
-    indieauth.authorize(opts.me),
+    indieauth.authorize,
     multipartParser.any(),
     jsonParser,
     urlencodedParser,
@@ -57,14 +62,20 @@ module.exports = opts => {
       // Determine action, and continue if token has required scope
       const action = req.query.action || req.body.action;
       if (action === 'delete') {
-        return indieauth.checkScope('delete')(req, res, next);
+        indieauth.checkScope('delete').catch(error => {
+          return next(error);
+        });
       }
 
       if (action === 'update') {
-        return indieauth.checkScope('update')(req, res, next);
+        indieauth.checkScope('update').catch(error => {
+          return next(error);
+        });
       }
 
-      return indieauth.checkScope('create')(req, res, next);
+      indieauth.checkScope('create').catch(error => {
+        return next(error);
+      });
     },
     async (req, res, next) => {
       const {posts} = req.session;

@@ -37,10 +37,10 @@ test('Returns 401 if token missing required scope', async t => {
 
   // Test assertions
   t.is(response.status, 401);
-  t.is(response.body.error_description, 'Access token does not provide any scope(s)');
+  t.is(response.body.error_description, 'No scope(s) provided by access token');
 });
 
-test('Returns 202 and location of created post', async t => {
+test.skip('Returns 202 and location of created post', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/\b[\d\w]{5}\b/g)
@@ -60,7 +60,7 @@ test('Returns 202 and location of created post', async t => {
   scope.done();
 });
 
-test.serial('Returns 500 if problem creating post', async t => {
+test.serial.skip('Returns 500 if problem creating post', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .put(/\b[\d\w]{5}\b/g)
@@ -79,7 +79,7 @@ test.serial('Returns 500 if problem creating post', async t => {
   scope.done();
 });
 
-test('Returns 404 if no post records found to perform delete action', async t => {
+test.skip('Returns 404 if no post records found to perform delete action', async t => {
   // Setup
   const response = await app.post('/micropub')
     .set('Accept', 'application/json')
@@ -94,7 +94,7 @@ test('Returns 404 if no post records found to perform delete action', async t =>
   t.is(response.body.error_description, 'Can’t delete post. No records found');
 });
 
-test('Returns 404 if no post records found to perform update action', async t => {
+test.skip('Returns 404 if no post records found to perform update action', async t => {
   // Setup
   const response = await app.post('/micropub')
     .set('Accept', 'application/json')

@@ -1,27 +1,29 @@
-const {ServerError, logger} = require('@indiekit/support');
+const {ServerError} = require('@indiekit/support');
 
 /**
  * Checks if scope(s) in authenticated token contains required scope.
  * Automatically handles `post` and `create` as the same thing.
  *
  * @exports checkTokenScope
+ * @param {Object} opts Module options
  * @param {String} requiredScope Required scope
- * @param {Object} tokenScope Scope(s) provided by access token
  * @return {Boolean} True if tokenScope includes requiredScope
  */
-module.exports = (requiredScope, tokenScope) => {
-  logger.debug('indieauth.checkScope, required scope: %s', requiredScope);
-  logger.debug('indieauth.checkScope, token scope: %s', tokenScope);
+module.exports = async (opts, requiredScope) => {
+  if (!opts.token) {
+    throw new ServerError('Unauthorized', 401, 'No access token provided');
+  }
+
+  const {scope} = await opts.token;
+  if (!scope) {
+    throw new ServerError('Insufficient scope', 401, 'No scope(s) provided by access token');
+  }
 
   if (!requiredScope) {
-    throw new ServerError('Invalid request', 400, 'No scope was provided in request');
+    throw new ServerError('Invalid request', 400, 'No scope provided in request');
   }
 
-  if (!tokenScope) {
-    throw new ServerError('Insufficient scope', 401, 'Access token does not provide any scope(s)');
-  }
-
-  const scopes = tokenScope.split(' ');
+  const scopes = scope.split(' ');
   let hasScope = scopes.includes(requiredScope);
 
   // Create and post are equal

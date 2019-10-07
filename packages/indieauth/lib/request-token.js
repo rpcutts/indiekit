@@ -5,25 +5,19 @@ const {ServerError} = require('@indiekit/support');
  * Requests an IndieAuth access token.
  *
  * @exports requestToken
- * @param {Object} bearerToken oAuth bearer token
  * @param {Object} opts Module options
+ * @param {Object} bearerToken oAuth bearer token
  * @return {Object} Access token
  */
-module.exports = async (bearerToken, opts = {}) => {
-  // Throw error if no access token provided
+module.exports = async (opts, bearerToken) => {
   if (!bearerToken) {
     throw new ServerError('Unauthorized', 401, 'No token provided in request');
-  }
-
-  // Provide default token endpoint if none provided
-  if (opts['token-endpoint'] === undefined) {
-    opts['token-endpoint'] = 'https://tokens.indieauth.com/token';
   }
 
   let status;
   let accessToken;
   try {
-    const response = await fetch(opts['token-endpoint'], {
+    const response = await fetch(opts.tokenEndpoint, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

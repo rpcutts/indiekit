@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const _ = require('lodash');
 const express = require('express');
 const favicon = require('serve-favicon');
 const i18n = require('i18n');
@@ -11,6 +12,7 @@ const {utils} = require('@indiekit/support');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
+const {ServerError} = require('@indiekit/support');
 
 const config = require('./config');
 
@@ -117,6 +119,21 @@ app.use('/share', authenticate, require('./routes/share'));
 app.use('/docs', require('./routes/docs'));
 app.use(require('./routes/session'));
 app.use(require('./routes/error'));
+
+app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
+  if (error instanceof ServerError) {
+    return res.status(error.status).send({
+      error: _.snakeCase(error.name),
+      error_description: error.message,
+      error_uri: error.uri
+    });
+  }
+
+  return res.status(500).send({
+    error: 'Internal server error',
+    error_description: error.message
+  });
+});
 
 https.createServer({
   key: fs.readFileSync('./ssl/key.pem'),

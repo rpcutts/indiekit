@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const indieauth = require('@indiekit/indieauth').middleware;
+const IndieAuth = require('@indiekit/indieauth');
 
 const queryEndpoint = require('./query-endpoint');
 const uploadMedia = require('./upload-media');
@@ -29,6 +29,11 @@ module.exports = opts => {
     limit: '10mb'
   });
 
+  // Configure IndieAuth middleware
+  const indieauth = new IndieAuth({
+    me: opts.me
+  });
+
   media.get('/',
     urlencodedParser,
     (req, res, next) => {
@@ -44,18 +49,21 @@ module.exports = opts => {
   );
 
   media.post('/',
-    indieauth.authorize(opts.me),
-    indieauth.checkScope('create'),
+    indieauth.authorize,
     multipartParser.single('file'),
     async (req, res, next) => {
       const {file} = req;
       const {media} = req.session;
 
+      const authorized = indieauth.checkScope('create').catch(error => {
+        return next(error);
+      });
+
       const uploaded = await uploadMedia(req, file, media).catch(error => {
         return next(error);
       });
 
-      if (uploaded) {
+      if (authorized && uploaded) {
         res.header('Location', uploaded.url);
         return res.status(201).json({
           success: 'create',
