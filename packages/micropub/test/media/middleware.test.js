@@ -33,7 +33,7 @@ test.serial('Uploads a media file', async t => {
     .reply(200);
 
   // Setup
-  const image = path.resolve(__dirname, '../fixtures/image.gif');
+  const image = path.resolve(__dirname, '../fixtures/photo.jpg');
   const response = await app.post('/media')
     .set('Accept', 'application/json')
     .set('Authorization', `Bearer ${t.context.token}`)
@@ -42,13 +42,13 @@ test.serial('Uploads a media file', async t => {
   // Test assertions
   t.is(response.status, 201);
   t.is(response.body.success, 'create');
-  t.regex(response.header.location, /\b[\d\w]{5}\b.gif/g);
+  t.regex(response.header.location, /\b[\d\w]{5}\b.jpg/g);
   scope.done();
 });
 
 test('Throws error creating media if token missing required scope', async t => {
   // Setup
-  const image = path.resolve(__dirname, '../fixtures/image.gif');
+  const image = path.resolve(__dirname, '../fixtures/photo.jpg');
   const response = await app.post('/media')
     .set('Accept', 'application/json')
     .set('Authorization', `Bearer ${t.context.badToken}`)

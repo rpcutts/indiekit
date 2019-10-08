@@ -2,6 +2,7 @@ const fs = require('fs');
 const camelcaseKeys = require('camelcase-keys');
 const {utils} = require('@indiekit/support');
 const createData = require('./create-data');
+const derive = require('./utils/derive');
 
 /**
  * Updates a post.
@@ -51,7 +52,7 @@ module.exports = async (req, postData, posts) => {
     let path = utils.render(typeConfig.post.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.post.url, properties);
-    url = utils.derivePermalink(pub.url, url);
+    url = derive.permalink(pub.url, url);
 
     // Update content
     const content = utils.render(typeTemplate, camelcaseKeys(properties));

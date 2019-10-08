@@ -31,10 +31,8 @@
   },
   "dependencies": {
     "@indiekit/support": "0.1.0",
-    "luxon": "^1.17.2",
     "microformat-node": "^2.0.1",
-    "node-fetch": "^2.6.0",
-    "slug": "^1.1.0"
+    "node-fetch": "^2.6.0"
   },
   "xo": false
 }

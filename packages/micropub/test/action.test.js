@@ -37,8 +37,8 @@ test.before(t => {
     };
     req.files = file ? [{
       buffer: Buffer.from(file),
-      mimetype: 'image/gif',
-      originalname: 'image.gif'
+      mimetype: 'image/jpg',
+      originalname: 'photo.jpg'
     }] : null;
     req.is = sinon.stub().returns(req);
     req.query = sinon.stub().returns(req);
@@ -79,7 +79,7 @@ test.serial('Creates a post file with attachment', async t => {
     .reply(200);
 
   // Setup
-  const file = fs.readFileSync(path.resolve(__dirname, 'fixtures/image.gif'));
+  const file = fs.readFileSync(path.resolve(__dirname, 'fixtures/photo.jpg'));
   const req = await t.context.req(file);
   const result = await action(req);
 

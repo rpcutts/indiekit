@@ -28,7 +28,6 @@
     "test": "echo \"Run tests from root\" && exit 1"
   },
   "dependencies": {
-    "file-type": "^12.2.0",
     "front-matter": "^3.0.2",
     "lodash": "^4.17.15",
     "luxon": "^1.17.2",

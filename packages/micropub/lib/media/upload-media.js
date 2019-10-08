@@ -1,5 +1,6 @@
 const {ServerError, utils} = require('@indiekit/support');
 const createData = require('./create-data');
+const derive = require('./../utils/derive');
 
 /**
  * Upload a media file.
@@ -19,17 +20,17 @@ module.exports = async (req, file, media) => {
     const {pub} = req.app.locals;
 
     // Post type
-    const type = utils.deriveMediaType(file);
+    const type = derive.mediaType(file);
     const typeConfig = pub['post-type-config'][type];
 
     // Derive properties
-    const properties = utils.deriveFileProperties(file);
+    const properties = derive.fileData(file);
 
     // Render publish path and public url
     let path = utils.render(typeConfig.media.path, properties);
     path = utils.normalizePath(path);
     let url = utils.render(typeConfig.media.url || typeConfig.media.path, properties);
-    url = utils.derivePermalink(pub.url, url);
+    url = derive.permalink(pub.url, url);
 
     // Upload media file
     const {publisher} = pub;

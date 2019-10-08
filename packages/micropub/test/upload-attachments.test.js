@@ -25,7 +25,7 @@ const pub = new Publication({
 const {uploadAttachments} = require('../.');
 
 test.before(t => {
-  const image = fs.readFileSync(path.resolve(__dirname, 'fixtures/image.gif'));
+  const photo = fs.readFileSync(path.resolve(__dirname, 'fixtures/photo.jpg'));
   t.context.media = [];
   t.context.req = async () => {
     const req = {};
@@ -36,9 +36,9 @@ test.before(t => {
       }
     };
     req.files = [{
-      buffer: Buffer.from(image),
-      mimetype: 'image/gif',
-      originalname: 'image.gif'
+      buffer: Buffer.from(photo),
+      mimetype: 'image/jpg',
+      originalname: 'photo.jpg'
     }];
     return req;
   };

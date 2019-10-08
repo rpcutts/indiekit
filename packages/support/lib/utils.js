@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const {DateTime} = require('luxon');
-const fileType = require('file-type');
 const frontmatter = require('front-matter');
 const markdown = require('./markdown');
 const nunjucks = require('nunjucks');
@@ -94,17 +93,6 @@ const utils = {
   },
 
   /**
-   * Generate random alpha-numeric string, 5 characters long.
-   *
-   * @function createRandomString
-   * @example createRandomString() => 'b3dog'
-   * @return {Object} Alpha-numeric string
-   */
-  createRandomString() {
-    return (Number(new Date())).toString(36).slice(-5);
-  },
-
-  /**
    * Decode form-encoded string.
    *
    * @function decodeFormEncodedString
@@ -179,94 +167,9 @@ const utils = {
   },
 
   /**
-   * Derive additional file name properties.
-   *
-   * @function deriveFileProperties
-   * @example deriveFileProperties('brighton-pier.jpg') => {
-   *   originalname: 'brighton-pier.jpg',
-   *   filedate: '2019-03-03T05:07:09+00:00',
-   *   filename: 'ds48s',
-   *   fileext: '.jpg'
-   * }
-   * @param {Object} file Original file object
-   * @return {Object} File properties
-   */
-  deriveFileProperties(file) {
-    const basename = utils.createRandomString();
-    const {ext} = fileType(file.buffer);
-    return {
-      originalname: file.originalname,
-      filedate: DateTime.local().toISO(),
-      filename: `${basename}.${ext}`,
-      fileext: ext
-    };
-  },
-
-  /**
-   * Derive media type and returns equivalent IndieWeb post type.
-   *
-   * @function deriveMediaType
-   * @example deriveMediaType('brighton-pier.jpg') => 'photo'
-   * @param {Object} file Original file object
-   * @return {String} Returns either 'photo', 'video' or audio
-   */
-  deriveMediaType(file) {
-    const {mime} = fileType(file.buffer);
-
-    if (mime.includes('audio/')) {
-      return 'audio';
-    }
-
-    if (mime.includes('image/')) {
-      return 'photo';
-    }
-
-    if (mime.includes('video/')) {
-      return 'video';
-    }
-
-    return null;
-  },
-
-  /**
-   * Derive a permalink (by combining publication URL, that may include a
-   * path, with the path to a post or file.
-   *
-   * @function derivePermalink
-   * @example derivePermalink('http://foo.bar/baz', '/qux/quux') =>
-   *   'http://foo.bar/baz/qux/quux'
-   * @param {Object} url URL
-   * @param {Object} pathname permalink path
-   * @return {String} Returns either 'photo', 'video' or audio
-   */
-  derivePermalink(url, pathname) {
-    url = new URL(url);
-    let permalink = path.join(url.pathname, pathname);
-    permalink = new URL(permalink, url);
-
-    return permalink.href;
-  },
-
-  /**
-   * Get first n words from a string.
-   *
-   * @function excerptString
-   * @example excerptString('Foo bar baz', 2) => 'Foo bar'
-   * @param {String} str String to excerpt
-   * @param {Number} n Max number of words
-   * @return {String} Excerpt
-   */
-  excerptString(str, n) {
-    if (typeof str === 'string') {
-      str = str.split(/\s+/).slice(0, n).join(' ');
-      return str;
-    }
-
-    return null;
-  },
-
-  /**
    * Format date
+   *
+   * @function formatDate
    * @param {String} str ISO 8601 date
    * @param {String} format Tokenised date format
    * @return {String} Formatted date
@@ -361,6 +264,7 @@ const utils = {
   /**
    * Render Markdown string as HTML
    *
+   * @function renderMarkdown
    * @param {String} str Markdown
    * @param {String} value If 'inline', HTML rendered without paragraph tags
    * @return {String} HTML
