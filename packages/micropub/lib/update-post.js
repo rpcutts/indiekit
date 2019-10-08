@@ -3,6 +3,7 @@ const camelcaseKeys = require('camelcase-keys');
 const {utils} = require('@indiekit/support');
 const dataFormat = require('./utils/data-format');
 const derive = require('./utils/derive');
+const update = require('./utils/update');
 
 /**
  * Updates a post.
@@ -31,20 +32,20 @@ module.exports = async (req, postData, posts) => {
 
     // Replace property entries
     if (Object.prototype.hasOwnProperty.call(body, 'replace')) {
-      properties = utils.replaceEntries(properties, body.replace);
+      properties = update.replaceEntries(properties, body.replace);
     }
 
     // Add properties
     if (Object.prototype.hasOwnProperty.call(body, 'add')) {
-      properties = utils.addProperties(properties, body.add);
+      properties = update.addProperties(properties, body.add);
     }
 
     // Remove properties and/or property entries
     if (Object.prototype.hasOwnProperty.call(body, 'delete')) {
       if (Array.isArray(body.delete)) {
-        properties = utils.deleteProperties(properties, body.delete);
+        properties = update.deleteProperties(properties, body.delete);
       } else {
-        properties = utils.deleteEntries(properties, body.delete);
+        properties = update.deleteEntries(properties, body.delete);
       }
     }
 
