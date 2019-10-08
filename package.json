@@ -19,10 +19,10 @@
     "url": "https://github.com/paulrobertlloyd/indiekit.git"
   },
   "scripts": {
-    "build:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config etc/postcss.config.js",
+    "build:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config packages/app/postcss.config.js",
     "build": "npm run build:styles",
     "watch:app": "nodemon packages/app",
-    "watch:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config etc/postcss.config.js --watch",
+    "watch:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config packages/app/postcss.config.js --watch",
     "watch": "npm-run-all --parallel watch:*",
     "preinstall": "npx lerna bootstrap",
     "start": "node packages/app",
