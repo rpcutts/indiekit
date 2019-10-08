@@ -1,7 +1,7 @@
 const fs = require('fs');
 const camelcaseKeys = require('camelcase-keys');
 const {utils} = require('@indiekit/support');
-const createData = require('./create-data');
+const dataFormat = require('./utils/data-format');
 const derive = require('./utils/derive');
 
 /**
@@ -64,7 +64,7 @@ module.exports = async (req, postData, posts) => {
 
     // Return post data
     if (response) {
-      const postData = createData(type, path, url, properties);
+      const postData = dataFormat.post(type, path, url, properties);
       posts = utils.addToArray(posts, postData);
       return postData;
     }

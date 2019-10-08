@@ -1,5 +1,5 @@
 const {ServerError, utils} = require('@indiekit/support');
-const createData = require('./create-data');
+const dataFormat = require('./../utils/data-format');
 const derive = require('./../utils/derive');
 
 /**
@@ -39,7 +39,7 @@ module.exports = async (req, file, media) => {
 
     // Return media data
     if (response) {
-      const mediaData = createData(type, path, url);
+      const mediaData = dataFormat.media(type, path, url);
       media = utils.addToArray(media, mediaData);
       return mediaData;
     }
