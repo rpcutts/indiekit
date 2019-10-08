@@ -1,7 +1,6 @@
 const fsp = require('fs').promises;
 const os = require('os');
 const path = require('path');
-const utils = require('./utils');
 
 /**
  * Gets file from publisher and saves it to filesystem.
@@ -12,7 +11,6 @@ const utils = require('./utils');
  * @returns {String|Object} Cache value
  */
 module.exports = async (basepath, publisher) => {
-  basepath = utils.normalizePath(basepath);
   const filePath = path.join(os.tmpdir(), basepath);
   let content;
 

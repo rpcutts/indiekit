@@ -27,8 +27,7 @@ module.exports = async (req, file, media) => {
     const properties = derive.fileData(file);
 
     // Render publish path and public url
-    let path = utils.render(typeConfig.media.path, properties);
-    path = utils.normalizePath(path);
+    const path = utils.render(typeConfig.media.path, properties);
     let url = utils.render(typeConfig.media.url || typeConfig.media.path, properties);
     url = derive.permalink(pub.url, url);
 

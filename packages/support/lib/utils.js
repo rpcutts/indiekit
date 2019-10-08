@@ -95,18 +95,6 @@ const utils = {
   },
 
   /**
-   * Remove ‘/’ from beginning and end of string. Useful for constructing paths.
-   *
-   * @function normalizePath
-   * @example normalizePath('/foo/bar/') => 'foo/bar'
-   * @param {String} str Path to normalize
-   * @return {String} Normalized path
-   */
-  normalizePath(str) {
-    return str.replace(/^\/|\/$/g, '');
-  },
-
-  /**
    * Render a Nunjucks template string using context data.
    *
    * @function render

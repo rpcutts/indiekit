@@ -1,5 +1,3 @@
-const {utils} = require('@indiekit/support');
-
 /**
  * Deletes a post.
  *
@@ -16,7 +14,7 @@ module.exports = async (req, postData) => {
     const {type} = postData;
 
     // Get publish path
-    const path = utils.normalizePath(postData.path);
+    const {path} = postData;
 
     // Delete post file
     const {publisher} = pub;

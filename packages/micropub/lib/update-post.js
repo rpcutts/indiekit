@@ -50,8 +50,7 @@ module.exports = async (req, postData, posts) => {
     }
 
     // Update publish path and public url
-    let path = utils.render(typeConfig.post.path, properties);
-    path = utils.normalizePath(path);
+    const path = utils.render(typeConfig.post.path, properties);
     let url = utils.render(typeConfig.post.url, properties);
     url = derive.permalink(pub.url, url);
 

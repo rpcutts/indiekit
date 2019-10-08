@@ -66,10 +66,6 @@ test('Decodes form-encoded string', t => {
   t.is(utils.decodeFormEncodedString('http%3A%2F%2Ffoo.bar'), 'http://foo.bar');
 });
 
-test('Removes `/` from beginning and end of string', t => {
-  t.is(utils.normalizePath('/foo/bar/'), 'foo/bar');
-});
-
 test('Renders a template string using context data', t => {
   const template = '{{ name }} walks into {{ location }}';
   const context = {

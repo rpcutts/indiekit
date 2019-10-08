@@ -26,8 +26,7 @@ module.exports = async (req, postData) => {
     const {properties} = postData.mf2;
 
     // Get publish path
-    let {path} = postData;
-    path = utils.normalizePath(path);
+    const {path} = postData;
 
     // Render content
     const content = utils.render(typeTemplate, camelcaseKeys(properties));
