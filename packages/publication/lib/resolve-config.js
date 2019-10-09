@@ -2,7 +2,7 @@ const os = require('os');
 const path = require('path');
 const _ = require('lodash');
 const debug = require('debug')('indiekit:publication:resolveConfig');
-const {getFile} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 
 /**
  * Merge publication’s configured post types (saving any referenced templates)
@@ -30,7 +30,7 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
         if (configPostType.template && !configPostType.resolved) {
           // Fetch template and save locally
           savedTemplates.push(
-            getFile(configPostType.template, opts.publisher)
+            utils.getFile(configPostType.template, opts.publisher)
           );
 
           // Update `template` with path to saved file

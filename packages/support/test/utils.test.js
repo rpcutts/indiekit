@@ -1,6 +1,15 @@
 const path = require('path');
+const nock = require('nock');
 const test = require('ava');
+const Publisher = require('@indiekit/publisher-github');
+
 const {utils} = require('../.');
+
+const github = new Publisher({
+  token: 'abc123',
+  user: 'user',
+  repo: 'repo'
+});
 
 test('Adds data to an array, creating it if doesn’t exist.', t => {
   t.deepEqual(utils.addToArray(['foo', 'bar'], 'baz'), ['foo', 'bar', 'baz']);
@@ -64,6 +73,22 @@ test('Decodes form-encoded string', t => {
   t.false(utils.decodeFormEncodedString({foo: 'bar'}));
   t.is(utils.decodeFormEncodedString('foo+bar'), 'foo bar');
   t.is(utils.decodeFormEncodedString('http%3A%2F%2Ffoo.bar'), 'http://foo.bar');
+});
+
+test('Throws error if file can’t be fetched from GitHub', async t => {
+  // Mock request
+  const scope = nock('https://api.github.com')
+    .get(uri => uri.includes('foo.txt'))
+    .replyWithError('not found');
+
+  // Setup
+  const error = await t.throwsAsync(async () => {
+    await utils.getFile('foo.txt', github);
+  });
+
+  // Test assertions
+  t.regex(error.message, /\bnot found\b/);
+  scope.done();
 });
 
 test('Renders a template string using context data', t => {
