@@ -140,6 +140,7 @@ app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
 if (process.env.NODE_ENV === 'test') {
   app.listen();
 } else if (process.env.NODE_ENV === 'production') {
+  debug('Listening on port %s', port);
   app.listen(port);
 } else {
   const options = {
@@ -147,6 +148,7 @@ if (process.env.NODE_ENV === 'test') {
     cert: fs.readFileSync('./ssl/cert.pem'),
     passphrase: process.env.PASSPHRASE
   };
+  debug('Listening on port %s', port);
   https.createServer(options, app).listen(port);
 }
 
