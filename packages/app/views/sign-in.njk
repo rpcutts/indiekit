@@ -1,32 +1,36 @@
 {% extends "_form.njk" %}
 
-{% set title = "Sign in" %}
+{% set title = "Sign in" if not session else "Welcome back" %}
 
 {% block fieldset %}
-  {{ input({
-    label: {
-      text: __("Web address")
-    },
-    id: "url",
-    name: "url",
-    type: "url",
-    value: errors.url.value,
-    errorMessage: {
-      text: errors.url.msg,
-      label: __("Error")
-    } if errors.url
-  }) | indent(2) }}
+  {% if not session %}
+    {{ input({
+      label: {
+        text: __("Web address")
+      },
+      id: "url",
+      name: "url",
+      type: "url",
+      value: errors.url.value,
+      errorMessage: {
+        text: errors.url.msg,
+        label: __("Error")
+      } if errors.url
+    }) | indent(2) }}
 
-  {{ input({
-    field: {
-      classes: "visually-hidden"
-    },
-    name: "redirect_uri",
-    type: "hidden",
-    value: redirect_uri
-  }) | indent(2) }}
+    {{ input({
+      field: {
+        classes: "visually-hidden"
+      },
+      name: "redirect_uri",
+      type: "hidden",
+      value: redirect_uri
+    }) | indent(2) }}
 
-  {{ button({
-    text: __("Sign in")
-  }) | indent(2) }}
+    {{ button({
+      text: __("Sign in")
+    }) | indent(2) }}
+  {% else %}
+    <a href="/sign-out">Sign out</a>
+  {% endif %}
 {% endblock %}

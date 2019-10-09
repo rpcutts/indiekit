@@ -1,13 +1,14 @@
 require('dotenv').config();
+const debug = require('debug')('indiekit:app');
 
 const pkg = require(process.env.PWD + '/package');
 const Publisher = require('@indiekit/publisher-github');
 
 const github = new Publisher({
-  token: process.env.GITHUB_TOKEN || console.warn('Missing GITHUB_TOKEN'),
-  user: process.env.GITHUB_USER || console.warn('Missing GITHUB_USER'),
-  repo: process.env.GITHUB_REPO || console.warn('Missing GITHUB_REPO'),
-  branch: process.env.GITHUB_BRANCH || 'master'
+  token: process.env.GITHUB_TOKEN || debug('Missing GITHUB_TOKEN'),
+  user: process.env.GITHUB_USER || debug('Missing GITHUB_USER'),
+  repo: process.env.GITHUB_REPO || debug('Missing GITHUB_REPO'),
+  branch: process.env.GITHUB_BRANCH
 });
 
 const config = module.exports;
@@ -17,9 +18,7 @@ config.name = 'IndieKit';
 config.version = pkg.version;
 config.description = pkg.description;
 config.repository = pkg.repository;
-config.port = (process.env.NODE_ENV === 'test') ?
-  null : // Don’t assign a port when running concurrent tests
-  process.env.PORT || 3000;
+config.port = process.env.PORT || 3000;
 config.mongoDbUri = process.env.MONGODB_URI;
 
 // Customisation

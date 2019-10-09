@@ -11,8 +11,8 @@ const micropub = require('@indiekit/micropub').middleware;
 const Publication = require('@indiekit/publication');
 const {utils} = require('@indiekit/support');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
-const mongoose = require('mongoose');
+const redis = require('redis');
+const RedisStore = require('connect-redis')(session);
 const {ServerError} = require('@indiekit/support');
 
 const config = require('./config');
@@ -54,27 +54,25 @@ i18n.configure({
 });
 app.use(i18n.init);
 
-// MongoDB
-let store = false;
-if (config.mongoDbUri) {
-  mongoose.connect(config.mongoDbUri, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
-  });
-  store = new MongoStore({
-    mongooseConnection: mongoose.connection
-  });
-}
+// Redis
+const client = redis.createClient({
+  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+});
+
+client.on('error', error => {
+  debug(error);
+});
 
 // Session
 app.use(session({
   cookie: {
     secure: true
   },
-  secret: process.env.SESSION_SECRET,
+  name: config.name,
   resave: false,
-  saveUninitialized: true,
-  store
+  saveUninitialized: false,
+  secret: process.env.SESSION_SECRET,
+  store: new RedisStore({client})
 }));
 
 // Add application and publication data to locals
@@ -122,6 +120,7 @@ app.use('/docs', require('./routes/docs'));
 app.use(require('./routes/session'));
 app.use(require('./routes/error'));
 
+// Handle errors
 app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
   if (error instanceof ServerError) {
     return res.status(error.status).send({
@@ -137,12 +136,18 @@ app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
   });
 });
 
-https.createServer({
-  key: fs.readFileSync('./ssl/key.pem'),
-  cert: fs.readFileSync('./ssl/cert.pem'),
-  passphrase: process.env.PASSPHRASE
-}, app).listen(port, () => {
-  debug(`Starting ${config.name} on port ${port}`);
-});
+// Start application
+if (process.env.NODE_ENV === 'test') {
+  app.listen();
+} else if (process.env.NODE_ENV === 'production') {
+  app.listen(port);
+} else {
+  const options = {
+    key: fs.readFileSync('./ssl/key.pem'),
+    cert: fs.readFileSync('./ssl/cert.pem'),
+    passphrase: process.env.PASSPHRASE
+  };
+  https.createServer(options, app).listen(port);
+}
 
 module.exports = app;

@@ -31,5 +31,8 @@
       "required": false
     }
   },
+  "addons": [
+    "heroku-redis"
+  ],
   "image": "heroku/nodejs"
 }
