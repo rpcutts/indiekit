@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const _ = require('lodash');
+const debug = require('debug')('indiekit:app');
 const express = require('express');
 const favicon = require('serve-favicon');
 const i18n = require('i18n');
@@ -16,6 +17,7 @@ const {ServerError} = require('@indiekit/support');
 
 const config = require('./config');
 
+const {port} = config;
 const app = express();
 
 // Correctly report secure connections
@@ -139,6 +141,8 @@ https.createServer({
   key: fs.readFileSync('./ssl/key.pem'),
   cert: fs.readFileSync('./ssl/cert.pem'),
   passphrase: process.env.PASSPHRASE
-}, app).listen(config.port);
+}, app).listen(port, () => {
+  debug(`Starting ${config.name} on port ${port}`);
+});
 
 module.exports = app;

@@ -1,4 +1,5 @@
-const {ServerError, logger} = require('@indiekit/support');
+const debug = require('debug')('indiekit:indieauth:verifyToken');
+const {ServerError} = require('@indiekit/support');
 const normalizeUrl = require('normalize-url');
 
 /**
@@ -30,8 +31,8 @@ module.exports = (opts, accessToken) => {
   const publicationMe = normalizeUrl(opts.me);
   const isAuthenticated = accessTokenMe === publicationMe;
 
-  logger.debug('indieauth.verifyToken, verified token URL: %s', accessTokenMe);
-  logger.debug('indieauth.verifyToken, publication URL: %s', publicationMe);
+  debug('Verified token URL: %s', accessTokenMe);
+  debug('Publication URL: %s', publicationMe);
 
   // Publication URL does not match that provided by access token
   if (!isAuthenticated) {

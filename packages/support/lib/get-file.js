@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:support:getFile');
 const fsp = require('fs').promises;
 const os = require('os');
 const path = require('path');
@@ -15,10 +16,10 @@ module.exports = async (basepath, publisher) => {
   let content;
 
   try {
-    // Fetch from filesystem
+    debug('Fetch %s from filesystem', filePath);
     content = await fsp.readFile(filePath, {encoding: 'utf-8'});
   } catch {
-    // Fetch from publisher
+    debug('Fetch %s from publisher', filePath);
     content = await publisher.readFile(basepath).catch(error => {
       throw new Error(error.message);
     });

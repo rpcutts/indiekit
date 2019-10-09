@@ -1,5 +1,3 @@
-const logger = require('./logger');
-
 class ServerError extends Error {
   constructor(name = 'Server error', status = 500, ...args) {
     super(...args);
@@ -13,8 +11,6 @@ class ServerError extends Error {
     if (args[1]) {
       this.uri = args[1];
     }
-
-    logger.error(args);
   }
 }
 

@@ -23,7 +23,7 @@
     "build": "npm run build:styles",
     "watch:app": "nodemon packages/app",
     "watch:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config packages/app/postcss.config.js --watch",
-    "watch": "npm-run-all --parallel watch:*",
+    "watch": "DEBUG=indiekit:* npm-run-all --parallel watch:*",
     "preinstall": "npx lerna bootstrap",
     "start": "node packages/app",
     "test": "ava --verbose",
@@ -75,7 +75,6 @@
   "nyc": {
     "exclude": [
       "packages/app/index.js",
-      "packages/support/lib/logger.js",
       "packages/**/*.test.js"
     ],
     "reporter": [

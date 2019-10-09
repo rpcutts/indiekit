@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
@@ -20,10 +21,11 @@ router.get('/:path(sign-in|log-in)?', (req, res) => {
   auth.options.clientId = app.url;
   auth.options.redirectUri = redirectUri;
 
+  debug('auth.options: %O', auth.options);
   res.render('sign-in');
 });
 
-router.post('/sign-in', [
+router.post('/:path(sign-in|log-in)?', [
   check('url')
     .isURL({require_protocol: true}).withMessage((value, {req, path}) => {
       return req.__(`error.validation.${path}`);
@@ -38,28 +40,31 @@ router.post('/sign-in', [
       url
     });
   } else if (url) {
+    auth.options.me = url;
     try {
-      auth.options.me = url;
       const authUrl = await auth.getAuthUrl('code', ['create']);
-      return res.redirect(authUrl);
+      debug('authUrl: %s', authUrl);
+      res.redirect(authUrl);
     } catch (error) {
-      console.error(error);
+      debug(req.originalUrl, error);
       res.end('Error getting auth url, check logs');
     }
   }
 });
 
 router.get('/auth', async (req, res) => {
-  const {code, state, redirect} = req.query;
+  const {code, me, state} = req.query;
+  const redirect = req.query.redirect || '/';
+  debug('/auth query', req.query);
   if (code && state && auth.validateState(state)) {
     try {
       const token = await auth.getToken(code);
-      req.session.me = auth.options.me;
+      req.session.me = me;
       req.session.indieauthToken = token;
       req.app.locals.session = true; // Show correct link in navigation
       res.redirect(redirect);
     } catch (error) {
-      console.log(error);
+      debug(req.originalUrl, error);
       res.end('Error getting token, check the logs');
     }
   } else {

@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
+const debug = require('debug')('indiekit:support:utils');
 const {DateTime} = require('luxon');
 const frontmatter = require('front-matter');
-const markdown = require('./markdown');
 const nunjucks = require('nunjucks');
+const markdown = require('./markdown');
 
 const utils = {
   /**

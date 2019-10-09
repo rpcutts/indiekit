@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:indieauth:checkTokenScope');
 const {ServerError} = require('@indiekit/support');
 
 /**
@@ -23,6 +24,8 @@ module.exports = async (opts, requiredScope) => {
     throw new ServerError('Invalid request', 400, 'No scope provided in request');
   }
 
+  debug('Required scope: %s', requiredScope);
+  debug('Token scope: %s', scope);
   const scopes = scope.split(' ');
   let hasScope = scopes.includes(requiredScope);
 

@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:indieauth:authorizeRequest');
 const requestToken = require('./request-token');
 const verifyToken = require('./verify-token');
 
@@ -15,6 +16,7 @@ module.exports = async (opts, req) => {
     delete req.body.access_token; // Delete token from body if exists
   }
 
+  debug('Bearer token scope: %s', bearerToken);
   const accessToken = await requestToken(opts, bearerToken);
   const verifiedToken = verifyToken(opts, accessToken);
   return verifiedToken;

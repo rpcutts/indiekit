@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:indieauth:requestToken');
 const fetch = require('node-fetch');
 const {ServerError} = require('@indiekit/support');
 
@@ -26,6 +27,7 @@ module.exports = async (opts, bearerToken) => {
       }
     });
 
+    debug('Token endpoint response: %O', response);
     status = response.status;
     accessToken = await response.json();
   } catch (error) {

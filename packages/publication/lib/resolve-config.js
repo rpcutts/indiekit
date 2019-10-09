@@ -1,7 +1,8 @@
 const os = require('os');
 const path = require('path');
 const _ = require('lodash');
-const {getFile, logger} = require('@indiekit/support');
+const debug = require('debug')('indiekit:publication:resolveConfig');
+const {getFile} = require('@indiekit/support');
 
 /**
  * Merge publication’s configured post types (saving any referenced templates)
@@ -77,7 +78,7 @@ module.exports = async opts => {
     config = opts.config;
   } else {
     // Return default configuration if no customisation values found
-    logger.info('Configuration not found. Using defaults');
+    debug('Configuration not found. Using defaults');
 
     return defaults;
   }
