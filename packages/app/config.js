@@ -1,4 +1,5 @@
 require('dotenv').config();
+const crypto = require('crypto');
 const debug = require('debug')('indiekit:app');
 
 const pkg = require(process.env.PWD + '/package');
@@ -19,7 +20,10 @@ config.version = pkg.version;
 config.description = pkg.description;
 config.repository = pkg.repository;
 config.port = process.env.PORT || 3000;
-config.mongoDbUri = process.env.MONGODB_URI;
+config.redisUrl = process.env.NODE_ENV === 'production' ?
+  process.env.REDIS_URL :
+  null;
+config.secret = crypto.createHash('md5').update(pkg.name).digest('hex');
 
 // Customisation
 config.locale = process.env.INDIEKIT_LOCALE || 'en';

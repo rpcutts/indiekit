@@ -56,7 +56,7 @@ app.use(i18n.init);
 
 // Redis
 const client = redis.createClient({
-  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+  url: config.redisUrl
 });
 
 client.on('error', error => {
@@ -71,7 +71,7 @@ app.use(session({
   name: config.name,
   resave: false,
   saveUninitialized: false,
-  secret: process.env.SESSION_SECRET,
+  secret: config.secret,
   store: new RedisStore({client})
 }));
 
