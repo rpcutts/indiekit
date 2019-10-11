@@ -3,6 +3,17 @@
 {% set title = "Sign in" if not session else "Welcome back" %}
 
 {% block fieldset %}
+  {% if error %}
+    {{ errorSummary({
+      title: {
+        text: __("There was a problem")
+      },
+      description: {
+        text: error
+      }
+    }) | indent(2) }}
+  {% endif %}
+
   {% if not session %}
     {{ input({
       label: {

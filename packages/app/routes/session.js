@@ -45,16 +45,18 @@ router.post('/:path(sign-in|log-in)?', [
     auth.options.me = url;
     try {
       const authUrl = await auth.getAuthUrl('code', ['create']);
-      debug('authUrl: %s', authUrl);
       res.redirect(authUrl);
     } catch (error) {
       debug(req.originalUrl, error);
-      res.end('Error getting auth url, check logs');
+      res.render('sign-in', {
+        error: error.message,
+        url
+      });
     }
   }
 });
 
-router.get('/auth', async (req, res) => {
+router.get('/auth', async (req, res, next) => {
   const {code, me, state} = req.query;
   const redirect = req.query.redirect || '/';
   debug('/auth query', req.query);
@@ -63,19 +65,20 @@ router.get('/auth', async (req, res) => {
       const token = await auth.getToken(code);
       req.session.me = me;
       req.session.indieauthToken = token;
-      req.app.locals.session = true; // Show correct link in navigation
+      req.app.locals.session = true; // Update interface
       res.redirect(redirect);
     } catch (error) {
       debug(req.originalUrl, error);
-      res.end('Error getting token, check the logs');
+      next(error);
     }
   } else {
-    res.end('Missing code or state mismatch');
+    next(new Error('Missing code or state mismatch'));
   }
 });
 
 router.get('/:path(sign-out|log-out)', (req, res) => {
   req.session.destroy();
+  delete req.app.locals.session; // Update interface
   res.redirect('/');
 });
 

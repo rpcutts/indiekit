@@ -122,18 +122,32 @@ app.use(require('./routes/error'));
 
 // Handle errors
 app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
-  if (error instanceof ServerError) {
-    return res.status(error.status).send({
-      error: _.snakeCase(error.name),
+  const status = error.status || 500;
+  const name = error.name || 'Internal server error';
+
+  if (req.accepts('html')) {
+    // Respond with HTML
+    res.render('error', {
+      status,
+      error: name,
       error_description: error.message,
       error_uri: error.uri
     });
-  }
+  } else {
+    if (req.accepts('json')) {
+      // Respond with JSON
+      return res.status(status).send({
+        error: _.snakeCase(name),
+        error_description: error.message,
+        error_uri: error.uri
+      });
+    }
 
-  return res.status(500).send({
-    error: 'Internal server error',
-    error_description: error.message
-  });
+    // Default to plain-text
+    return res.status(status).type('txt').send(
+      `${name}: ${error.message}`
+    );
+  }
 });
 
 // Start application

@@ -12,7 +12,7 @@ router.get('/teapot', (req, res, next) => {
 router.use((req, res) => {
   res.status(404);
 
-  if (req.accepts('text/html')) {
+  if (req.accepts('html')) {
     res.render('error', {
       status: 404,
       error: req.__('Not found'),
