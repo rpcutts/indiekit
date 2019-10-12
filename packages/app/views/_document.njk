@@ -3,6 +3,7 @@
 {% block main %}
     {% call article({
       title: title,
+      parent: parent,
       content: content
     }) %}{% block content %}
     {% endblock %}{% endcall %}

@@ -7,10 +7,14 @@
 }
 
 .summary__row {
-  border-bottom: var(--border-width-thin) solid var(--color-neutral-light);
-  display: flex;
-  flex-wrap: wrap;
+  border-block-end: var(--border-width-thin) solid var(--color-neutral-light);
   line-height: var(--line-height-tight);
+}
+
+@media (--from-small-viewport) {
+  .summary__row {
+    display: flex;
+  }
 }
 
 .summary__key {
@@ -20,6 +24,7 @@
 }
 
 .summary__value {
+  color: var(--color-neutral-dark);
   flex: 2;
   padding-block-end: var(--space-block-small);
   padding-inline-end: var(--space-inline);

@@ -36,20 +36,13 @@ If you’d like to deploy this application on your own server, first make sure i
   npm i @indiekit/app
   ```
 
-2. Ensure the following required environment variables have been set:
-
-  * `INDIEKIT_URL`: URL of the website you want to publish to.
-  * `GITHUB_TOKEN`: A GitHub [personal access token](https://github.com/settings/tokens).
-  * `GITHUB_USER`: Username on GitHub.
-  * `GITHUB_REPO`: Name of the repository files will be saved to.
-
-3. Start the application:
+2. Start the application:
 
   ```
   node @indiekit/app
   ```
 
-4. Browse to `https://<your-endpoint>/help/welcome` for information about how to get started with IndieKit.
+4. Browse to `https://<your-endpoint>` for information about how to get started with IndieKit.
 
 ## Local development
 

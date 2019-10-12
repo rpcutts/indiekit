@@ -1,0 +1,84 @@
+const {promisify} = require('util');
+const debug = require('debug')('indiekit:app');
+const express = require('express');
+const {check, validationResult} = require('express-validator');
+const redis = require('redis');
+const config = require('../config');
+
+// Redis
+const client = redis.createClient({
+  url: config.redisUrl
+});
+
+client.on('error', error => {
+  debug(error);
+});
+
+client.hget = promisify(client.hget);
+
+const router = new express.Router();
+
+// Configuration
+router.get('/', async (req, res) => {
+  // If we have already configured a publication URL, assume we have configured
+  // everything else. Will probably need to revisit this.
+  if (req.app.locals.app.me) {
+    res.render('config/index', {config});
+  } else {
+    res.redirect('/config/app');
+  }
+});
+
+// Application
+router.get('/app', async (req, res) => {
+  res.render('config/app');
+});
+
+router.post('/app', (req, res) => {
+  const {me, token, publisher, locale, themeColor} = req.body;
+  const {referrer} = req.query;
+  client.hmset('app', {me, token, publisher, locale, themeColor});
+  res.redirect(referrer || '/config/publisher');
+});
+
+// Publisher
+router.get('/publisher', async (req, res) => {
+  res.render('config/publisher');
+});
+
+router.post('/publisher', [
+  check('user')
+    .matches(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i)
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.publisher.${path}.error`);
+    }),
+  check('repo')
+    .matches(/^[a-zA-Z0-9-_]+$/i)
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.publisher.${path}.error`);
+    }),
+  check('token')
+    .matches(/^[0-9a-fA-F]{40}$/i)
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.publisher.${path}.error`);
+    })
+], async (req, res) => {
+  const {user, repo, branch, token} = req.body;
+  const {referrer} = req.query;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.render('config/publisher', {
+      errors: errors.mapped(),
+      user,
+      repo,
+      branch,
+      token
+    });
+  } else if (user && repo && token) {
+    client.hmset('publisher', {user, repo, branch, token});
+    res.redirect(referrer || '/config');
+  }
+});
+
+module.exports = router;

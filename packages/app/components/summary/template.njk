@@ -1,7 +1,6 @@
 {%- macro _actionLink(action, key) %}
   <a href="{{ action.href }}"{%- for attr, value in action.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>{{ action.text | safe }}<span class="visually-hidden"> {{ key.text | safe | lower }}</span></a>
 {% endmacro -%}
-
 {%- set classes = "summary" + (" " + opts.classes if opts.classes) -%}
 <dl class="{{ classes }}"{%- for attr, value in opts.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
   {% for row in opts.rows %}

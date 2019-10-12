@@ -2,6 +2,7 @@
 {%- from "banner/macro.njk" import banner -%}
 {%- from "button/macro.njk" import button -%}
 {%- from "contentinfo/macro.njk" import contentinfo -%}
+{%- from "debug/macro.njk" import debug -%}
 {%- from "error-summary/macro.njk" import errorSummary -%}
 {%- from "fieldset/macro.njk" import fieldset -%}
 {%- from "input/macro.njk" import input -%}
@@ -25,6 +26,9 @@
     <title>{{ title + " - " if title }}{{ app.name }}</title>
   </head>
   <body>
+    {{ debug({
+      items: [session, app, publisher]
+    }) }}
     {{ banner({
       url: app.url,
       name: app.name,
@@ -35,12 +39,11 @@
       }, {
         href: "/sign-in",
         text: __("Sign in")
-      } if not session, {
+      } if not session.me, {
         href: "/sign-out",
         text: __("Sign out")
-      } if session]
+      } if session.me]
     }) | indent(4) }}
-
     {%- block main %}{% endblock %}
 
     {{ contentinfo({

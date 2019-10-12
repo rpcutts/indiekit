@@ -1,68 +1,69 @@
 {% extends "_form.njk" %}
 
-{% set title = __("configure.publisher.title") %}
+{% set title = __("config.publisher.title") %}
+{% set parent = __("config.title %s", app.name) %}
 
 {% block fieldset %}
-  {{ input ({
+  {{ input({
     label: {
-      text: __("configure.publisher.user.label")
+      text: __("config.publisher.user.label")
     },
     attributes: {
       spellcheck: "false"
     },
     id: "user",
     name: "user",
-    value: user,
+    value: publisher.user,
     errorMessage: {
       text: errors.user.msg,
       label: __("Error")
     } if errors.user
   }) | indent(2) }}
 
-  {{ input ({
+  {{ input({
     label: {
-      text: __("configure.publisher.repo.label")
+      text: __("config.publisher.repo.label")
     },
     hint: {
-      text: __("configure.publisher.repo.hint")
+      text: __("config.publisher.repo.hint")
     },
     attributes: {
       spellcheck: "false"
     },
     id: "repo",
     name: "repo",
-    value: repo,
+    value: publisher.repo,
     errorMessage: {
       text: errors.repo.msg,
       label: __("Error")
     } if errors.repo
   }) | indent(2) }}
 
-  {{ input ({
+  {{ input({
     label: {
-      text: __("configure.publisher.branch.label")
+      text: __("config.publisher.branch.label")
     },
     hint: {
-      text: __("configure.publisher.branch.hint")
+      text: __("config.publisher.branch.hint")
     },
     attributes: {
       spellcheck: "false"
     },
     id: "branch",
     name: "branch",
-    value: branch or "master",
+    value: publisher.branch or "master",
     errorMessage: {
       text: errors.branch.msg,
       label: __("Error")
     } if errors.branch
   }) | indent(2) }}
 
-  {{ input ({
+  {{ input({
     label: {
-      text: __("configure.publisher.token.label")
+      text: __("config.publisher.token.label")
     },
     hint: {
-      text: "<a href=\"https://github.com/settings/tokens\">" + __("configure.publisher.token.hint") + "</a>"
+      text: "<a href=\"https://github.com/settings/tokens\">" + __("config.publisher.token.hint") + "</a>"
     },
     attributes: {
       maxlength: 40,
@@ -70,7 +71,7 @@
     },
     id: "token",
     name: "token",
-    value: token,
+    value: publisher.token,
     errorMessage: {
       text: errors.token.msg,
       label: __("Error")
@@ -78,6 +79,6 @@
   }) | indent(2) }}
 
   {{ button({
-    text: __("Continue")
+    text: __("Save and continue")
   }) | indent(2) }}
 {% endblock %}

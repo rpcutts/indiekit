@@ -1,7 +1,7 @@
 :root {
   /* Colour palette */
   --color-neutral-darkest: hsl(216, 12%, 16%);
-  --color-neutral-dark: hsl(216, 12%, 48%);
+  --color-neutral-dark: hsl(216, 12%, 40%);
   --color-neutral: hsl(216, 12%, 64%);
   --color-neutral-light: hsl(216, 12%, 84%);
   --color-neutral-lightest: hsl(216, 12%, 96%);

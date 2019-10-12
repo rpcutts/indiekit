@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
-const _ = require('lodash');
 const debug = require('debug')('indiekit:app');
 const express = require('express');
 const favicon = require('serve-favicon');
@@ -9,6 +8,7 @@ const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
 const Publication = require('@indiekit/publication');
+const Publisher = require('@indiekit/publisher-github');
 const {utils} = require('@indiekit/support');
 const session = require('express-session');
 const redis = require('redis');
@@ -46,7 +46,7 @@ app.use(express.urlencoded({
 
 // Internationalisation
 i18n.configure({
-  defaultLocale: config.locale,
+  defaultLocale: 'en',
   directory: path.join(__dirname, 'locales'),
   objectNotation: true,
   queryParameter: 'lang'
@@ -55,11 +55,28 @@ app.use(i18n.init);
 
 // Redis
 const client = redis.createClient({
-  url: config.redisUrl
+  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
 });
 
 client.on('error', error => {
   debug(error);
+});
+
+// Publisher
+const publisher = new Publisher({
+  branch: config.publisher.branch,
+  repo: config.publisher.repo,
+  token: config.publisher.token,
+  user: config.publisher.user
+});
+
+// Publication
+const publication = new Publication({
+  configPath: config.app.configPath,
+  defaults: require('@indiekit/config-jekyll'),
+  endpointUrl: config.app.url,
+  publisher,
+  url: config.app.me
 });
 
 // Session
@@ -78,27 +95,23 @@ app.use(session({
 app.use(async (req, res, next) => {
   const url = `${req.protocol}://${req.headers.host}`;
 
-  app.locals.app = config;
+  app.locals.app = await config.app();
   app.locals.app.url = url;
-  app.locals.pub = await new Publication({
-    configPath: config.publication.configPath,
-    defaults: config.publication.defaults,
-    endpointUrl: url,
-    publisher: config.publisher,
-    url: config.publication.url
-  }).getConfig();
+  app.locals.publisher = await config.publisher();
+  app.locals.pub = await publication.getConfig();
+  app.locals.session = req.session;
 
   next();
 });
 
 // Micropub endpoint
 app.use('/micropub', micropub.post({
-  me: config.publication.url
+  me: config.app.me
 }));
 
 // Micropub media endpoint
 app.use('/media', micropub.media({
-  me: config.publication.url
+  me: config.app.me
 }));
 
 // Routes
@@ -113,7 +126,7 @@ const authenticate = async (req, res, next) => {
 };
 
 // Routes
-app.use('/configure', require('./routes/configure'));
+app.use('/config', authenticate, require('./routes/config'));
 app.use('/share', authenticate, require('./routes/share'));
 app.use('/docs', require('./routes/docs'));
 app.use(require('./routes/session'));
@@ -121,7 +134,8 @@ app.use(require('./routes/error'));
 
 // Handle errors
 app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
-  res.status(error.status);
+  debug(error.status);
+  res.status(error.status || 500);
 
   if (req.accepts('html')) {
     // Respond with HTML

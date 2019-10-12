@@ -1,6 +1,6 @@
 {% extends "_form.njk" %}
 
-{% set title = "Sign in" if not session else "Welcome back" %}
+{% set title = "Sign in" if not session.me else "Welcome back" %}
 
 {% block fieldset %}
   {% if error %}
@@ -14,7 +14,7 @@
     }) | indent(2) }}
   {% endif %}
 
-  {% if not session %}
+  {% if not session.me %}
     {{ input({
       label: {
         text: __("Web address")

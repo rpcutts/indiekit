@@ -60,9 +60,6 @@
   },
   "ava": {
     "environmentVariables": {
-      "GITHUB_TOKEN": "abc123",
-      "GITHUB_USER": "user",
-      "GITHUB_REPO": "repo",
       "NODE_ENV": "test"
     },
     "files": [

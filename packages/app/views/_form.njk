@@ -1,10 +1,15 @@
 {% extends "_default.njk" %}
 
+{%- set legendText -%}
+  {% if parent %}<span class="fieldset__parent">{{ parent }}</span> {% endif %}
+  {{ title | safe }}
+{%- endset -%}
+
 {% block main %}
     <form class="form" method="post">
       {% call fieldset({
         legend: {
-          text: title,
+          text: legendText,
           isPageHeading: true
         },
         indent: 6

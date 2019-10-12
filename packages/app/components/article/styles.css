@@ -25,6 +25,14 @@
   padding-block-end: var(--space-block-medium);
 }
 
+.article__parent {
+  @extend %label;
+  color: var(--color-neutral);
+  display: block;
+  font-weight: 500;
+  padding-block-end: var(--space-block-xsmall);
+}
+
 .article h3 {
   @extend %heading;
   margin-block-start: var(--space-block-large);

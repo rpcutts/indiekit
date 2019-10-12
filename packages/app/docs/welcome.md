@@ -3,8 +3,6 @@ title: Welcome to {{ app.name }}! 👋
 ---
 Congratulations, you now have successfuly created your very own Micropub endpoint. Before using it to post to your website, there are a few things you will need to set up.
 
-### Enable automatic discovery
-
 To ensure this endpoint can be discovered by Micropub clients and then use it to publish content to your website, the follow values should be added to your website’s `<head>`:
 
 ```html
@@ -13,11 +11,9 @@ To ensure this endpoint can be discovered by Micropub clients and then use it to
 <link rel="token_endpoint" href="https://tokens.indieauth.com/token">
 ```
 
-### Configure {{ app.name }}
-
 Next, you should provide {{ app.name }} with the details of where and how you would like to publish files.
 
-[Configure {{ app.name }} →](/configure/app)
+[Configure {{ app.name }} →](/config)
 
 ### Configure where and how {{ app.name }} publishes content
 

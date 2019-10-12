@@ -5,6 +5,11 @@
   width: 100%;
 }
 
+.input[readonly] {
+  border-color: var(--color-neutral-light);
+  color: var(--color-neutral-dark);
+}
+
 .input[type="color"] {
   padding: var(--inset-small);
   min-block-size: 3rem;

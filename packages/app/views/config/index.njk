@@ -1,48 +1,62 @@
 {% extends "_document.njk" %}
 
-{% set title = "Done" %}
+{% set title = "Config" %}
 
 {% block content %}
-    <h3>{{ __("configure.app.title") }}</h3>
+    <h3>{{ __("config.app.title") }}</h3>
     {{ summary({
       rows: [{
         key: {
-          text: __("configure.app.locale.label")
+          text: __("config.app.me.label")
         },
         value: {
-          text: config.app.locale
+          text: app.me
+        }
+      }, {
+        key: {
+          text: __("config.app.token.label")
+        },
+        value: {
+          text: app.token
+        }
+      }, {
+        key: {
+          text: __("config.app.locale.label")
+        },
+        value: {
+          text: __("locale." + app.locale)
         },
         actions: {
           items: [{
-            href: "/configure/app?referrer=/configure/done",
+            href: "/config/app?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "locale"
           }]
         }
       }, {
         key: {
-          text: __("configure.app.publisher.label")
+          text: __("config.app.publisher.label")
         },
         value: {
-          text: config.app.publisher
+          text: __("publisher." + app.publisher)
         },
         actions: {
           items: [{
-            href: "/configure/app?referrer=/configure/done",
+            href: "/config/app?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "publisher"
           }]
         }
       }, {
         key: {
-          text: __("configure.app.themeColor.label")
+          text: __("config.app.themeColor.label")
         },
         value: {
-          text: "<span style=\"color:" + config.app.themeColor + "\" aria-hidden\"true\">●</span> " + config.app.themeColor
+          text: "<span style=\"color:" + app.themeColor + "\" aria-hidden\"true\">●</span> " + app.themeColor
         },
         actions: {
           items: [{
-            href: "/configure/app?referrer=/configure/done",
+            href: "/config/app?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "theme color"
           }]
@@ -50,60 +64,60 @@
       }]
     }) }}
 
-    <h3>{{ __("configure.publisher.title") }}</h3>
+    <h3>{{ __("config.publisher.title") }}</h3>
     {{ summary({
       rows: [{
         key: {
-          text: __("configure.publisher.user.label")
+          text: __("config.publisher.user.label")
         },
         value: {
-          text: config.publisher.user
+          text: publisher.user
         },
         actions: {
           items: [{
-            href: "/configure/publisher?referrer=/configure/done",
+            href: "/config/publisher?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "username"
           }]
         }
       }, {
         key: {
-          text: __("configure.publisher.repo.label")
+          text: __("config.publisher.repo.label")
         },
         value: {
-          text: config.publisher.repo
+          text: publisher.repo
         },
         actions: {
           items: [{
-            href: "/configure/publisher?referrer=/configure/done",
+            href: "/config/publisher?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "repository"
           }]
         }
       }, {
         key: {
-          text: __("configure.publisher.branch.label")
+          text: __("config.publisher.branch.label")
         },
         value: {
-          text: config.publisher.branch
+          text: publisher.branch
         },
         actions: {
           items: [{
-            href: "/configure/publisher?referrer=/configure/done",
+            href: "/config/publisher?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "branch"
           }]
         }
       }, {
         key: {
-          text: __("configure.publisher.token.label")
+          text: __("config.publisher.token.label")
         },
         value: {
-          text: config.publisher.token
+          text: publisher.token
         },
         actions: {
           items: [{
-            href: "/configure/publisher?referrer=/configure/done",
+            href: "/config/publisher?referrer=/config",
             text: __("Edit"),
             visuallyHiddenText: "token"
           }]

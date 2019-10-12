@@ -17,3 +17,11 @@
   @extend %title;
   padding-block-end: var(--space-block-large);
 }
+
+.fieldset__parent {
+  @extend %label;
+  color: var(--color-neutral);
+  display: block;
+  font-weight: 500;
+  padding-block-end: var(--space-block-xsmall);
+}

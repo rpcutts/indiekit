@@ -5,6 +5,11 @@
   width: 100%;
 }
 
+.textarea[readonly] {
+  border-color: var(--color-neutral-light);
+  color: var(--color-neutral-dark);
+}
+
 .textarea--error {
   border-color: var(--color-error);
 }

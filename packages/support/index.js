@@ -84,13 +84,14 @@ const utils = {
    * @function formatDate
    * @param {String} str ISO 8601 date
    * @param {String} format Tokenised date format
+   * @param {String} locale Locale
    * @return {String} Formatted date
    */
-  formatDate(str, format) {
+  formatDate(str, format, locale = 'en-GB') {
     const date = (str === 'now') ? DateTime.local() : str;
 
     const datetime = DateTime.fromISO(date, {
-      locale: 'en-GB',
+      locale,
       zone: 'utc'
     }).toFormat(format);
 

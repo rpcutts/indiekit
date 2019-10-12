@@ -32,7 +32,6 @@ router.post('/:path(sign-in|log-in)?', [
     return req.__(`error.validation.${path}`);
   })
 ], async (req, res) => {
-  console.log('HELLO');
   const {url} = req.body;
 
   const errors = validationResult(req);
@@ -64,8 +63,7 @@ router.get('/auth', async (req, res, next) => {
     try {
       const token = await auth.getToken(code);
       req.session.me = me;
-      req.session.indieauthToken = token;
-      req.app.locals.session = true; // Update interface
+      req.session.token = token;
       res.redirect(redirect);
     } catch (error) {
       debug(req.originalUrl, error);
@@ -78,7 +76,6 @@ router.get('/auth', async (req, res, next) => {
 
 router.get('/:path(sign-out|log-out)', (req, res) => {
   req.session.destroy();
-  delete req.app.locals.session; // Update interface
   res.redirect('/');
 });
 

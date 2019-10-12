@@ -98,7 +98,7 @@ test('Throws error if publication URL doesn’t match that in token', async t =>
       authorization: `Bearer ${t.context.token}`
     },
     session: {
-      indieauthToken: {
+      token: {
         scope: 'create'
       }
     }
