@@ -1,0 +1,35 @@
+{%- macro _actionLink(action, key) %}
+  <a href="{{ action.href }}"{%- for attr, value in action.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
+    {{ action.html | safe if action.html else action.text }}
+    <span class="visually-hidden"> {{ key.html | safe if key.html else key.text | lower }}</span>
+  </a>
+{% endmacro -%}
+
+{%- set classes = "summary" + (" " + opts.classes if opts.classes) -%}
+<dl class="{{ classes }}"{%- for attr, value in opts.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
+  {% for row in opts.rows %}
+  <div class="summary__row {%- if row.classes %} {{ row.classes }}{% endif %}">
+    <dt class="summary__key {%- if row.key.classes %} {{ row.key.classes }}{% endif %}">
+      {{ row.key.html | safe if row.key.html else row.key.text }}
+    </dt>
+    <dd class="summary__value {%- if row.value.classes %} {{ row.value.classes }}{% endif %}">
+      {{ row.value.html | indent(8) | trim | safe if row.value.html else row.value.text }}
+    </dd>
+    {% if row.actions.items.length %}
+    <dd class="summary__actions {%- if row.actions.classes %} {{ row.actions.classes }}{% endif %}">
+      {% if row.actions.items.length == 1 %}
+        {{ _actionLink(row.actions.items[0], row.key) | indent(12) | trim }}
+      {% else %}
+        <ul class="summary__actions-list">
+        {% for action in row.actions.items %}
+          <li class="summary__actions-list-item">
+            {{ _actionLink(action, row.key) | indent(18) | trim }}
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    </dd>
+    {% endif %}
+  </div>
+  {% endfor %}
+</dl>

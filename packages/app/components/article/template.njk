@@ -1,7 +1,9 @@
 {%- set classes = "article" + (" " + opts.classes if opts.classes) -%}
+{%- set indent = opts.indent or 2 -%}
 <article class="{{ classes }}">
 {%- if opts.title %}
-<h2 class="article__title">{{ opts.title }}</h2>
+  <h2 class="article__title">{{ opts.title }}</h2>
 {%- endif %}
-{{ opts.content | markdown | safe }}
+{{ opts.content | markdown | safe if opts.content }}
+{{- caller() | indent(indent) if caller -}}
 </article>

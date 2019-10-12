@@ -28,11 +28,11 @@ router.get('/:path(sign-in|log-in)?', (req, res) => {
 });
 
 router.post('/:path(sign-in|log-in)?', [
-  check('url')
-    .isURL({require_protocol: true}).withMessage((value, {req, path}) => {
-      return req.__(`error.validation.${path}`);
-    })
+  check('url').isURL({require_protocol: true}).withMessage((value, {req, path}) => {
+    return req.__(`error.validation.${path}`);
+  })
 ], async (req, res) => {
+  console.log('HELLO');
   const {url} = req.body;
 
   const errors = validationResult(req);

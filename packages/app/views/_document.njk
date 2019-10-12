@@ -1,8 +1,9 @@
 {% extends "_default.njk" %}
 
 {% block main %}
-    {{ article({
+    {% call article({
       title: title,
-      content: body
-    }) }}
+      content: content
+    }) %}{% block content %}
+    {% endblock %}{% endcall %}
 {% endblock %}

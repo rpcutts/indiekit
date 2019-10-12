@@ -11,9 +11,9 @@ router.get('*', (req, res, next) => {
     const content = utils.renderDocument(file, req.app.locals);
 
     res.render('_document', {
-      body: content.body,
       page: content.page,
-      title: content.title
+      title: content.title,
+      content: content.body
     });
   } catch (error) {
     next();

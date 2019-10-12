@@ -17,7 +17,7 @@ To ensure this endpoint can be discovered by Micropub clients and then use it to
 
 Next, you should provide {{ app.name }} with the details of where and how you would like to publish files.
 
-[Configure {{ app.name }} →](/configure)
+[Configure {{ app.name }} →](/configure/app)
 
 ### Configure where and how {{ app.name }} publishes content
 

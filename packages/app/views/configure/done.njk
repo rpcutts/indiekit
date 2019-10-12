@@ -2,13 +2,112 @@
 
 {% set title = "Done" %}
 
-{% set body %}
-`locale`
-: {{ app.locale }}
+{% block content %}
+    <h3>{{ __("configure.app.title") }}</h3>
+    {{ summary({
+      rows: [{
+        key: {
+          text: __("configure.app.locale.label")
+        },
+        value: {
+          text: config.app.locale
+        },
+        actions: {
+          items: [{
+            href: "/configure/app?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "locale"
+          }]
+        }
+      }, {
+        key: {
+          text: __("configure.app.publisher.label")
+        },
+        value: {
+          text: config.app.publisher
+        },
+        actions: {
+          items: [{
+            href: "/configure/app?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "publisher"
+          }]
+        }
+      }, {
+        key: {
+          text: __("configure.app.themeColor.label")
+        },
+        value: {
+          html: "<span style=\"color:" + config.app.themeColor + "\" aria-hidden\"true\">●</span> " + config.app.themeColor
+        },
+        actions: {
+          items: [{
+            href: "/configure/app?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "theme color"
+          }]
+        }
+      }]
+    }) }}
 
-`color`
-: {{ app.themeColor }}
-
-`publisher`
-: {{ app.publisher | dump }}
-{% endset %}
+    <h3>{{ __("configure.publisher.title") }}</h3>
+    {{ summary({
+      rows: [{
+        key: {
+          text: __("configure.publisher.user.label")
+        },
+        value: {
+          text: config.publisher.user
+        },
+        actions: {
+          items: [{
+            href: "/configure/publisher?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "username"
+          }]
+        }
+      }, {
+        key: {
+          text: __("configure.publisher.repo.label")
+        },
+        value: {
+          text: config.publisher.repo
+        },
+        actions: {
+          items: [{
+            href: "/configure/publisher?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "repository"
+          }]
+        }
+      }, {
+        key: {
+          text: __("configure.publisher.branch.label")
+        },
+        value: {
+          text: config.publisher.branch
+        },
+        actions: {
+          items: [{
+            href: "/configure/publisher?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "branch"
+          }]
+        }
+      }, {
+        key: {
+          text: __("configure.publisher.token.label")
+        },
+        value: {
+          text: config.publisher.token
+        },
+        actions: {
+          items: [{
+            href: "/configure/publisher?referrer=/configure/done",
+            text: __("Edit"),
+            visuallyHiddenText: "token"
+          }]
+        }
+      }]
+    }) }}
+{% endblock %}

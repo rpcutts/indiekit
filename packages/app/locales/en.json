@@ -27,6 +27,7 @@
   "Title": "Title",
   "URL": "URL",
   "Content": "Content",
+  "Edit": "Edit",
   "Publish": "Publish",
   "There was a problem": "There was a problem",
   "Error": "Error",
@@ -36,15 +37,9 @@
     }
   },
   "Continue": "Continue",
-  "publisher": {
-    "configure": {
-      "provider": {
-        "label": "Where do you want to publish files?"
-      }
-    }
-  },
-  "publisher-github": {
-    "configure": {
+  "configure": {
+    "publisher": {
+      "title": "Publisher",
       "user": {
         "label": "Username",
         "error": "Username must be between 1 and 38 characters long."
@@ -63,14 +58,16 @@
         "error": "Personal access token must be an alphanumeric value that is 40 characters long.",
         "hint": "To create a new token, visit your account settings."
       }
-    }
-  },
-  "server": {
-    "configure": {
+    },
+    "app": {
+      "title": "Application",
+      "publisher": {
+        "label": "Publisher"
+      },
       "locale": {
         "label": "Locale"
       },
-      "color": {
+      "themeColor": {
         "label": "Theme color"
       }
     }

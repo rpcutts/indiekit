@@ -22,7 +22,7 @@
 
 .article__title {
   @extend %title;
-  padding-block-end: var(--space-block-large);
+  padding-block-end: var(--space-block-medium);
 }
 
 .article h3 {

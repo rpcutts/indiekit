@@ -1,0 +1,31 @@
+.summary {
+  --flow-inset: 0;
+}
+
+.summary > * + * {
+  margin-block-start: var(--space-block-small);
+}
+
+.summary__row {
+  border-bottom: var(--border-width-thin) solid var(--color-neutral-light);
+  display: flex;
+  flex-wrap: wrap;
+  line-height: var(--line-height-tight);
+}
+
+.summary__key {
+  flex: 1;
+  padding-block-end: var(--space-block-small);
+  padding-inline-end: var(--space-inline);
+}
+
+.summary__value {
+  flex: 2;
+  padding-block-end: var(--space-block-small);
+  padding-inline-end: var(--space-inline);
+  word-break: break-all;
+}
+
+.summary__actions {
+  margin-inline-start: auto;
+}

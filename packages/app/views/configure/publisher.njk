@@ -1,27 +1,80 @@
 {% extends "_form.njk" %}
 
-{% set title = "Publisher" %}
+{% set title = __("configure.publisher.title") %}
 
 {% block fieldset %}
-  {{ select({
+  {{ input ({
     label: {
-      text: __("publisher.configure.provider.label")
+      text: __("configure.publisher.user.label")
     },
-    id: "publisher",
-    name: "publisher",
-    items: [{
-      value: "github",
-      text: "GitHub",
-      selected: true
-    }, {
-      value: "gitlab",
-      text: "GitLab",
-      disabled: true
-    }],
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "user",
+    name: "user",
+    value: user,
     errorMessage: {
-      text: errors.publisher.msg,
+      text: errors.user.msg,
       label: __("Error")
-    } if errors.publisher
+    } if errors.user
+  }) | indent(2) }}
+
+  {{ input ({
+    label: {
+      text: __("configure.publisher.repo.label")
+    },
+    hint: {
+      text: __("configure.publisher.repo.hint")
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "repo",
+    name: "repo",
+    value: repo,
+    errorMessage: {
+      text: errors.repo.msg,
+      label: __("Error")
+    } if errors.repo
+  }) | indent(2) }}
+
+  {{ input ({
+    label: {
+      text: __("configure.publisher.branch.label")
+    },
+    hint: {
+      text: __("configure.publisher.branch.hint")
+    },
+    attributes: {
+      spellcheck: "false"
+    },
+    id: "branch",
+    name: "branch",
+    value: branch or "master",
+    errorMessage: {
+      text: errors.branch.msg,
+      label: __("Error")
+    } if errors.branch
+  }) | indent(2) }}
+
+  {{ input ({
+    label: {
+      text: __("configure.publisher.token.label")
+    },
+    hint: {
+      html: "<a href=\"https://github.com/settings/tokens\">" + __("configure.publisher.token.hint") + "</a>"
+    },
+    attributes: {
+      maxlength: 40,
+      spellcheck: "false"
+    },
+    id: "token",
+    name: "token",
+    value: token,
+    errorMessage: {
+      text: errors.token.msg,
+      label: __("Error")
+    } if errors.token
   }) | indent(2) }}
 
   {{ button({
