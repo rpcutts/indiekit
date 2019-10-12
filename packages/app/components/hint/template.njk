@@ -1,5 +1,5 @@
 {%- set classes = "hint" + (" " + opts.classes if opts.classes) -%}
 <p class="{{ classes }}" id="{{ opts.id }}"
   {%- for attr, value in opts.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
-  {{ opts.html | safe if opts.html else opts.text }}
+  {{- opts.text | safe -}}
 </p>

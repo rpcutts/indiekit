@@ -6,7 +6,6 @@
 <div class="{{ fieldClasses + (" " + "form__field--error" if opts.errorMessage) }}">
 {%- if opts.label %}
   {{ label({
-    html: opts.label.html,
     text: opts.label.text,
     classes: opts.label.classes,
     attributes: opts.label.attributes,
@@ -20,7 +19,6 @@
     id: hintId,
     classes: opts.hint.classes,
     attributes: opts.hint.attributes,
-    html: opts.hint.html,
     text: opts.hint.text
   }) | indent(2) | trim }}
 {%- endif %}
@@ -31,7 +29,6 @@
     id: errorId,
     classes: opts.errorMessage.classes,
     attributes: opts.errorMessage.attributes,
-    html: opts.errorMessage.html,
     text: opts.errorMessage.text,
     visuallyHiddenText: opts.errorMessage.visuallyHiddenText
   }) | indent(2) | trim }}

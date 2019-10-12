@@ -10,7 +10,7 @@
   <nav class="banner__navigation" aria-label="site">
   {%- for item in opts.navigation %}
     {%- if item.href and item.text %}
-    <a href="{{ item.href }}">{{ item.text }}</a>
+    <a href="{{ item.href }}">{{ item.text | safe }}</a>
     {%- endif %}
   {%- endfor %}
   </nav>

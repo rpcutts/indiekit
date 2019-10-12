@@ -1,13 +1,13 @@
 {%- set classes = "fieldset" + (" " + opts.classes if opts.classes) -%}
-{%- set legendHtml -%}
-  {%- if opts.legend.html or opts.legend.text %}
+{%- set legend -%}
+  {%- if opts.legend.text %}
   <legend class="fieldset__legend">
   {%- if opts.legend.isPageHeading %}
     <h1 class="fieldset__title">
-      {{- opts.legend.html | safe if opts.legend.html else opts.legend.text -}}
+      {{- opts.legend.text | safe -}}
     </h1>
   {%- else %}
-    {{- opts.legend.html | safe if opts.legend.html else opts.legend.text -}}
+    {{- opts.legend.text | safe -}}
   {%- endif %}
   </legend>
   {%- endif %}
@@ -17,6 +17,6 @@
   {%- if opts.role %} role="{{ opts.role }}"{% endif %}
   {%- if opts.describedBy %} aria-describedby="{{ opts.describedBy }}"{% endif %}
   {%- for attr, value in opts.attributes %} {{ attr }}="{{ value }}"{% endfor -%}>
-  {{- legendHtml | indent(indent) | safe -}}
+  {{- legend | indent(indent) | safe -}}
   {{- caller() | indent(indent) if caller -}}
 </fieldset>
