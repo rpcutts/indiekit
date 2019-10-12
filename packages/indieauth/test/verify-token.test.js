@@ -24,6 +24,7 @@ test('Throws error if no access token provided', t => {
   const error = t.throws(() => {
     verifyToken(opts, null);
   });
+  t.is(error.status, 401);
   t.is(error.message, 'No access token provided in request');
 });
 
@@ -32,6 +33,7 @@ test('Throws error if no publication URL provided', t => {
   const error = t.throws(() => {
     verifyToken(opts, t.context.token);
   });
+  t.is(error.status, 500);
   t.is(error.message, 'No publication URL provided');
 });
 
@@ -40,6 +42,7 @@ test('Throws error if publication URL not authenticated by token', t => {
   const error = t.throws(() => {
     verifyToken(opts, t.context.token);
   });
+  t.is(error.status, 403);
   t.is(error.message, 'User does not have permission to perform request');
 });
 
@@ -48,5 +51,6 @@ test('Throws error if token endpoint does not return a me value', t => {
   const error = t.throws(() => {
     verifyToken(opts, {});
   });
+  t.is(error.status, 401);
   t.is(error.message, 'There was a problem with this access token');
 });

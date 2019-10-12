@@ -33,7 +33,7 @@ test('Throws error if request is missing query string', t => {
   const error = t.throws(() => {
     queryEndpoint(t.context.req(null), t.context.media);
   });
-  t.is(error.name, 'Invalid request');
+  t.is(error.status, 400);
   t.is(error.message, 'Request is missing query string');
 });
 
@@ -41,7 +41,7 @@ test('Throws error if unsupported query provided', t => {
   const error = t.throws(() => {
     queryEndpoint(t.context.req({foo: 'bar'}), t.context.media);
   });
-  t.is(error.name, 'Invalid request');
+  t.is(error.status, 400);
   t.is(error.message, 'Invalid query');
 });
 
@@ -49,6 +49,6 @@ test('Throws error if unsupported parameter provided', t => {
   const error = t.throws(() => {
     queryEndpoint(t.context.req({q: 'foo'}), t.context.media);
   });
-  t.is(error.name, 'Invalid request');
+  t.is(error.status, 400);
   t.is(error.message, 'Invalid parameter: foo');
 });

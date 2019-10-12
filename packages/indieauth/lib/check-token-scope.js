@@ -1,5 +1,5 @@
 const debug = require('debug')('indiekit:indieauth:checkTokenScope');
-const {ServerError} = require('@indiekit/support');
+const httpError = require('http-errors');
 
 /**
  * Checks if scope(s) in authenticated token contains required scope.
@@ -12,16 +12,16 @@ const {ServerError} = require('@indiekit/support');
  */
 module.exports = async (opts, requiredScope) => {
   if (!opts.token) {
-    throw new ServerError('Unauthorized', 401, 'No access token provided');
+    throw new httpError.Unauthorized('No access token provided');
   }
 
   const {scope} = await opts.token;
   if (!scope) {
-    throw new ServerError('Insufficient scope', 401, 'No scope(s) provided by access token');
+    throw new httpError.Unauthorized('No scope(s) provided by access token');
   }
 
   if (!requiredScope) {
-    throw new ServerError('Invalid request', 400, 'No scope provided in request');
+    throw new httpError.BadRequest('No scope provided in request');
   }
 
   debug('Required scope: %s', requiredScope);
@@ -42,5 +42,5 @@ module.exports = async (opts, requiredScope) => {
     return true;
   }
 
-  throw new ServerError('Insufficient scope', 401, `Access token does not meet requirements for requested scope (${requiredScope})`);
+  throw new httpError.Unauthorized(`Access token does not meet requirements for requested scope (${requiredScope})`);
 };

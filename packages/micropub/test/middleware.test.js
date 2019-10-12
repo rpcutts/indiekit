@@ -24,7 +24,7 @@ test('Returns 400 in response to unknown endpoint query', async t => {
     .set('Accept', 'application/json')
     .query({q: 'foo'});
   t.is(response.status, 400);
-  t.is(response.body.error, 'invalid_request');
+  t.is(response.body.error_description, 'Invalid parameter: foo');
 });
 
 test('Returns 401 if token missing required scope', async t => {

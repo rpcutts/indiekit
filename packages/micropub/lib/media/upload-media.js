@@ -1,4 +1,5 @@
-const {ServerError, utils} = require('@indiekit/support');
+const httpError = require('http-errors');
+const {utils} = require('@indiekit/support');
 const dataFormat = require('./../utils/data-format');
 const derive = require('./../utils/derive');
 
@@ -43,6 +44,6 @@ module.exports = async (req, file, media) => {
       return mediaData;
     }
   } catch (error) {
-    throw new ServerError('Invalid request', 400, error.message);
+    throw new httpError.BadRequest(error.message);
   }
 };

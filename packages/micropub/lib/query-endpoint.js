@@ -1,5 +1,5 @@
+const httpError = require('http-errors');
 const microformats = require('@indiekit/microformats');
-const {ServerError} = require('@indiekit/support');
 
 /**
  * Express middleware function for querying Micropub endpoint.
@@ -68,6 +68,6 @@ module.exports = async (req, posts) => {
       }
     }
   } catch (error) {
-    throw new ServerError('Invalid request', 400, error.message);
+    throw new httpError.BadRequest(error.message);
   }
 };

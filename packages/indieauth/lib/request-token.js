@@ -1,6 +1,6 @@
 const debug = require('debug')('indiekit:indieauth:requestToken');
+const httpError = require('http-errors');
 const fetch = require('node-fetch');
-const {ServerError} = require('@indiekit/support');
 
 /**
  * Requests an IndieAuth access token.
@@ -12,10 +12,9 @@ const {ServerError} = require('@indiekit/support');
  */
 module.exports = async (opts, bearerToken) => {
   if (!bearerToken) {
-    throw new ServerError('Unauthorized', 401, 'No token provided in request');
+    throw new httpError.Unauthorized('No token provided in request');
   }
 
-  let status;
   let accessToken;
   try {
     const response = await fetch(opts.tokenEndpoint, {
@@ -28,15 +27,14 @@ module.exports = async (opts, bearerToken) => {
     });
 
     debug('Token endpoint response: %O', response);
-    status = response.status;
     accessToken = await response.json();
   } catch (error) {
-    throw new Error(error);
+    throw new httpError.InternalServerError(error.message);
   }
 
   // Endpoint has responded, but with an error
   if (accessToken.error) {
-    throw new ServerError(accessToken.error, status, accessToken.error_description);
+    throw new httpError.InternalServerError(accessToken.error_description);
   }
 
   return accessToken;

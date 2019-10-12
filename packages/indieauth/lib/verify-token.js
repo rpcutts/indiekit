@@ -1,5 +1,5 @@
 const debug = require('debug')('indiekit:indieauth:verifyToken');
-const {ServerError} = require('@indiekit/support');
+const httpError = require('http-errors');
 const normalizeUrl = require('normalize-url');
 
 /**
@@ -13,17 +13,17 @@ const normalizeUrl = require('normalize-url');
 module.exports = (opts, accessToken) => {
   // Throw error if no publication URL provided
   if (!opts.me) {
-    throw new ServerError('Configuration error', 500, 'No publication URL provided');
+    throw new httpError.InternalServerError('No publication URL provided');
   }
 
   // Throw error if no access token provided
   if (!accessToken) {
-    throw new ServerError('Unauthorized', 401, 'No access token provided in request');
+    throw new httpError.Unauthorized('No access token provided in request');
   }
 
   // Throw error if access token does not contain a `me` value
   if (!accessToken.me) {
-    throw new ServerError('Not found', 404, 'There was a problem with this access token');
+    throw new httpError.Unauthorized('There was a problem with this access token');
   }
 
   // Normalize publication and token URLs before comparing
@@ -36,7 +36,7 @@ module.exports = (opts, accessToken) => {
 
   // Publication URL does not match that provided by access token
   if (!isAuthenticated) {
-    throw new ServerError('Access denied', 403, 'User does not have permission to perform request');
+    throw new httpError.Forbidden('User does not have permission to perform request');
   }
 
   return accessToken;

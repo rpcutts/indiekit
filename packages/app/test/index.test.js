@@ -26,24 +26,56 @@ test('Application displays a documentation page', async t => {
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
-test('Application responds to 404 errors', async t => {
-  const response = await app.get('/docs/foobar');
+test('Application responds to 404 error (with HTML if accepted)', async t => {
+  const response = await app.get('/foobar')
+    .set('Accept', 'text/html');
 
   t.is(response.status, 404);
+  t.true(response.text.includes('<!DOCTYPE html>'));
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
-test('Application responds to errors', async t => {
-  const response = await app.get('/teapot');
+test('Application responds to 404 error (with JSON if accepted)', async t => {
+  const response = await app.get('/foobar')
+    .set('Accept', 'application/json');
 
-  t.is(response.status, 418);
+  t.is(response.status, 404);
+  t.is(response.body.error, 'NotFoundError');
   t.regex(response.header['content-type'], /^application\/json/);
 });
 
-test('Application responds to errors (using JSON if accepted)', async t => {
+test('Application responds to 404 error (with plain text if accepted)', async t => {
+  const response = await app.get('/foobar')
+    .set('Accept', 'text/plain');
+
+  t.is(response.status, 404);
+  t.is(response.text, 'NotFoundError: The requested resource was not found');
+  t.regex(response.header['content-type'], /^text\/plain/);
+});
+
+test('Application responds to errors (with HTML if accepted)', async t => {
+  const response = await app.get('/teapot')
+    .set('Accept', 'text/html');
+
+  t.is(response.status, 418);
+  t.true(response.text.includes('<!DOCTYPE html>'));
+  t.regex(response.header['content-type'], /^text\/html/);
+});
+
+test('Application responds to errors (with JSON if accepted)', async t => {
   const response = await app.get('/teapot')
     .set('Accept', 'application/json');
 
   t.is(response.status, 418);
+  t.is(response.body.error, 'ImATeapotError');
   t.regex(response.header['content-type'], /^application\/json/);
+});
+
+test('Application responds to errors (with plain text if accepted)', async t => {
+  const response = await app.get('/teapot')
+    .set('Accept', 'text/plain');
+
+  t.is(response.status, 418);
+  t.is(response.text, 'ImATeapotError: https://tools.ietf.org/html/rfc2324');
+  t.regex(response.header['content-type'], /^text\/plain/);
 });

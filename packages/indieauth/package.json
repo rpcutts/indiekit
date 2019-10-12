@@ -33,6 +33,7 @@
     "@indiekit/support": "0.1.0",
     "debug": "^4.1.1",
     "dotenv": "^8.1.0",
+    "http-errors": "^1.7.3",
     "node-fetch": "^2.6.0",
     "normalize-url": "^4.3.0"
   },

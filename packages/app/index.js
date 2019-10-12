@@ -13,7 +13,6 @@ const {utils} = require('@indiekit/support');
 const session = require('express-session');
 const redis = require('redis');
 const RedisStore = require('connect-redis')(session);
-const {ServerError} = require('@indiekit/support');
 
 const config = require('./config');
 
@@ -122,31 +121,25 @@ app.use(require('./routes/error'));
 
 // Handle errors
 app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
-  const status = error.status || 500;
-  const name = error.name || 'Internal server error';
+  res.status(error.status);
 
   if (req.accepts('html')) {
     // Respond with HTML
     res.render('error', {
-      status,
-      error: name,
-      error_description: error.message,
-      error_uri: error.uri
+      error
     });
   } else {
     if (req.accepts('json')) {
       // Respond with JSON
-      return res.status(status).send({
-        error: _.snakeCase(name),
+      return res.send({
+        error: error.name,
         error_description: error.message,
         error_uri: error.uri
       });
     }
 
     // Default to plain-text
-    return res.status(status).type('txt').send(
-      `${name}: ${error.message}`
-    );
+    return res.type('txt').send(`${error.name}: ${error.message}`);
   }
 });
 

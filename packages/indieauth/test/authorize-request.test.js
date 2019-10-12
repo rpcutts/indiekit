@@ -75,6 +75,7 @@ test('Throws error if publication URL not provided', async t => {
   const error = await t.throwsAsync(authorizeRequest(opts, req));
 
   // Test assertions
+  t.is(error.status, 500);
   t.is(error.message, 'No publication URL provided');
   scope.done();
 });
@@ -105,6 +106,7 @@ test('Throws error if publication URL doesn’t match that in token', async t =>
   const error = await t.throwsAsync(authorizeRequest(opts, req));
 
   // Test assertions
+  t.is(error.status, 403);
   t.is(error.message, 'User does not have permission to perform request');
   scope.done();
 });

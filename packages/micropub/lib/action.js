@@ -1,4 +1,5 @@
-const {ServerError, utils} = require('@indiekit/support');
+const httpError = require('http-errors');
+const {utils} = require('@indiekit/support');
 
 const createPost = require('./create-post');
 const deletePost = require('./delete-post');
@@ -13,20 +14,20 @@ module.exports = async (req, posts, media) => {
   if (action && url) {
     // If no post data has been recorded, throw error
     if (!posts) {
-      throw new ServerError('Not found', 404, `Can’t ${action} post. No records found`);
+      httpError(404, `Can’t ${action} post. No records found`);
     }
 
     // If no post data has been recorded for this URL, throw error
     const postData = posts.filter(post => post.url === url);
     if (postData === undefined) {
-      throw new ServerError('Not found', 404, `Can’t ${action} post. No record found for ${url}`);
+      httpError(404, `Can’t ${action} post. No record found for ${url}`);
     }
 
     // Determine action to perform
     switch (action) {
       case 'delete': {
         const deleted = await deletePost(req, postData).catch(error => {
-          throw new Error(error.message);
+          httpError(500, error.message);
         });
 
         if (deleted) {
@@ -42,7 +43,7 @@ module.exports = async (req, posts, media) => {
 
       case 'undelete': {
         const undeleted = await undeletePost(req, postData).catch(error => {
-          throw new Error(error.message);
+          httpError(500, error.message);
         });
 
         if (undeleted) {
@@ -59,7 +60,7 @@ module.exports = async (req, posts, media) => {
 
       case 'update': {
         const updated = await updatePost(req, postData, posts).catch(error => {
-          throw new Error(error.message);
+          httpError(500, error.message);
         });
 
         if (updated) {
@@ -85,7 +86,7 @@ module.exports = async (req, posts, media) => {
 
   // Upload attached media and add its URL to respective body property
   const uploaded = await uploadAttachments(req, media).catch(error => {
-    throw new Error(error.message);
+    httpError(500, error.message);
   });
 
   if (uploaded) {
@@ -97,7 +98,7 @@ module.exports = async (req, posts, media) => {
 
   // Create post
   const created = await createPost(req, posts).catch(error => {
-    throw new Error(error.message);
+    httpError(500, error.message);
   });
 
   if (created) {

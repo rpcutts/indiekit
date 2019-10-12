@@ -1,4 +1,4 @@
-const {ServerError} = require('@indiekit/support');
+const httpError = require('http-errors');
 
 /**
  * Express middleware function for querying Micropub media endpoint.
@@ -30,6 +30,6 @@ module.exports = (req, media) => {
       }
     }
   } catch (error) {
-    throw new ServerError('Invalid request', 400, error.message);
+    throw new httpError.BadRequest(error.message);
   }
 };

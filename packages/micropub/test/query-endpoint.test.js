@@ -82,20 +82,20 @@ test('Returns any available configuration value', async t => {
 test('Throws error if request is missing query string', async t => {
   const query = await t.context.req(null);
   const error = await t.throwsAsync(queryEndpoint(query, t.context.posts));
-  t.is(error.name, 'Invalid request');
+  t.is(error.status, 400);
   t.is(error.message, 'Request is missing query string');
 });
 
 test('Throws error if unsupported query provided', async t => {
   const query = await t.context.req({foo: 'bar'});
   const error = await t.throwsAsync(queryEndpoint(query, t.context.posts, t.context.config));
-  t.is(error.name, 'Invalid request');
+  t.is(error.status, 400);
   t.is(error.message, 'Invalid query');
 });
 
 test('Throws error if unsupported parameter provided', async t => {
   const query = await t.context.req({q: 'foo'});
   const error = await t.throwsAsync(queryEndpoint(query, t.context.posts, t.context.config));
-  t.is(error.name, 'Invalid request');
+  t.is(error.status, 400);
   t.is(error.message, 'Invalid parameter: foo');
 });

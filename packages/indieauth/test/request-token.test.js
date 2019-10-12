@@ -26,6 +26,7 @@ test('Returns an access token', async t => {
 
 test('Throws error if no access token provided', async t => {
   const error = await t.throwsAsync(requestToken(t.context.opts, null));
+  t.is(error.status, 401);
   t.is(error.message, 'No token provided in request');
 });
 
@@ -39,6 +40,7 @@ test('Throws error if token endpoint returns an error', async t => {
   const error = await t.throwsAsync(requestToken(t.context.opts, t.context.bearer));
 
   // Test assertions
+  t.is(error.status, 500);
   t.is(error.message, 'The code provided was not valid');
   scope.done();
 });
@@ -50,6 +52,7 @@ test('Throws error if can’t connect to token endpoint', async t => {
   const error = await t.throwsAsync(requestToken(t.context.opts, t.context.bearer));
 
   // Test assertions
-  t.regex(error.message, /^FetchError/);
+  t.is(error.status, 500);
+  t.regex(error.message, /The code provided was not valid/);
   scope.done();
 });
