@@ -1,19 +1,19 @@
 {% extends "_form.njk" %}
 
-{% set title = __("config.publisher.title") %}
+{% set title = __("config.github.title") %}
 {% set parent = __("config.title %s", app.name) %}
 
 {% block fieldset %}
   {{ input({
     label: {
-      text: __("config.publisher.user.label")
+      text: __("config.github.user.label")
     },
     attributes: {
       spellcheck: "false"
     },
     id: "user",
     name: "user",
-    value: publisher.user,
+    value: github.user,
     errorMessage: {
       text: errors.user.msg,
       label: __("Error")
@@ -22,17 +22,17 @@
 
   {{ input({
     label: {
-      text: __("config.publisher.repo.label")
+      text: __("config.github.repo.label")
     },
     hint: {
-      text: __("config.publisher.repo.hint")
+      text: __("config.github.repo.hint")
     },
     attributes: {
       spellcheck: "false"
     },
     id: "repo",
     name: "repo",
-    value: publisher.repo,
+    value: github.repo,
     errorMessage: {
       text: errors.repo.msg,
       label: __("Error")
@@ -41,17 +41,17 @@
 
   {{ input({
     label: {
-      text: __("config.publisher.branch.label")
+      text: __("config.github.branch.label")
     },
     hint: {
-      text: __("config.publisher.branch.hint")
+      text: __("config.github.branch.hint")
     },
     attributes: {
       spellcheck: "false"
     },
     id: "branch",
     name: "branch",
-    value: publisher.branch or "master",
+    value: github.branch or "master",
     errorMessage: {
       text: errors.branch.msg,
       label: __("Error")
@@ -60,10 +60,10 @@
 
   {{ input({
     label: {
-      text: __("config.publisher.token.label")
+      text: __("config.github.token.label")
     },
     hint: {
-      text: "<a href=\"https://github.com/settings/tokens\">" + __("config.publisher.token.hint") + "</a>"
+      text: "<a href=\"https://github.com/settings/tokens\">" + __("config.github.token.hint") + "</a>"
     },
     attributes: {
       maxlength: 40,
@@ -71,7 +71,7 @@
     },
     id: "token",
     name: "token",
-    value: publisher.token,
+    value: github.token,
     errorMessage: {
       text: errors.token.msg,
       label: __("Error")

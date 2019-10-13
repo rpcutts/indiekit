@@ -14,163 +14,165 @@ const session = require('express-session');
 const redis = require('redis');
 const RedisStore = require('connect-redis')(session);
 
-const config = require('./config');
+(async () => {
+  const config = await require('./config');
 
-const {port} = config;
-const app = express();
+  const {port} = config;
+  const app = express();
 
-// Correctly report secure connections
-app.enable('trust proxy');
+  // Correctly report secure connections
+  app.enable('trust proxy');
 
-// Parse Nunjucks templates
-const componentsDir = path.join(__dirname, 'components');
-const viewsDir = path.join(__dirname, 'views');
-const staticDir = path.join(__dirname, 'static');
-const env = nunjucks.configure([componentsDir, viewsDir, staticDir], {
-  autoescape: true,
-  express: app,
-  watch: true
-});
-env.addFilter('markdown', utils.renderMarkdown);
-env.addFilter('date', utils.formatDate);
-app.set('view engine', 'njk');
+  // Parse Nunjucks templates
+  const componentsDir = path.join(__dirname, 'components');
+  const viewsDir = path.join(__dirname, 'views');
+  const staticDir = path.join(__dirname, 'static');
+  const env = nunjucks.configure([componentsDir, viewsDir, staticDir], {
+    autoescape: true,
+    express: app,
+    watch: true
+  });
+  env.addFilter('markdown', utils.renderMarkdown);
+  env.addFilter('date', utils.formatDate);
+  app.set('view engine', 'njk');
 
-// Serve static files and paths
-app.use(express.static(staticDir));
-app.use(favicon(`${staticDir}/favicon.ico`));
+  // Serve static files and paths
+  app.use(express.static(staticDir));
+  app.use(favicon(`${staticDir}/favicon.ico`));
 
-// Parse application/x-www-form-urlencoded requests
-app.use(express.urlencoded({
-  extended: true
-}));
+  // Parse application/x-www-form-urlencoded requests
+  app.use(express.urlencoded({
+    extended: true
+  }));
 
-// Internationalisation
-i18n.configure({
-  defaultLocale: 'en',
-  directory: path.join(__dirname, 'locales'),
-  objectNotation: true,
-  queryParameter: 'lang'
-});
-app.use(i18n.init);
+  // Internationalisation
+  i18n.configure({
+    defaultLocale: 'en',
+    directory: path.join(__dirname, 'locales'),
+    objectNotation: true,
+    queryParameter: 'lang'
+  });
+  app.use(i18n.init);
 
-// Redis
-const client = redis.createClient({
-  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
-});
+  // Redis
+  const client = redis.createClient({
+    url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+  });
 
-client.on('error', error => {
-  debug(error);
-});
+  client.on('error', error => {
+    debug(error);
+  });
 
-// Publisher
-const publisher = new Publisher({
-  branch: config.publisher.branch,
-  repo: config.publisher.repo,
-  token: config.publisher.token,
-  user: config.publisher.user
-});
+  // Session
+  app.use(session({
+    cookie: {
+      secure: true
+    },
+    name: config.name,
+    resave: false,
+    saveUninitialized: false,
+    secret: config.secret,
+    store: new RedisStore({client})
+  }));
 
-// Publication
-const publication = new Publication({
-  configPath: config.app.configPath,
-  defaults: require('@indiekit/config-jekyll'),
-  endpointUrl: config.app.url,
-  publisher,
-  url: config.app.me
-});
+  // Publisher
+  const github = new Publisher({
+    branch: config.github.branch,
+    repo: config.github.repo,
+    token: config.github.token,
+    user: config.github.user
+  });
 
-// Session
-app.use(session({
-  cookie: {
-    secure: true
-  },
-  name: config.name,
-  resave: false,
-  saveUninitialized: false,
-  secret: config.secret,
-  store: new RedisStore({client})
-}));
+  // Publication
+  const publication = new Publication({
+    configPath: config.pub.configPath,
+    defaults: require('@indiekit/config-jekyll'),
+    endpointUrl: config.app.url,
+    publisher: github,
+    url: config.app.me
+  });
 
-// Add application and publication data to locals
-app.use(async (req, res, next) => {
-  const url = `${req.protocol}://${req.headers.host}`;
+  // Add application and publication data to locals
+  app.use(async (req, res, next) => {
+    const url = `${req.protocol}://${req.headers.host}`;
 
-  app.locals.app = await config.app();
-  app.locals.app.url = url;
-  app.locals.publisher = await config.publisher();
-  app.locals.pub = await publication.getConfig();
-  app.locals.session = req.session;
+    app.locals.app = config.app;
+    app.locals.app.url = url;
+    app.locals.publisher = config.publisher;
+    app.locals.pub = await publication.getConfig();
+    app.locals.session = req.session;
 
-  next();
-});
+    next();
+  });
 
-// Micropub endpoint
-app.use('/micropub', micropub.post({
-  me: config.app.me
-}));
+  // Micropub endpoint
+  app.use('/micropub', micropub.post({
+    me: config.app.me
+  }));
 
-// Micropub media endpoint
-app.use('/media', micropub.media({
-  me: config.app.me
-}));
+  // Micropub media endpoint
+  app.use('/media', micropub.media({
+    me: config.app.me
+  }));
 
-// Routes
-const authenticate = async (req, res, next) => {
-  // If current session, proceed to next middleware
-  if (req.session && req.session.me) {
-    return next();
-  }
-
-  // No current session
-  res.redirect(`/sign-in?redirect=${req.originalUrl}`);
-};
-
-// Routes
-app.use('/config', authenticate, require('./routes/config'));
-app.use('/share', authenticate, require('./routes/share'));
-app.use('/docs', require('./routes/docs'));
-app.use(require('./routes/session'));
-app.use(require('./routes/error'));
-
-// Handle errors
-app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
-  debug(error.status);
-  res.status(error.status || 500);
-
-  if (req.accepts('html')) {
-    // Respond with HTML
-    res.render('error', {
-      error
-    });
-  } else {
-    if (req.accepts('json')) {
-      // Respond with JSON
-      return res.send({
-        error: error.name,
-        error_description: error.message,
-        error_uri: error.uri
-      });
+  // Routes
+  const authenticate = async (req, res, next) => {
+    // If current session, proceed to next middleware
+    if (req.session && req.session.me) {
+      return next();
     }
 
-    // Default to plain-text
-    return res.type('txt').send(`${error.name}: ${error.message}`);
-  }
-});
-
-// Start application
-if (process.env.NODE_ENV === 'test') {
-  app.listen();
-} else if (process.env.NODE_ENV === 'production') {
-  debug('Listening on port %s', port);
-  app.listen(port);
-} else {
-  const options = {
-    key: fs.readFileSync('./ssl/key.pem'),
-    cert: fs.readFileSync('./ssl/cert.pem'),
-    passphrase: process.env.PASSPHRASE
+    // No current session
+    res.redirect(`/sign-in?redirect=${req.originalUrl}`);
   };
-  debug('Listening on port %s', port);
-  https.createServer(options, app).listen(port);
-}
 
-module.exports = app;
+  // Routes
+  app.use('/config', authenticate, require('./routes/config'));
+  app.use('/share', authenticate, require('./routes/share'));
+  app.use('/docs', require('./routes/docs'));
+  app.use(require('./routes/session'));
+  app.use(require('./routes/error'));
+
+  // Handle errors
+  app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
+    debug(error.status);
+    res.status(error.status || 500);
+
+    if (req.accepts('html')) {
+      // Respond with HTML
+      res.render('error', {
+        error
+      });
+    } else {
+      if (req.accepts('json')) {
+        // Respond with JSON
+        return res.send({
+          error: error.name,
+          error_description: error.message,
+          error_uri: error.uri
+        });
+      }
+
+      // Default to plain-text
+      return res.type('txt').send(`${error.name}: ${error.message}`);
+    }
+  });
+
+  // Start application
+  if (process.env.NODE_ENV === 'test') {
+    app.listen();
+  } else if (process.env.NODE_ENV === 'production') {
+    debug('Listening on port %s', port);
+    app.listen(port);
+  } else {
+    const options = {
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
+      passphrase: process.env.PASSPHRASE
+    };
+    debug('Listening on port %s', port);
+    https.createServer(options, app).listen(port);
+  }
+})();
+//
+// module.exports = app;

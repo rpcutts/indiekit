@@ -26,9 +26,7 @@
 	},
 	"publisher": {
 		"github": "GitHub",
-		"gitlab": "GitLab",
-		"undefined": "publisher.undefined",
-		"[object Promise]": "publisher.[object Promise]"
+		"gitlab": "GitLab"
 	},
 	"Documentation": "Documentation",
 	"Sign out": "Sign out",
@@ -71,8 +69,8 @@
 				"label": "Access token"
 			}
 		},
-		"publisher": {
-			"title": "Publisher",
+		"github": {
+			"title": "GitHub",
 			"user": {
 				"label": "Username",
 				"error": "Username must be between 1 and 38 characters long."

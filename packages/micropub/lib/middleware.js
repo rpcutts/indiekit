@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const express = require('express');
 const multer = require('multer');
 const IndieAuth = require('@indiekit/indieauth');
@@ -46,8 +47,10 @@ module.exports = opts => {
 
       try {
         const response = await queryEndpoint(req, posts);
+        debug('queryEndpoint response', response);
         return res.json(response);
       } catch (error) {
+        debug('queryEndpoint error', error);
         return next(error);
       }
     }
@@ -61,21 +64,31 @@ module.exports = opts => {
     (req, res, next) => {
       // Determine action, and continue if token has required scope
       const action = req.query.action || req.body.action;
+      debug('action', action);
       if (action === 'delete') {
-        indieauth.checkScope('delete').catch(error => {
+        try {
+          indieauth.checkScope('delete');
+          return next();
+        } catch (error) {
           return next(error);
-        });
+        }
       }
 
       if (action === 'update') {
-        indieauth.checkScope('update').catch(error => {
+        try {
+          indieauth.checkScope('update');
+          return next();
+        } catch (error) {
           return next(error);
-        });
+        }
       }
 
-      indieauth.checkScope('create').catch(error => {
-        return next(error);
-      });
+      try {
+        indieauth.checkScope('create');
+        return next();
+      } catch (error) {
+        return next(indieauth.checkScope('create'));
+      }
     },
     async (req, res, next) => {
       const {posts} = req.session;
@@ -89,6 +102,7 @@ module.exports = opts => {
           success_description: response.success_description
         });
       } catch (error) {
+        debug('action error', error);
         return next(error);
       }
     }

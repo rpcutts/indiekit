@@ -1,4 +1,5 @@
 const fsp = require('fs').promises;
+const debug = require('debug')('indiekit:micropub');
 const camelcaseKeys = require('camelcase-keys');
 const microformats = require('@indiekit/microformats');
 const {utils} = require('@indiekit/support');

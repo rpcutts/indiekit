@@ -26,7 +26,6 @@ module.exports = async (opts, bearerToken) => {
       }
     });
 
-    debug('Token endpoint response: %O', response);
     accessToken = await response.json();
   } catch (error) {
     throw new httpError.InternalServerError(error.message);

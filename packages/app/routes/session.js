@@ -3,10 +3,10 @@ const express = require('express');
 const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
 
-const config = require('./../config');
+// const config = require('./../config');
 
 const auth = new IndieAuth({
-  secret: config.secret
+  secret: 'test' // config.secret TODO: Get config secret
 });
 
 const router = new express.Router();

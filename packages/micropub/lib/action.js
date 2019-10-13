@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const httpError = require('http-errors');
 const {utils} = require('@indiekit/support');
 
@@ -26,11 +27,13 @@ module.exports = async (req, posts, media) => {
     // Determine action to perform
     switch (action) {
       case 'delete': {
+        debug('Deleting post');
         const deleted = await deletePost(req, postData).catch(error => {
           httpError(500, error.message);
         });
 
         if (deleted) {
+          debug('deleted', deleted);
           return {
             status: 200,
             success: 'delete',
@@ -42,11 +45,13 @@ module.exports = async (req, posts, media) => {
       }
 
       case 'undelete': {
+        debug('Undeleting post');
         const undeleted = await undeletePost(req, postData).catch(error => {
           httpError(500, error.message);
         });
 
         if (undeleted) {
+          debug('undeleted', undeleted);
           return {
             location: undeleted.url,
             status: 200,
@@ -59,11 +64,13 @@ module.exports = async (req, posts, media) => {
       }
 
       case 'update': {
+        debug('Updating post');
         const updated = await updatePost(req, postData, posts).catch(error => {
           httpError(500, error.message);
         });
 
         if (updated) {
+          debug('updated', updated);
           const hasUpdatedUrl = (url !== updated.url);
           return {
             location: updated.url,
@@ -85,11 +92,13 @@ module.exports = async (req, posts, media) => {
   const {body} = req;
 
   // Upload attached media and add its URL to respective body property
+  debug('Uploading attachments');
   const uploaded = await uploadAttachments(req, media).catch(error => {
     httpError(500, error.message);
   });
 
   if (uploaded) {
+    debug('uploaded', uploaded);
     for (const upload of uploaded) {
       const property = upload.type;
       body[property] = utils.addToArray(body[property], upload.url);
@@ -97,11 +106,13 @@ module.exports = async (req, posts, media) => {
   }
 
   // Create post
+  debug('Creating post');
   const created = await createPost(req, posts).catch(error => {
     httpError(500, error.message);
   });
 
   if (created) {
+    debug('created', created);
     return {
       location: created.url,
       status: 202,
