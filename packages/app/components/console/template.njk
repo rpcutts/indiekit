@@ -1,0 +1,9 @@
+<div class="console" id="debug">
+  <a class="console__close" href="#" aria-label="Hide console">×</a>
+  {%- for item in opts.items %}
+    {%- if item -%}
+      {%- set code = "```json\n" + item | dump(2) + "\n```" -%}
+      {{- code | markdown | safe -}}
+    {%- endif -%}
+  {%- endfor %}
+</div>

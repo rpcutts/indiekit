@@ -95,10 +95,9 @@ const RedisStore = require('connect-redis')(session);
   // Add application and publication data to locals
   app.use(async (req, res, next) => {
     const url = `${req.protocol}://${req.headers.host}`;
-
     app.locals.app = config.app;
     app.locals.app.url = url;
-    app.locals.publisher = config.publisher;
+    app.locals.github = config.github;
     app.locals.pub = await publication.getConfig();
     app.locals.session = req.session;
 

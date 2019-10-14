@@ -59,12 +59,8 @@ code,
 samp,
 var {
   font-family: var(--font-family-monospace);
+  font-size: 85%;
   hanging-punctuation: none;
-}
-
-code,
-samp {
-  font-size: var(--font-size-default);
 }
 
 del {

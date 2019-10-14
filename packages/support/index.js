@@ -180,11 +180,13 @@ const utils = {
    *
    */
   renderMarkdown(str, value) {
-    if (value === 'inline') {
-      return markdown.renderInline(str);
-    }
+    if (str) {
+      if (value === 'inline') {
+        return markdown.renderInline(str);
+      }
 
-    return markdown.render(str);
+      return markdown.render(str);
+    }
   },
 
   /**

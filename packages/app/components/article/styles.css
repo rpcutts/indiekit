@@ -70,7 +70,6 @@
 .article code,
 .article samp {
   border-radius: var(--border-radius-small);
-  font-size: 85%;
   hanging-punctuation: none;
 }
 

@@ -1,0 +1,42 @@
+.console {
+  --flow-space: var(space-block-medium);
+  background-color: var(--color-neutral-lightest);
+  border: solid var(--color-neutral-light);
+  border-width: 0 0 var(--border-width-thin) 0;
+  display: none;
+  margin: 0;
+  max-block-size: 33vh;
+  position: relative;
+  overflow: scroll;
+}
+
+.console:target {
+  display: block;
+}
+
+.console__close {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-solid);
+  padding: var(--inset-squished);
+  right: 0;
+  position: absolute;
+}
+
+.console pre {
+  padding: var(--inset-squished);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+@supports (inset: 0) {
+  .console {
+    border-width: var(--border-width-thin) 0 0 0;
+    inset: auto 0 0 0;
+    position: fixed;
+  }
+
+  .console__close {
+    inset: 0 0 auto auto;
+  }
+}

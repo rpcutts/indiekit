@@ -1,8 +1,8 @@
 {%- from "article/macro.njk" import article -%}
 {%- from "banner/macro.njk" import banner -%}
 {%- from "button/macro.njk" import button -%}
+{%- from "console/macro.njk" import console -%}
 {%- from "contentinfo/macro.njk" import contentinfo -%}
-{%- from "debug/macro.njk" import debug -%}
 {%- from "error-summary/macro.njk" import errorSummary -%}
 {%- from "fieldset/macro.njk" import fieldset -%}
 {%- from "input/macro.njk" import input -%}
@@ -26,8 +26,8 @@
     <title>{{ title + " - " if title }}{{ app.name }}</title>
   </head>
   <body>
-    {{ debug({
-      items: [session, app, publisher]
+    {{ console({
+      items: [session, app, github]
     }) }}
     {{ banner({
       url: app.url,
@@ -48,6 +48,9 @@
 
     {{ contentinfo({
       navigation: [{
+        href: "#debug",
+        text: "Debug"
+      }, {
         href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,
         text: "v" + app.version
       }]

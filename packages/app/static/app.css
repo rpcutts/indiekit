@@ -314,11 +314,8 @@ code,
 samp,
 var {
   font-family: var(--font-family-monospace);
+  font-size: 85%;
   hanging-punctuation: none;
-}
-code,
-samp {
-  font-size: var(--font-size-default);
 }
 del {
   background-color: var(--color-delete);
@@ -420,7 +417,6 @@ mark {
 .article code,
 .article samp {
   border-radius: var(--border-radius-small);
-  font-size: 85%;
   hanging-punctuation: none;
 }
 .article code {
@@ -467,6 +463,44 @@ mark {
   background-color: var(--color-accent);
   color: var(--color-background);
 }
+.console {
+  --flow-space: var(space-block-medium);
+  background-color: var(--color-neutral-lightest);
+  border: solid var(--color-neutral-light);
+  border-width: 0 0 var(--border-width-thin) 0;
+  display: none;
+  margin: 0;
+  max-block-size: 33vh;
+  position: relative;
+  overflow: scroll;
+}
+.console:target {
+  display: block;
+}
+.console__close {
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-solid);
+  padding: var(--inset-squished);
+  right: 0;
+  position: absolute;
+}
+.console pre {
+  padding: var(--inset-squished);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+@supports (inset: 0) {
+  .console {
+    border-width: var(--border-width-thin) 0 0 0;
+    inset: auto 0 0 0;
+    position: fixed;
+  }
+
+  .console__close {
+    inset: 0 0 auto auto;
+  }
+}
 .contentinfo {
   color: var(--color-neutral-dark);
   display: flex;
@@ -477,16 +511,6 @@ mark {
 }
 .contentinfo a {
   padding: var(--inset-small-squished);
-}
-.debug {
-  --flow-space: var(space-block-medium);
-  background-color: var(--color-neutral-lightest);
-  border: 1px solid var(--color-neutral-light);
-  border-radius: var(--border-radius-small);
-  margin: var(--space-block-small);
-  max-block-size: 33vh;
-  padding: var(--inset);
-  overflow: scroll;
 }
 .error-message {
   font-size: var(--font-size-reference);
