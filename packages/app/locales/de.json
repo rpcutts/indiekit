@@ -1,37 +1,37 @@
 {
-	"This is the %s endpoint for": "Dies ist der %s-Endpunkt für",
-	"Media endpoint": "Medienendpunkt",
-	"Supported post types": "Unterstützte Post Typen",
-	"Syndication targets": "Syndikate zu diesen Sites",
-	"Not found": "Nicht gefunden",
-	"The requested resource was not found": "Die angeforderte Ressource wurde nicht gefunden",
-	"post": {
-		"article": "Artikel Post",
-		"note": "Notiz Posten",
-		"photo": "Foto Posten",
-		"video": "Video Posten",
-		"audio": "Audio Posten",
-		"bookmark": "Lesezeichen Post",
-		"checkin": "Checkin Post",
-		"event": "Veranstaltungs Post",
-		"rsvp": "RSVP Posten",
-		"reply": "Antworten-post",
-		"repost": "Repost",
-		"like": "„Gefällt mir“-Post"
-	},
-	"Help": "Help",
-	"Sign out": "Abmelden",
-	"Sign in": "Anmelden",
-	"Web address": "Webadresse",
-	"Share": "Teilhaben",
-	"Title": "Titel",
-	"URL": "URL",
-	"Content": "Inhalt",
-	"Publish": "Publizieren",
-	"Error": "Fehler",
-	"error": {
-		"validation": {
-			"url": "Geben Sie eine Webadresse mit einer vollständigen URL, wie https://example.org"
-		}
-	}
+  "This is the %s endpoint for": "Dies ist der %s-Endpunkt für",
+  "Media endpoint": "Medienendpunkt",
+  "Supported post types": "Unterstützte Post Typen",
+  "Syndication targets": "Syndikate zu diesen Sites",
+  "Not found": "Nicht gefunden",
+  "The requested resource was not found": "Die angeforderte Ressource wurde nicht gefunden",
+  "post": {
+    "article": "Artikel Post",
+    "note": "Notiz Posten",
+    "photo": "Foto Posten",
+    "video": "Video Posten",
+    "audio": "Audio Posten",
+    "bookmark": "Lesezeichen Post",
+    "checkin": "Checkin Post",
+    "event": "Veranstaltungs Post",
+    "rsvp": "RSVP Posten",
+    "reply": "Antworten-post",
+    "repost": "Repost",
+    "like": "„Gefällt mir“-Post"
+  },
+  "Help": "Help",
+  "Sign out": "Abmelden",
+  "Sign in": "Anmelden",
+  "Web address": "Webadresse",
+  "Share": "Teilhaben",
+  "Title": "Titel",
+  "URL": "URL",
+  "Content": "Inhalt",
+  "Publish": "Publizieren",
+  "Error": "Fehler",
+  "error": {
+    "validation": {
+      "url": "Geben Sie eine Webadresse mit einer vollständigen URL, wie https://example.org"
+    }
+  }
 }

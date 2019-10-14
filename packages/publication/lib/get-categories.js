@@ -12,7 +12,7 @@ module.exports = async pubCategories => {
 
   if (pubCategories && pubCategories.url) {
     const response = await fetch(pubCategories.url, {
-      method: 'GET',
+      method: 'get',
       headers: {
         Accept: 'application/json'
       }

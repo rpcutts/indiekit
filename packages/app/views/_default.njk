@@ -2,9 +2,10 @@
 {%- from "banner/macro.njk" import banner -%}
 {%- from "button/macro.njk" import button -%}
 {%- from "console/macro.njk" import console -%}
-{%- from "contentinfo/macro.njk" import contentinfo -%}
 {%- from "error-summary/macro.njk" import errorSummary -%}
 {%- from "fieldset/macro.njk" import fieldset -%}
+{%- from "footer/macro.njk" import footer -%}
+{%- from "header/macro.njk" import header -%}
 {%- from "input/macro.njk" import input -%}
 {%- from "select/macro.njk" import select -%}
 {%- from "summary/macro.njk" import summary -%}
@@ -29,7 +30,7 @@
     {{ console({
       items: [session, app, github]
     }) }}
-    {{ banner({
+    {{ header({
       url: app.url,
       name: app.name,
       description: app.description,
@@ -44,9 +45,13 @@
         text: __("Sign out")
       } if session.me]
     }) | indent(4) }}
+    {{ banner({
+      text: success,
+      type: "success"
+    }) | indent(2) if success }}
     {%- block main %}{% endblock %}
 
-    {{ contentinfo({
+    {{ footer({
       navigation: [{
         href: "#debug",
         text: "Debug"

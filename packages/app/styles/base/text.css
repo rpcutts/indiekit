@@ -6,14 +6,14 @@
 
 a {
   color: inherit;
-  -webkit-text-decoration-color: var(--color-neutral-light);
-  text-decoration-color: var(--color-neutral-light);
+  -webkit-text-decoration-color: var(--color-text-decoration);
+  text-decoration-color: var(--color-text-decoration);
 }
 
 a:hover {
-  color: var(--color-accent);
-  -webkit-text-decoration-color: var(--color-primary);
-  text-decoration-color: var(--color-primary);
+  color: inherit;
+  -webkit-text-decoration-color: currentColor;
+  text-decoration-color: currentColor;
 }
 
 a[aria-current] {

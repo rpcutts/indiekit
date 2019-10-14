@@ -18,7 +18,7 @@ module.exports = async (opts, bearerToken) => {
   let accessToken;
   try {
     const response = await fetch(opts.tokenEndpoint, {
-      method: 'GET',
+      method: 'get',
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${bearerToken}`,

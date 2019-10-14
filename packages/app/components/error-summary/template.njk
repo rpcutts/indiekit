@@ -6,7 +6,7 @@
   </h2>
   <div class="error-summary__body">
   {% if opts.description.text %}
-    <p>{{ opts.description.text | safe }}</p>
+    <p>{{ opts.description.text | markdown | safe }}</p>
   {% endif %}
   {% if opts.errorList %}
     <ul class="error-summary__list">

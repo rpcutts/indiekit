@@ -7,6 +7,7 @@ module.exports = (() => {
   const opts = {
     html: true,
     breaks: true,
+    linkify: true,
     typographer: true
   };
 

@@ -20,7 +20,7 @@ client.hget = promisify(client.hget);
 // Config
 const config = (async () => {
   return {
-    port: process.env.PORT || 3000,
+    port: (process.env.NODE_ENV === 'test') ? null : process.env.PORT || 3000,
     secret: crypto.createHash('md5').update(pkg.name).digest('hex'),
 
     app: {

@@ -1,4 +1,4 @@
-.contentinfo {
+.footer {
   color: var(--color-neutral-dark);
   display: flex;
   font-size: var(--font-size-reference);
@@ -7,6 +7,6 @@
   padding: var(--space-block-medium) 0;
 }
 
-.contentinfo a {
+.footer a {
   padding: var(--inset-small-squished);
 }

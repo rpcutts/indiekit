@@ -145,7 +145,7 @@ const RedisStore = require('connect-redis')(session);
     } else {
       if (req.accepts('json')) {
         // Respond with JSON
-        return res.send({
+        return res.json({
           error: error.name,
           error_description: error.message,
           error_uri: error.uri
@@ -158,9 +158,7 @@ const RedisStore = require('connect-redis')(session);
   });
 
   // Start application
-  if (process.env.NODE_ENV === 'test') {
-    app.listen();
-  } else if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     debug('Listening on port %s', port);
     app.listen(port);
   } else {

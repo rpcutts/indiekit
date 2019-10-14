@@ -1,18 +1,15 @@
-<header class="banner">
-  <h1 class="banner__title">
-    <a class="u-url" href="{{ opts.url }}">
-      {% include "logo.svg" %}
-      <span class="p-name">{{ opts.name }}</span>
-    </a>
-  </h1>
-  <p class="banner__description p-summary">{{ opts.description }}</p>
-{%- if opts.navigation %}
-  <nav class="banner__navigation" aria-label="site">
-  {%- for item in opts.navigation %}
-    {%- if item.href and item.text %}
-    <a href="{{ item.href }}">{{ item.text | safe }}</a>
-    {%- endif %}
-  {%- endfor %}
-  </nav>
-{%- endif %}
-</header>
+{%- set classes = "banner" + (" banner--" + opts.type if opts.type) + (" " + opts.classes if opts.classes) -%}
+<div class="{{ classes }}"
+  {%- for attr, value in opts.attributes -%} {{ attr }}="{{ value }}"{% endfor %}>
+  <div class="banner__body">
+  {% if opts.type == "success" %}
+    <svg class="banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" height="16" width="16"><path d="M16 3.5L5.5 14 0 8.5 2.5 6l3 3 8-8z"/></svg>
+  {% elif opts.type == "warning" %}
+    <svg class="banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" height="16" width="16"><path d="M0 14L8 1l8 13H0zm7.5-4.5h1l.5-4H7l.5 4zm.5 3a1 1 0 100-2 1 1 0 000 2z"/></svg>
+  {% elif opts.type == "information" %}
+    <svg class="banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" height="16" width="16"><path d="M8 1a7 7 0 017 7 7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7zm.8 10.5v-4H7.2v4h1.5zm-.8-5a1 1 0 100-2 1 1 0 000 2z"/></svg>
+  {% endif %}
+    {% if opts.iconFallbackText %}<span class="banner__assistive">{{ opts.iconFallbackText }}</span>{% endif %}
+    {{- opts.text | markdown | safe -}}
+  </div>
+</div>
