@@ -1,11 +1,47 @@
 <div class="preview">
   <h3 class="preview__title">
-    <output for="name" id="title-preview">{{ opts.title }}</output>
+    <output for="{{ opts.title.for }}">{{ opts.title.value }}</output>
   </h3>
   <p class="preview__content">
-    <output for="content" id="content-preview">{{ opts.content }}</output>
+    <output for="{{ opts.content.for }}">{{ opts.content.value }}</output>
+  </p>
+  <p class="preview__href">
+    <output for="{{ opts.href.for }}">{{ opts.href.value }}</output>
   </p>
   <p class="preview__date">
     <date>{{ opts.date | date("fff") }}</date>
   </p>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set up
+    let share = document.querySelector('.form');
+    let name = document.getElementById('title');
+    let namePreview = document.querySelector('output[for="{{ opts.title.for }}"]');
+    let content = document.getElementById('content');
+    let contentPreview = document.querySelector('output[for="{{ opts.content.for }}"]');
+    let href = document.getElementById('bookmark-of');
+    let hrefPreview = document.querySelector('output[for="{{ opts.href.for }}"]');
+
+    const updatePreview = (element, previewElement, fallbackText) => {
+      const updateAttributes = () => {
+        if (element.value === '') {
+          previewElement.className = 'empty';
+          previewElement.value = fallbackText;
+        } else {
+          previewElement.className = 'filled'
+          previewElement.value = decodeURIComponent(element.value);
+        }
+      }
+
+      updateAttributes();
+      element.addEventListener('keyup', (e) => {
+        updateAttributes();
+      })
+    };
+
+    updatePreview(name, namePreview, '{{ opts.title.text }}');
+    updatePreview(content, contentPreview, '{{ opts.content.text }}');
+    updatePreview(href, hrefPreview, '{{ opts.href.text }}');
+  }, false);
+</script>

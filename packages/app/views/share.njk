@@ -6,8 +6,21 @@
 
 {% block fieldset %}
   {{ preview({
-    title: name,
-    content: content,
+    title: {
+      text: __("Title"),
+      for: "name",
+      value: name
+    },
+    content: {
+      text: __("Content"),
+      for: "content",
+      value: content
+    },
+    href: {
+      text: __("URL"),
+      for: "bookmark-of",
+      value: url
+    },
     date: "now"
   }) }}
 
@@ -15,8 +28,8 @@
     label: {
       text: __("Title")
     },
-    id: "name",
-    name: "name",
+    id: "title",
+    name: "title",
     value: name
   }) }}
 
@@ -26,7 +39,7 @@
     },
     id: "bookmark-of",
     name: "bookmark-of",
-    value: bookmark-of
+    value: url
   }) }}
 
   {{ textarea({
@@ -59,19 +72,4 @@
   {{ button({
     text: __("Publish")
   }) }}
-{% endblock %}
-
-{% block scripts %}
-<script>
-  let share = document.querySelector('.form');
-  let name = document.getElementById('name');
-  let namePreview = document.querySelector('output[for="name"]');
-  let content = document.getElementById('content');
-  let contentPreview = document.querySelector('output[for="content"]');
-  share.oninput = handleInput;
-  function handleInput(e) {
-    namePreview.value = decodeURIComponent(name.value);
-    contentPreview.value = content.value;
-  }
-</script>
 {% endblock %}

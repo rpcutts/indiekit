@@ -8,14 +8,20 @@
   margin-block-start: var(--space-block-small);
 }
 
+.preview output.empty {
+  color: var(--color-neutral-light);
+}
+
 .preview__title {
   @extend %subhead;
 }
 
-.preview__content {
+.preview__content,
+.preview__href {
   @extend %body;
 }
 
 .preview__date {
   @extend %reference;
+  color: var(--color-neutral-dark);
 }

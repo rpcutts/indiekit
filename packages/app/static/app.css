@@ -701,13 +701,17 @@ mark {
 .preview > * + * {
   margin-block-start: var(--space-block-small);
 }
+.preview output.empty {
+  color: var(--color-neutral-light);
+}
 .preview__title {
   font-size: var(--font-size-subhead);
   font-weight: 700;
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
 }
-.preview__content {
+.preview__content,
+.preview__href {
   font-size: var(--font-size-body);
   font-variant: oldstyle-nums;
   hanging-punctuation: first;
@@ -722,6 +726,9 @@ mark {
   hyphens: auto;
   line-height: var(--line-height-loose);
   word-spacing: var(--word-spacing);
+}
+.preview__date {
+  color: var(--color-neutral-dark);
 }
 .select {
   border: var(--border-width-thick) solid var(--color-neutral);
