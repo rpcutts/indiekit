@@ -35,8 +35,8 @@
       name: app.name,
       description: app.description,
       navigation: [{
-        href: "/docs",
-        text: __("Documentation")
+        href: "/share",
+        text: __("Share")
       }, {
         href: "/sign-in",
         text: __("Sign in")
@@ -55,6 +55,9 @@
       navigation: [{
         href: "#debug",
         text: "Debug"
+      }, {
+        href: "/docs",
+        text: __("Help")
       }, {
         href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,
         text: "v" + app.version
