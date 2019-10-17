@@ -3,10 +3,10 @@
     <output for="{{ opts.title.for }}">{{ opts.title.value }}</output>
   </h3>
   <p class="preview__content">
-    <output for="{{ opts.content.for }}">{{ opts.content.value }}</output>
+    <output for="{{ opts.text.for }}">{{ opts.text.value }}</output>
   </p>
   <p class="preview__href">
-    <output for="{{ opts.href.for }}">{{ opts.href.value }}</output>
+    <output for="{{ opts.url.for }}">{{ opts.url.value }}</output>
   </p>
   <p class="preview__date">
     <date>{{ opts.date | date("fff") }}</date>
@@ -16,12 +16,12 @@
   document.addEventListener('DOMContentLoaded', () => {
     // Set up
     let share = document.querySelector('.form');
-    let name = document.getElementById('title');
-    let namePreview = document.querySelector('output[for="{{ opts.title.for }}"]');
-    let content = document.getElementById('content');
-    let contentPreview = document.querySelector('output[for="{{ opts.content.for }}"]');
-    let href = document.getElementById('bookmark-of');
-    let hrefPreview = document.querySelector('output[for="{{ opts.href.for }}"]');
+    let title = document.getElementById('{{ opts.title.for }}');
+    let titlePreview = document.querySelector('output[for="{{ opts.title.for }}"]');
+    let text = document.getElementById('{{ opts.text.for }}');
+    let textPreview = document.querySelector('output[for="{{ opts.text.for }}"]');
+    let url = document.getElementById('{{ opts.url.for }}');
+    let urlPreview = document.querySelector('output[for="{{ opts.url.for }}"]');
 
     const updatePreview = (element, previewElement, fallbackText) => {
       const updateAttributes = () => {
@@ -40,8 +40,8 @@
       })
     };
 
-    updatePreview(name, namePreview, '{{ opts.title.text }}');
-    updatePreview(content, contentPreview, '{{ opts.content.text }}');
-    updatePreview(href, hrefPreview, '{{ opts.href.text }}');
+    updatePreview(title, titlePreview, '{{ opts.title.text }}');
+    updatePreview(text, textPreview, '{{ opts.text.text }}');
+    updatePreview(url, urlPreview, '{{ opts.url.text }}');
   }, false);
 </script>

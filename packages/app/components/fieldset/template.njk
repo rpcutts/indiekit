@@ -1,7 +1,8 @@
 {%- set classes = "fieldset" + (" " + opts.classes if opts.classes) -%}
 {%- set legend -%}
   {%- if opts.legend.text %}
-  <legend class="fieldset__legend">
+  {%- set legendClasses = "fieldset__legend" + (" " + opts.legend.classes if opts.legend.classes) -%}
+  <legend class="{{ legendClasses }}">
   {%- if opts.legend.isPageHeading %}
     <h1 class="fieldset__title">
       {{- opts.legend.text | safe -}}

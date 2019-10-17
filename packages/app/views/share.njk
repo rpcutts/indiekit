@@ -1,8 +1,33 @@
+{#-
+  Share interface inspired and developed from an idea described by Max Böck.
+  See: https://mxb.dev/blog/indieweb-link-sharing/
+-#}
 {% from "preview/macro.njk" import preview %}
 
 {% extends "_form.njk" %}
 
 {% set title = "Share" %}
+{% set bookmarkletFunction -%}
+(function() {
+  var title = document.getElementsByTagName('title')[0].innerHTML;
+  name = encodeURIComponent(title);
+
+  var selection = '';
+  if (window.getSelection) {
+    selection = window.getSelection().toString();
+  } else if (document.selection && document.selection.type != 'Control') {
+    selection = document.selection.createRange().text;
+  }
+  content = encodeURIComponent(selection);
+
+  new_window=window.open(
+    '{{ app.url }}/share/bookmarklet?name='+name+'&content='+content+'&url='+encodeURIComponent(document.location.href),
+    'Sharer',
+    'resizable,scrollbars,status=0,toolbar=0,menubar=0,titlebar=0,width=640,height=720,location=0'
+  );
+})();
+{%- endset %}
+{% set bookmarkletHref = "javascript:" + bookmarkletFunction | replace("  ", "") | replace("\n", "") | replace("&", "&amp;") | trim %}
 
 {% block fieldset %}
   {{ preview({
@@ -11,14 +36,14 @@
       for: "name",
       value: name
     },
-    content: {
+    text: {
       text: __("Content"),
       for: "content",
       value: content
     },
-    href: {
+    url: {
       text: __("URL"),
-      for: "bookmark-of",
+      for: "url",
       value: url
     },
     date: "now"
@@ -28,18 +53,9 @@
     label: {
       text: __("Title")
     },
-    id: "title",
-    name: "title",
+    id: "name",
+    name: "name",
     value: name
-  }) }}
-
-  {{ input({
-    label: {
-      text: __("URL")
-    },
-    id: "bookmark-of",
-    name: "bookmark-of",
-    value: url
   }) }}
 
   {{ textarea({
@@ -50,6 +66,15 @@
     name: "content",
     value: content
   }) | indent(8) }}
+
+  {{ input({
+    label: {
+      text: __("URL")
+    },
+    id: "url",
+    name: "bookmark-of",
+    value: url
+  }) }}
 
   {{ input({
     field: {
@@ -72,4 +97,6 @@
   {{ button({
     text: __("Publish")
   }) }}
+
+  <p><a href="{{ bookmarkletHref | safe }}">Bookmarklet</a></p>
 {% endblock %}

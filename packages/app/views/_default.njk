@@ -44,7 +44,7 @@
         href: "/sign-out",
         text: __("Sign out")
       } if session.me]
-    }) | indent(4) }}
+    }) | indent(4) if not minimalui }}
     {{ banner({
       text: success,
       type: "success"
@@ -62,6 +62,6 @@
         href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,
         text: "v" + app.version
       }]
-    }) | indent(4) }}
+    }) | indent(4) if not minimalui }}
   </body>
 </html>

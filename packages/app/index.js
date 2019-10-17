@@ -32,8 +32,8 @@ const RedisStore = require('connect-redis')(session);
     express: app,
     watch: true
   });
-  env.addFilter('markdown', utils.renderMarkdown);
   env.addFilter('date', utils.formatDate);
+  env.addFilter('markdown', utils.renderMarkdown);
   app.set('view engine', 'njk');
 
   // Serve static files and paths

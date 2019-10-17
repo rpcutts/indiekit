@@ -9,6 +9,7 @@
     <form class="form" method="post">
       {% call fieldset({
         legend: {
+          classes: "visually-hidden" if minimalui,
           text: legendText,
           isPageHeading: true
         },

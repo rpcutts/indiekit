@@ -14,8 +14,18 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/bookmarklet', (req, res) => {
+  res.render('share', {
+    content: req.query.content,
+    name: req.query.name,
+    url: req.query.url,
+    success: req.query.success,
+    minimalui: true
+  });
+});
+
 // Post to micropub endpoint here so we can handle the returned JSON
-router.post('/', async (req, res, next) => {
+router.post('/*', async (req, res, next) => {
   const host = `${req.protocol}://${req.headers.host}`;
   try {
     const response = await fetch(`${host}/micropub`, {
