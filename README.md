@@ -60,8 +60,6 @@ If you’re developing a new feature and want the application to automatically r
 npm test
 ```
 
-Before running any automated tests, an IndieAuth token needs to be assigned to the `TEST_INDIEAUTH_TOKEN` environment variable. This token, whose URL must match that used for `INDIEKIT_URL`, should also include `create`, `update` and `delete` scopes. [Homebrew Access Token](https://gimme-a-token.5eb.nl) is a useful tool for creating tokens for this purpose.
-
 ## Similar projects
 
 IndieKit is inspired by similar projects made by members of the [IndieWeb community](https://indieweb.org), all of which you are encouraged to try:

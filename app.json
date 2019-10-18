@@ -10,14 +10,6 @@
   "logo": "https://raw.githubusercontent.com/paulrobertlloyd/indiekit/master/app/static/logo.svg?sanitize=true",
   "success_url": "/docs/welcome",
   "env": {
-    "INDIEKIT_URL": {
-      "description": "URL of the website you want to publish to",
-      "required": true
-    },
-    "INDIEKIT_CONFIG_PATH": {
-      "description": "Location of configuration file, relative to repository’s root",
-      "required": false
-    },
     "NPM_CONFIG_PRODUCTION": {
       "descrition": "Skip pruning devDependencies while packages are not public",
       "value": "false"
