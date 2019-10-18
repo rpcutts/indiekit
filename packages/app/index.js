@@ -11,8 +11,6 @@ const Publication = require('@indiekit/publication');
 const Publisher = require('@indiekit/publisher-github');
 const {utils} = require('@indiekit/support');
 const session = require('express-session');
-const redis = require('async-redis');
-const RedisStore = require('connect-redis')(session);
 
 (async () => {
   const config = await require('./config');
@@ -55,6 +53,10 @@ const RedisStore = require('connect-redis')(session);
   app.use(i18n.init);
 
   // Redis
+  // connect-redis requires a synchronous redis client
+  // See: https://github.com/tj/connect-redis/issues/241
+  const redis = require('redis');
+  const RedisStore = require('connect-redis')(session);
   const client = redis.createClient({
     url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
   });
