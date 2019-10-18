@@ -91,5 +91,8 @@
 			}
 		}
 	},
-	"Help": "Help"
+	"Help": "Help",
+	"Save": "Save",
+	"Save changes": "Save changes",
+	"Configuration": "Configuration"
 }

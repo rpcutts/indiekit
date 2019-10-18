@@ -28,7 +28,9 @@ router.get('/', async (req, res) => {
 
 // Application
 router.get('/app', async (req, res) => {
-  res.render('config/app');
+  res.render('config/app', {
+    referrer: req.query.referrer
+  });
 });
 
 router.post('/app', (req, res) => {
@@ -40,7 +42,9 @@ router.post('/app', (req, res) => {
 
 // GitHub
 router.get('/github', async (req, res) => {
-  res.render('config/github');
+  res.render('config/github', {
+    referrer: req.query.referrer
+  });
 });
 
 router.post('/github', [

@@ -90,6 +90,6 @@
   }) | indent(2) }}
 
   {{ button({
-    text: __("Save and continue")
+    text: __("Save changes") if referrer else __("Save and continue")
   }) | indent(2) }}
 {% endblock %}

@@ -3,125 +3,84 @@
 {% set title = "Config" %}
 
 {% block content %}
-    <h3>{{ __("config.app.title") }}</h3>
-    {{ summary({
-      rows: [{
-        key: {
-          text: __("config.app.me.label")
-        },
-        value: {
-          text: app.me
-        }
-      }, {
-        key: {
-          text: __("config.app.token.label")
-        },
-        value: {
-          text: app.token
-        }
-      }, {
-        key: {
-          text: __("config.app.locale.label")
-        },
-        value: {
-          text: __("locale." + app.locale)
-        },
-        actions: {
-          items: [{
-            href: "/config/app?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "locale"
-          }]
-        }
-      }, {
-        key: {
-          text: __("config.app.publisher.label")
-        },
-        value: {
-          text: __("publisher." + app.publisher)
-        },
-        actions: {
-          items: [{
-            href: "/config/app?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "publisher"
-          }]
-        }
-      }, {
-        key: {
-          text: __("config.app.themeColor.label")
-        },
-        value: {
-          text: "<span style=\"color:" + app.themeColor + "\" aria-hidden\"true\">●</span> " + app.themeColor
-        },
-        actions: {
-          items: [{
-            href: "/config/app?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "theme color"
-          }]
-        }
-      }]
-    }) }}
+  {{ summary({
+    title: __("config.app.title"),
+    actions: [{
+      href: "/config/app?referrer=/config",
+      text: __("Edit")
+    }],
+    rows: [{
+      key: {
+        text: __("config.app.me.label")
+      },
+      value: {
+        text: app.me
+      }
+    }, {
+      key: {
+        text: __("config.app.token.label")
+      },
+      value: {
+        text: app.token
+      }
+    }, {
+      key: {
+        text: __("config.app.locale.label")
+      },
+      value: {
+        text: __("locale." + app.locale)
+      }
+    }, {
+      key: {
+        text: __("config.app.publisher.label")
+      },
+      value: {
+        text: __("publisher." + app.publisher)
+      }
+    }, {
+      key: {
+        text: __("config.app.themeColor.label")
+      },
+      value: {
+        text: "<span style=\"color:" + app.themeColor + "\" aria-hidden\"true\">●</span> " + app.themeColor
+      }
+    }]
+  }) }}
 
-    <h3>{{ __("config.publisher.title") }}</h3>
-    {{ summary({
-      rows: [{
-        key: {
-          text: __("config.publisher.user.label")
-        },
-        value: {
-          text: publisher.user
-        },
-        actions: {
-          items: [{
-            href: "/config/publisher?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "username"
-          }]
-        }
-      }, {
-        key: {
-          text: __("config.publisher.repo.label")
-        },
-        value: {
-          text: publisher.repo
-        },
-        actions: {
-          items: [{
-            href: "/config/publisher?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "repository"
-          }]
-        }
-      }, {
-        key: {
-          text: __("config.publisher.branch.label")
-        },
-        value: {
-          text: publisher.branch
-        },
-        actions: {
-          items: [{
-            href: "/config/publisher?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "branch"
-          }]
-        }
-      }, {
-        key: {
-          text: __("config.publisher.token.label")
-        },
-        value: {
-          text: publisher.token
-        },
-        actions: {
-          items: [{
-            href: "/config/publisher?referrer=/config",
-            text: __("Edit"),
-            visuallyHiddenText: "token"
-          }]
-        }
-      }]
-    }) }}
+  {{ summary({
+    title: __("config.github.title"),
+    actions: [{
+      href: "/config/github?referrer=/config",
+      text: __("Edit")
+    }],
+    rows: [{
+      key: {
+        text: __("config.github.user.label")
+      },
+      value: {
+        text: github.user
+      }
+    }, {
+      key: {
+        text: __("config.github.repo.label")
+      },
+      value: {
+        text: github.repo
+      }
+    }, {
+      key: {
+        text: __("config.github.branch.label")
+      },
+      value: {
+        text: github.branch
+      }
+    }, {
+      key: {
+        text: __("config.github.token.label")
+      },
+      value: {
+        text: github.token
+      }
+    }]
+  }) }}
 {% endblock %}
