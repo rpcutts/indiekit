@@ -1,8 +1,7 @@
-const {promisify} = require('util');
 const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
-const redis = require('redis');
+const redis = require('async-redis');
 const config = require('../config');
 
 // Redis
@@ -13,8 +12,6 @@ const client = redis.createClient({
 client.on('error', error => {
   debug(error);
 });
-
-client.hget = promisify(client.hget);
 
 const router = new express.Router();
 

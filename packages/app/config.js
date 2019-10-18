@@ -1,7 +1,6 @@
 require('dotenv').config();
-const {promisify} = require('util');
 const debug = require('debug')('indiekit:app');
-const redis = require('redis');
+const redis = require('async-redis');
 
 const pkg = require(process.env.PWD + '/package');
 
@@ -13,8 +12,6 @@ const client = redis.createClient({
 client.on('error', error => {
   debug(error);
 });
-
-client.hget = promisify(client.hget);
 
 // Config
 const config = (async () => {

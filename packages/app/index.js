@@ -11,7 +11,7 @@ const Publication = require('@indiekit/publication');
 const Publisher = require('@indiekit/publisher-github');
 const {utils} = require('@indiekit/support');
 const session = require('express-session');
-const redis = require('redis');
+const redis = require('async-redis');
 const RedisStore = require('connect-redis')(session);
 
 (async () => {
