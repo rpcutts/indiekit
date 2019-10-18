@@ -24,7 +24,7 @@ IndieKit needs to be hosted on a public server so that it can accept and respond
 
 The easiest way to do this is to deploy this application to Heroku. Clicking on the button below will guide you through the process:
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/paulrobertlloyd/indiekit)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/paulrobertlloyd/indiekit/tree/v0.1.0)
 
 ### …or host on your own web server
 
