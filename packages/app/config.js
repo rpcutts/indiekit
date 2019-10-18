@@ -1,5 +1,4 @@
 require('dotenv').config();
-const crypto = require('crypto');
 const {promisify} = require('util');
 const debug = require('debug')('indiekit:app');
 const redis = require('redis');
@@ -21,7 +20,7 @@ client.hget = promisify(client.hget);
 const config = (async () => {
   return {
     port: (process.env.NODE_ENV === 'test') ? null : process.env.PORT || 3000,
-    secret: crypto.createHash('md5').update(pkg.name).digest('hex'),
+    secret: process.env.SECRET,
 
     app: {
       name: 'IndieKit',

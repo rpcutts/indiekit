@@ -17,6 +17,10 @@
     "INDIEKIT_CONFIG_PATH": {
       "description": "Location of configuration file, relative to repository’s root",
       "required": false
+    },
+    "SECRET": {
+      "description": "A secret key for verifying the integrity of signed cookies",
+      "generator": "secret"
     }
   },
   "addons": [
