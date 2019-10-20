@@ -5,14 +5,14 @@
 
 {% block fieldset %}
   {{ input({
+    id: "user",
+    name: "user",
     label: {
       text: __("config.github.user.label")
     },
     attributes: {
       spellcheck: "false"
     },
-    id: "user",
-    name: "user",
     value: github.user,
     errorMessage: {
       text: errors.user.msg,
@@ -21,6 +21,8 @@
   }) | indent(2) }}
 
   {{ input({
+    id: "repo",
+    name: "repo",
     label: {
       text: __("config.github.repo.label")
     },
@@ -30,8 +32,6 @@
     attributes: {
       spellcheck: "false"
     },
-    id: "repo",
-    name: "repo",
     value: github.repo,
     errorMessage: {
       text: errors.repo.msg,
@@ -40,6 +40,8 @@
   }) | indent(2) }}
 
   {{ input({
+    id: "branch",
+    name: "branch",
     label: {
       text: __("config.github.branch.label")
     },
@@ -49,8 +51,6 @@
     attributes: {
       spellcheck: "false"
     },
-    id: "branch",
-    name: "branch",
     value: github.branch or "master",
     errorMessage: {
       text: errors.branch.msg,
@@ -59,6 +59,8 @@
   }) | indent(2) }}
 
   {{ input({
+    id: "token",
+    name: "token",
     label: {
       text: __("config.github.token.label")
     },
@@ -69,8 +71,6 @@
       maxlength: 40,
       spellcheck: "false"
     },
-    id: "token",
-    name: "token",
     value: github.token,
     errorMessage: {
       text: errors.token.msg,

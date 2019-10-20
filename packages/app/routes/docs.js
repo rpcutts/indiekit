@@ -8,7 +8,7 @@ router.get('*', (req, res, next) => {
   try {
     const filepath = path.join(__dirname, '../', req.originalUrl);
     const file = utils.resolveFilePath(filepath, 'md');
-    const content = utils.renderDocument(file, req.app.locals);
+    const content = utils.renderDocument(file, res.locals);
 
     res.render('_document', {
       page: content.page,

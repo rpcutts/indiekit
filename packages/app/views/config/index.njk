@@ -11,20 +11,6 @@
     }],
     rows: [{
       key: {
-        text: __("config.app.me.label")
-      },
-      value: {
-        text: app.me
-      }
-    }, {
-      key: {
-        text: __("config.app.token.label")
-      },
-      value: {
-        text: app.token
-      }
-    }, {
-      key: {
         text: __("config.app.locale.label")
       },
       value: {
@@ -80,6 +66,22 @@
       },
       value: {
         text: github.token
+      }
+    }]
+  }) }}
+
+  {{ summary({
+    title: __("config.pub.title"),
+    actions: [{
+      href: "/config/app?referrer=/config",
+      text: __("Edit")
+    }],
+    rows: [{
+      key: {
+        text: __("config.pub.me.label")
+      },
+      value: {
+        text: pub.me
       }
     }]
   }) }}

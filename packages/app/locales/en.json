@@ -56,9 +56,6 @@
 				"label": "Language",
 				"hint": "This is used to detirmine how dates and times should be formatted."
 			},
-			"me": {
-				"label": "URL"
-			},
 			"publisher": {
 				"label": "Publisher"
 			},
@@ -88,6 +85,16 @@
 				"label": "Personal access token",
 				"error": "Personal access token must be an alphanumeric value that is 40 characters long.",
 				"hint": "To create a new token, visit your account settings."
+			}
+		},
+		"pub": {
+			"title": "Website settings",
+			"me": {
+				"label": "URL"
+			},
+			"configPath": {
+				"label": "Configuration file path (optional)",
+				"hint": "Path to the configuration file in your repository. <a href=\"%s\">Learn more about configuring your website</a>."
 			}
 		}
 	},

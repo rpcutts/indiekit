@@ -1,0 +1,34 @@
+{% extends "_form.njk" %}
+
+{% set title = __("config.pub.title") %}
+{% set parent = __("config.title %s", app.name) %}
+
+{% block fieldset %}
+  {{ input({
+    id: "me",
+    name: "me",
+    label: {
+      text: __("config.pub.me.label")
+    },
+    attributes: {
+      readonly: true
+    },
+    value: pub.me or session.me
+  }) | indent(2) }}
+
+  {{ input({
+    id: "configPath",
+    name: "configPath",
+    label: {
+      text: __("config.pub.configPath.label")
+    },
+    hint: {
+      text: __("config.pub.configPath.hint", "/docs/website-configuration")
+    },
+    value: pub.configPath
+  }) | indent(2) }}
+
+  {{ button({
+    text: __("Save changes") if referrer else __("Save and continue")
+  }) | indent(2) }}
+{% endblock %}

@@ -3,18 +3,14 @@ const express = require('express');
 const {check, validationResult} = require('express-validator');
 const config = require('../config');
 
-// Redis
-const Redis = require('ioredis');
-
-const client = new Redis(
-  process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
-);
-
+const {client} = config;
 const router = new express.Router();
 
 // Configuration
 router.get('/', async (req, res) => {
-  if (res.locals.configured === true) {
+  const configured = await client.get('configured');
+  console.log('configured', configured);
+  if (configured) {
     res.render('config/index', {config});
   } else {
     res.redirect('/config/app');
@@ -29,7 +25,9 @@ router.get('/app', async (req, res) => {
 });
 
 router.post('/app', (req, res) => {
-  const {me, publisher, locale, themeColor} = req.body;
+  const {publisher, locale, themeColor} = req.body;
+  const {me} = req.session;
+  console.log('me', me);
   const {referrer} = req.query;
   client.hmset('app', {publisher, locale, themeColor});
   client.hmset('pub', {me});
@@ -74,8 +72,23 @@ router.post('/github', [
     });
   } else if (user && repo && token) {
     client.hmset('github', {user, repo, branch, token});
-    res.redirect(referrer || '/config');
+    res.redirect(referrer || '/config/publication');
   }
+});
+
+// Application
+router.get('/publication', async (req, res) => {
+  res.render('config/pub', {
+    referrer: req.query.referrer
+  });
+});
+
+router.post('/publication', (req, res) => {
+  const {configPath} = req.body;
+  const {referrer} = req.query;
+  client.hmset('pub', {configPath});
+  client.set('configured', true);
+  res.redirect(referrer || '/config');
 });
 
 module.exports = router;

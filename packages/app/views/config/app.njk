@@ -27,14 +27,14 @@
   }) | indent(2) }}
 
   {{ select({
+    id: "locale",
+    name: "locale",
     label: {
       text: __("config.app.locale.label")
     },
     hint: {
       text: __("config.app.locale.hint")
     },
-    id: "locale",
-    name: "locale",
     items: [{
       value: "de",
       text: __("locale.de"),
@@ -51,12 +51,12 @@
   }) | indent(2) }}
 
   {{ input({
+    id: "theme-color",
+    name: "themeColor",
     classes: "input--width-5",
     label: {
       text: __("config.app.themeColor.label")
     },
-    id: "theme-color",
-    name: "themeColor",
     type: "color",
     value: app.themeColor,
     errorMessage: {

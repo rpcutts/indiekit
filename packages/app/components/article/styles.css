@@ -8,9 +8,12 @@
   padding: var(--space-block-medium) 0;
 }
 
+.article > * {
+  max-inline-size: var(--line-measure);
+}
+
 .article > * + * {
   margin-block-start: var(--space-block-medium);
-  max-inline-size: var(--line-measure);
 }
 
 @media (--from-medium-viewport) {

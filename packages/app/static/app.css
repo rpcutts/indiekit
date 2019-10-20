@@ -31,6 +31,7 @@
   --line-height-tight: calc(1.25em + 0.25vw);
   --line-height-loose: calc(1.4em + 0.25vw);
   --word-spacing: 0;
+  --line-measure: 45rem;
 
   /* Borders */
   --border-radius-xsmall: 0.125rem;
@@ -350,9 +351,11 @@ mark {
   margin: 0 var(--space-block-medium);
   padding: var(--space-block-medium) 0;
 }
+.article > * {
+  max-inline-size: var(--line-measure);
+}
 .article > * + * {
   margin-block-start: var(--space-block-medium);
-  max-inline-size: var(--line-measure);
 }
 @media (min-width: 48em) {
   .article {

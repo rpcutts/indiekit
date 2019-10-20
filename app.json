@@ -8,7 +8,7 @@
   "website": "https://paulrobertlloyd.github.io/indiekit/",
   "repository": "https://github.com/paulrobertlloyd/indiekit",
   "logo": "https://raw.githubusercontent.com/paulrobertlloyd/indiekit/master/app/static/logo.svg?sanitize=true",
-  "success_url": "/docs/welcome",
+  "success_url": "/docs/config",
   "env": {
     "NPM_CONFIG_PRODUCTION": {
       "descrition": "Skip pruning devDependencies while packages are not public",

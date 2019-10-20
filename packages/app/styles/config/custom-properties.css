@@ -31,6 +31,7 @@
   --line-height-tight: calc(1.25em + 0.25vw);
   --line-height-loose: calc(1.4em + 0.25vw);
   --word-spacing: 0;
+  --line-measure: 45rem;
 
   /* Borders */
   --border-radius-xsmall: 0.125rem;
