@@ -2,17 +2,16 @@ const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
-
-// const config = require('./../config');
+const config = require('./../config');
 
 const auth = new IndieAuth({
-  secret: 'test' // config.secret TODO: Get config secret
+  secret: config.secret
 });
 
 const router = new express.Router();
 
 router.get('/:path(sign-in|log-in)?', (req, res) => {
-  const {app} = req.app.locals;
+  const {app} = res.locals;
   const {redirect} = req.query;
   let redirectUri = `${app.url}/auth`;
 

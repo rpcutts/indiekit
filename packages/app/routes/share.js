@@ -41,7 +41,6 @@ router.post('/*', async (req, res, next) => {
       res.redirect(`?success=${message}`);
     }
   } catch (error) {
-    debug(error);
     next(error);
   }
 });

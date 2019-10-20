@@ -14,9 +14,7 @@ const router = new express.Router();
 
 // Configuration
 router.get('/', async (req, res) => {
-  // If we have already configured a publication URL, assume we have configured
-  // everything else. Will probably need to revisit this.
-  if (req.app.locals.app.me) {
+  if (res.locals.configured === true) {
     res.render('config/index', {config});
   } else {
     res.redirect('/config/app');
@@ -31,9 +29,10 @@ router.get('/app', async (req, res) => {
 });
 
 router.post('/app', (req, res) => {
-  const {me, token, publisher, locale, themeColor} = req.body;
+  const {me, publisher, locale, themeColor} = req.body;
   const {referrer} = req.query;
-  client.hmset('app', {me, token, publisher, locale, themeColor});
+  client.hmset('app', {publisher, locale, themeColor});
+  client.hmset('pub', {me});
   res.redirect(referrer || `/config/${publisher}`);
 });
 

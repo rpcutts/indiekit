@@ -1,49 +1,24 @@
 require('dotenv').config();
-const debug = require('debug')('indiekit:app');
+const Redis = require('ioredis');
 
 const pkg = require(process.env.PWD + '/package');
 
-// Redis
-const Redis = require('ioredis');
-
-const client = new Redis(
-  process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
-);
-
-// Config
-const config = (async () => {
-  try {
-    return {
-      port: (process.env.NODE_ENV === 'test') ? null : process.env.PORT || 3000,
-      secret: process.env.SECRET,
-
-      app: {
-        name: 'IndieKit',
-        description: pkg.description,
-        version: pkg.version,
-        repository: pkg.repository,
-
-        locale: await client.hget('app', 'locale') || 'en',
-        me: await client.hget('app', 'me'),
-        publisher: await client.hget('app', 'publisher') || 'github',
-        themeColor: await client.hget('app', 'themeColor') || '#0000ee',
-        token: await client.hget('app', 'token')
-      },
-
-      pub: {
-        configPath: await client.hget('pub', 'configPath')
-      },
-
-      github: {
-        branch: await client.hget('github', 'branch'),
-        repo: await client.hget('github', 'repo'),
-        token: await client.hget('github', 'token'),
-        user: await client.hget('github', 'user')
-      }
-    };
-  } catch (error) {
-    debug(error);
+const config = {
+  client: new Redis(
+    process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+  ),
+  port: (process.env.NODE_ENV === 'test') ? null : process.env.PORT || 3000,
+  secret: process.env.SECRET || 'secret',
+  // Default settings
+  app: {
+    name: 'IndieKit',
+    version: pkg.version,
+    description: pkg.description,
+    repository: pkg.repository,
+    locale: 'en',
+    publisher: 'github',
+    themeColor: '#0000ee'
   }
-})();
+};
 
 module.exports = config;

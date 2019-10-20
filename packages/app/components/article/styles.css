@@ -2,16 +2,15 @@
   --flow-inset: 1.5em;
   --flow-space: 0.75em;
   --list-display: list-item;
-  --linear-measure: var(--line-measure);
   @extend %body;
   flex: 1;
   margin: 0 var(--space-block-medium);
-  max-width: 45rem;
   padding: var(--space-block-medium) 0;
 }
 
-.article > * + *{
+.article > * + * {
   margin-block-start: var(--space-block-medium);
+  max-inline-size: var(--line-measure);
 }
 
 @media (--from-medium-viewport) {
@@ -50,6 +49,7 @@
   margin: var(--space-block-small) 0;
   padding: var(--inset-small);
   overflow: scroll;
+  max-inline-size: auto;
 }
 
 .article pre code {
