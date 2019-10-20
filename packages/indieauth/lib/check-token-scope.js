@@ -39,7 +39,7 @@ module.exports = async (opts, requiredScope) => {
   }
 
   if (hasScope) {
-    return;
+    return true;
   }
 
   throw new httpError.Unauthorized(`Access token does not meet requirements for requested scope (${requiredScope})`);

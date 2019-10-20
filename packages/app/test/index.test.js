@@ -20,7 +20,7 @@ test('Application displays a home page', async t => {
 });
 
 test('Application displays a documentation page', async t => {
-  const response = await app.get('/docs/welcome');
+  const response = await app.get('/docs');
 
   t.is(response.status, 200);
   t.regex(response.header['content-type'], /^text\/html/);
