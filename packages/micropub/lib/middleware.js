@@ -13,6 +13,8 @@ const queryEndpoint = require('./query-endpoint');
  * @returns {Object} Express middleware
  */
 module.exports = opts => {
+  const pub = opts;
+
   // Create new Express router
   const post = new express.Router({
     caseSensitive: true,
@@ -37,7 +39,7 @@ module.exports = opts => {
 
   // Configure IndieAuth middleware
   const indieauth = new IndieAuth({
-    me: opts.me
+    me: pub.me
   });
 
   post.get('/',
@@ -46,7 +48,7 @@ module.exports = opts => {
       const {posts} = req.session;
 
       try {
-        const response = await queryEndpoint(req, posts);
+        const response = await queryEndpoint(req, posts, pub);
         debug('queryEndpoint response', response);
         return res.json(response);
       } catch (error) {
@@ -91,11 +93,10 @@ module.exports = opts => {
       }
     },
     async (req, res, next) => {
-      const {posts} = req.session;
-      const {media} = req.session;
+      const store = req.session; // Should be opts.store
 
       try {
-        const response = await action(req, posts, media);
+        const response = await action(req, store, pub);
         res.header('Location', response.location);
         return res.status(response.status).json({
           success: response.success,

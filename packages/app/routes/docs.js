@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 
 const router = new express.Router();
 

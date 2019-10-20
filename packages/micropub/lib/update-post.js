@@ -1,6 +1,6 @@
 const fs = require('fs');
 const camelcaseKeys = require('camelcase-keys');
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 const dataFormat = require('./utils/data-format');
 const derive = require('./utils/derive');
 const update = require('./utils/update');
@@ -12,14 +12,12 @@ const update = require('./utils/update');
  * @param {Object} req Request
  * @param {Object} postData Stored post data object
  * @param {Object} posts Post data store
+ * @param {Object} pub Publication settings
  * @returns {String} Location of undeleted post
 */
-module.exports = async (req, postData, posts) => {
+module.exports = async (req, postData, posts, pub) => {
   try {
     const {body} = req;
-
-    // Publication
-    const {pub} = req.app.locals;
 
     // Post type
     const {type} = postData;

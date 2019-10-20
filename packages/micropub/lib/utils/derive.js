@@ -3,7 +3,7 @@ const {DateTime} = require('luxon');
 const fileType = require('file-type');
 const postTypeDiscovery = require('post-type-discovery');
 const slugify = require('slug');
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 
 /**
  * Generate random alpha-numeric string, 5 characters long.

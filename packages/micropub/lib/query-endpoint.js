@@ -6,15 +6,12 @@ const microformats = require('@indiekit/microformats');
  *
  * @param {Object} req Request
  * @param {Object} posts Published posts
- * @param {Object} config Publication config
+ * @param {Object} pub Publication settings
  * @returns {Object} Requested information
  */
-module.exports = async (req, posts) => {
+module.exports = async (req, posts, pub) => {
   try {
     const {query} = req;
-
-    // Publication
-    const {pub} = req.app.locals;
 
     if (!query) {
       throw new Error('Request is missing query string');

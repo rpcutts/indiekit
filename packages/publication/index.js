@@ -27,7 +27,7 @@ module.exports = class {
       'media-endpoint': resolvedConfig['media-endpoint'] || resolvedMediaEndpoint,
       'slug-separator': resolvedConfig['slug-separator'],
       'syndicate-to': resolvedConfig['syndicate-to'],
-      url: this.opts.url
+      me: this.opts.me
     };
   }
 };

@@ -3,13 +3,11 @@
  *
  * @param {Object} req Request
  * @param {Object} postData Stored post data object
+ * @param {Object} pub Publication settings
  * @returns {Boolean} True if post is deleted
  */
-module.exports = async (req, postData) => {
+module.exports = async (req, postData, pub) => {
   try {
-    // Publication
-    const {pub} = req.app.locals;
-
     // Post type
     const {type} = postData;
 

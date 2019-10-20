@@ -55,13 +55,16 @@
         "label": "config.github.user.label"
       },
       "repo": {
-        "label": "config.github.repo.label"
+        "label": "config.github.repo.label",
+        "hint": "config.github.repo.hint"
       },
       "branch": {
-        "label": "config.github.branch.label"
+        "label": "config.github.branch.label",
+        "hint": "config.github.branch.hint"
       },
       "token": {
-        "label": "config.github.token.label"
+        "label": "config.github.token.label",
+        "hint": "config.github.token.hint"
       }
     },
     "pub": {
@@ -81,5 +84,6 @@
     "github": "publisher.github",
     "gitlab": "publisher.gitlab"
   },
-  "Save changes": "Save changes"
+  "Save changes": "Save changes",
+  "Save and continue": "Save and continue"
 }

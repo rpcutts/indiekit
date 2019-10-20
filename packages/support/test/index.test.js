@@ -3,7 +3,7 @@ const nock = require('nock');
 const test = require('ava');
 const Publisher = require('@indiekit/publisher-github');
 
-const {utils} = require('../.');
+const utils = require('../.');
 
 const github = new Publisher({
   token: 'abc123',

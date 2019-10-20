@@ -1,6 +1,6 @@
 const debug = require('debug')('indiekit:micropub');
 const httpError = require('http-errors');
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 
 const createPost = require('./create-post');
 const deletePost = require('./delete-post');
@@ -8,7 +8,9 @@ const undeletePost = require('./undelete-post');
 const updatePost = require('./update-post');
 const uploadAttachments = require('./upload-attachments');
 
-module.exports = async (req, posts, media) => {
+module.exports = async (req, store, pub) => {
+  const {posts} = store;
+  const {media} = store;
   const action = req.query.action || req.body.action;
   const url = req.query.url || req.body.url;
 
@@ -28,7 +30,7 @@ module.exports = async (req, posts, media) => {
     switch (action) {
       case 'delete': {
         debug('Deleting post');
-        const deleted = await deletePost(req, postData).catch(error => {
+        const deleted = await deletePost(req, postData, pub).catch(error => {
           httpError(500, error.message);
         });
 
@@ -46,7 +48,7 @@ module.exports = async (req, posts, media) => {
 
       case 'undelete': {
         debug('Undeleting post');
-        const undeleted = await undeletePost(req, postData).catch(error => {
+        const undeleted = await undeletePost(req, postData, pub).catch(error => {
           httpError(500, error.message);
         });
 
@@ -65,7 +67,7 @@ module.exports = async (req, posts, media) => {
 
       case 'update': {
         debug('Updating post');
-        const updated = await updatePost(req, postData, posts).catch(error => {
+        const updated = await updatePost(req, postData, posts, pub).catch(error => {
           httpError(500, error.message);
         });
 
@@ -107,7 +109,7 @@ module.exports = async (req, posts, media) => {
 
   // Create post
   debug('Creating post');
-  const created = await createPost(req, posts).catch(error => {
+  const created = await createPost(req, posts, pub).catch(error => {
     httpError(500, error.message);
   });
 

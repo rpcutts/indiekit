@@ -8,7 +8,15 @@ const auth = new IndieAuth({
   secret: config.secret
 });
 
+const {client} = config;
 const router = new express.Router();
+
+router.get('/', async (req, res) => {
+  const configured = await client.get('configured');
+  if (!configured) {
+    res.redirect('/docs/config');
+  }
+});
 
 router.get('/:path(sign-in|log-in)?', (req, res) => {
   const {app} = res.locals;
@@ -27,7 +35,9 @@ router.get('/:path(sign-in|log-in)?', (req, res) => {
 });
 
 router.post('/:path(sign-in|log-in)?', [
-  check('url').isURL({require_protocol: true}).withMessage((value, {req, path}) => {
+  check('url').isURL({
+    require_protocol: true
+  }).withMessage((value, {req, path}) => {
     return req.__(`error.validation.${path}`);
   })
 ], async (req, res) => {

@@ -2,7 +2,7 @@ const fsp = require('fs').promises;
 const debug = require('debug')('indiekit:micropub');
 const camelcaseKeys = require('camelcase-keys');
 const microformats = require('@indiekit/microformats');
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 const dataFormat = require('./utils/data-format');
 const derive = require('./utils/derive');
 
@@ -12,15 +12,13 @@ const derive = require('./utils/derive');
  * @exports createPost
  * @param {Object} req Request
  * @param {Object} posts Post data store
+ * @param {Object} pub Publication settings
  * @returns {String} Location of created file
  */
-module.exports = async (req, posts) => {
+module.exports = async (req, posts, pub) => {
   try {
     const {body} = req;
     const mf2 = req.is('json') ? body : microformats.formEncodedToMf2(body);
-
-    // Publication
-    const {pub} = req.app.locals;
 
     // Post type
     const type = derive.postType(mf2);

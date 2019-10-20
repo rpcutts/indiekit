@@ -8,11 +8,9 @@ const session = require('express-session');
 const favicon = require('serve-favicon');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
-const micropub = require('@indiekit/micropub').middleware;
 const RedisStore = require('connect-redis')(session);
-const Publication = require('@indiekit/publication');
-const Publisher = require('@indiekit/publisher-github');
-const {utils} = require('@indiekit/support');
+
+const utils = require('@indiekit/support');
 const config = require('./config');
 
 const {client} = config;
@@ -92,27 +90,8 @@ app.use(async (req, res, next) => {
   res.locals.pub = pub;
   res.locals.session = req.session;
 
-  // Configure publication
-  const publication = new Publication({
-    configPath: pub.configPath,
-    defaults: require('@indiekit/config-jekyll'),
-    endpointUrl: url,
-    publisher: new Publisher(github),
-    url: pub.me
-  });
-
   next();
 });
-
-// Micropub endpoint
-app.use('/micropub', micropub.post({
-  // me: config.app.me
-}));
-
-// Micropub media endpoint
-app.use('/media', micropub.media({
-  // me: config.app.me
-}));
 
 // Routes
 const authenticate = async (req, res, next) => {
@@ -129,6 +108,7 @@ const authenticate = async (req, res, next) => {
 app.use('/config', authenticate, require('./routes/config'));
 app.use('/share', authenticate, require('./routes/share'));
 app.use('/docs', require('./routes/docs'));
+// app.use(require('./routes/micropub'));
 app.use(require('./routes/session'));
 app.use(require('./routes/error'));
 

@@ -1,5 +1,5 @@
 const httpError = require('http-errors');
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 const dataFormat = require('./../utils/data-format');
 const derive = require('./../utils/derive');
 
@@ -9,16 +9,14 @@ const derive = require('./../utils/derive');
  * @param {Object} req Request
  * @param {Object} file File
  * @param {Object} media Media data store
+ * @param {Object} pub Publication settings
  * @returns {Object} Media data record
  */
-module.exports = async (req, file, media) => {
+module.exports = async (req, file, media, pub) => {
   try {
     if (!file || file.truncated || !file.buffer) {
       throw new Error('No file included in request');
     }
-
-    // Publication
-    const {pub} = req.app.locals;
 
     // Post type
     const type = derive.mediaType(file);

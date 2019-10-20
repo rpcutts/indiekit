@@ -1,4 +1,4 @@
-const {utils} = require('@indiekit/support');
+const utils = require('@indiekit/support');
 
 /**
  * Parses microformats in form-encoded POST request.
