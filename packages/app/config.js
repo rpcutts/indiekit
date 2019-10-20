@@ -1,17 +1,14 @@
 require('dotenv').config();
 const debug = require('debug')('indiekit:app');
-const redis = require('async-redis');
 
 const pkg = require(process.env.PWD + '/package');
 
 // Redis
-const client = redis.createClient({
-  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
-});
+const Redis = require('ioredis');
 
-client.on('error', error => {
-  debug(error);
-});
+const client = new Redis(
+  process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+);
 
 // Config
 const config = (async () => {

@@ -1,17 +1,14 @@
 const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
-const redis = require('async-redis');
 const config = require('../config');
 
 // Redis
-const client = redis.createClient({
-  url: config.redisUrl
-});
+const Redis = require('ioredis');
 
-client.on('error', error => {
-  debug(error);
-});
+const client = new Redis(
+  process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+);
 
 const router = new express.Router();
 

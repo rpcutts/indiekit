@@ -7,8 +7,10 @@ const favicon = require('serve-favicon');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 const micropub = require('@indiekit/micropub').middleware;
+const Redis = require('ioredis');
 const Publication = require('@indiekit/publication');
 const Publisher = require('@indiekit/publisher-github');
+
 const {utils} = require('@indiekit/support');
 const session = require('express-session');
 
@@ -53,13 +55,10 @@ const session = require('express-session');
   app.use(i18n.init);
 
   // Redis
-  // connect-redis requires a synchronous redis client
-  // See: https://github.com/tj/connect-redis/issues/241
-  const redis = require('redis');
+  const client = new Redis(
+    process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
+  );
   const RedisStore = require('connect-redis')(session);
-  const client = redis.createClient({
-    url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
-  });
 
   client.on('error', error => {
     debug(error);
