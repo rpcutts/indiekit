@@ -9,6 +9,8 @@ const frontmatter = require('front-matter');
 const nunjucks = require('nunjucks');
 const markdown = require('./lib/markdown');
 
+const pkg = require(process.env.PWD + '/package');
+
 const utils = {
   /**
    * Add data to an array, creating it if doesn’t exist.
@@ -101,28 +103,42 @@ const utils = {
   /**
    * Get file from publisher and save it to filesystem.
    *
-   * @exports getFile
+   * @exports getData
    * @param {Object} basepath Path to remote file
    * @param {Function} publisher Publishing function
    * @returns {String|Object} Cache value
    */
-  async getFile(basepath, publisher) {
-    const filePath = path.join(os.tmpdir(), basepath);
-    let content;
+  async getData(basepath, publisher) {
+    let data;
+    const filePath = path.join(os.tmpdir(), pkg.name, basepath);
+    const fileData = await fsp.readFile(filePath, {encoding: 'utf-8'}).catch(error => {
+      debug('Error fetching %O from filesystem', error);
+    });
 
-    try {
-      debug('Fetch %s from filesystem', filePath);
-      content = await fsp.readFile(filePath, {encoding: 'utf-8'});
-    } catch {
-      debug('Fetch %s from publisher', filePath);
-      content = await publisher.readFile(basepath).catch(error => {
+    if (fileData) {
+      debug('Got %s from filesystem', basepath);
+      data = fileData;
+    } else {
+      const pubData = await publisher.readFile(basepath).catch(error => {
+        debug('Error fetching %s from publisher', basepath);
         throw new Error(error.message);
       });
 
-      fsp.writeFile(filePath, content);
+      if (pubData) {
+        debug('Got %s from publisher, %O', basepath);
+        await fsp.mkdir(path.dirname(filePath), {recursive: true}).catch(error => {
+          debug('Error creating directories for %s', filePath);
+          throw new Error(error.message);
+        });
+
+        data = await fsp.writeFile(filePath, pubData).catch(error => {
+          debug('Error writing %s to filesystem', basepath);
+          throw new Error(error.message);
+        });
+      }
     }
 
-    return content;
+    return data;
   },
 
   /**

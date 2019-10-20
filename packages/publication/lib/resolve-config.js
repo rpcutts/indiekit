@@ -30,7 +30,7 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
         if (configPostType.template && !configPostType.resolved) {
           // Fetch template and save locally
           savedTemplates.push(
-            utils.getFile(configPostType.template, opts.publisher)
+            utils.getData(configPostType.template, opts.publisher)
           );
 
           // Update `template` with path to saved file
