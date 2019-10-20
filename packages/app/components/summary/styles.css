@@ -28,6 +28,7 @@
 
 @media (--from-small-viewport) {
   .summary__row {
+    align-items: baseline;
     display: flex;
   }
 }

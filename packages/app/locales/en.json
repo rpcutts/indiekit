@@ -90,21 +90,20 @@
     "pub": {
       "title": "Website settings",
       "me": {
-        "label": "URL"
+        "label": "Address",
+        "hint": "For example, https://mywebsite.example. To change this value, sign out and sign back in with the address you want to use."
       },
       "configPath": {
-        "label": "Configuration file path (optional)",
+        "label": "Configuration file path",
         "hint": "Path to the configuration file in your repository. <a href=\"%s\">Learn more about configuring your website</a>."
-      }
-    },
-    "share": {
-      "title": "Sharing",
+      },
       "bookmarklet": {
         "label": "Bookmarklet",
         "drag": "Drag this link to your bookmarks bar"
       }
     }
   },
+  "optional": "optional",
   "Help": "Help",
   "Save": "Save",
   "Save changes": "Save changes",

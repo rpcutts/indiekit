@@ -70,22 +70,6 @@
     }]
   }) }}
 
-  {{ summary({
-    title: __("config.pub.title"),
-    actions: [{
-      href: "/config/app?referrer=/config",
-      text: __("Edit")
-    }],
-    rows: [{
-      key: {
-        text: __("config.pub.me.label")
-      },
-      value: {
-        text: pub.me
-      }
-    }]
-  }) }}
-
   {%- set bookmarklet %}
     {% set bookmarkletFunction -%}
       (function() {
@@ -115,13 +99,31 @@
   {%- endset %}
 
   {{ summary({
-    title: __("config.share.title"),
+    title: __("config.pub.title"),
+    actions: [{
+      href: "/config/publication?referrer=/config",
+      text: __("Edit")
+    }],
     rows: [{
       key: {
-        text: __("config.share.bookmarklet.label")
+        text: __("config.pub.me.label")
       },
       value: {
-        text: __("config.share.bookmarklet.drag") + ": " + bookmarklet
+        text: pub.me
+      }
+    }, {
+      key: {
+        text: __("config.pub.configPath.label")
+      },
+      value: {
+        text: pub.configPath
+      }
+    }, {
+      key: {
+        text: __("config.pub.bookmarklet.label")
+      },
+      value: {
+        text: __("config.pub.bookmarklet.drag") + ": " + bookmarklet
       }
     }]
   }) }}

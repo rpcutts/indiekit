@@ -3,7 +3,7 @@
   background-color: var(--color-neutral-lightest);
   border-radius: var(--border-radius-small);
   display: inline-block;
-  padding: var(--inset-squished);
+  padding: var(--inset-small-squished);
   margin: var(--space-block-xsmall) 0;
   white-space: nowrap;
 }
