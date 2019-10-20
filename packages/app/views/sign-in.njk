@@ -1,6 +1,6 @@
 {% extends "_form.njk" %}
 
-{% set title = "Sign in" if not session.me else "Welcome back" %}
+{% set title = __("Sign in") if not session.me else __("Welcome back") %}
 
 {% block fieldset %}
   {{ errorSummary({
@@ -14,11 +14,11 @@
 
   {% if not session.me %}
     {{ input({
+      id: "url",
+      name: "url",
       label: {
         text: __("Web address")
       },
-      id: "url",
-      name: "url",
       type: "url",
       value: errors.url.value,
       errorMessage: {
@@ -28,10 +28,10 @@
     }) | indent(2) }}
 
     {{ input({
+      name: "redirect_uri",
       field: {
         classes: "visually-hidden"
       },
-      name: "redirect_uri",
       type: "hidden",
       value: redirect_uri
     }) | indent(2) }}

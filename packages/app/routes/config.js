@@ -9,7 +9,6 @@ const router = new express.Router();
 // Configuration
 router.get('/', async (req, res) => {
   const configured = await client.get('configured');
-  console.log('configured', configured);
   if (configured) {
     res.render('config/index', {config});
   } else {
@@ -27,8 +26,10 @@ router.get('/app', async (req, res) => {
 router.post('/app', (req, res) => {
   const {publisher, locale, themeColor} = req.body;
   const {me} = req.session;
-  console.log('me', me);
   const {referrer} = req.query;
+  res.cookie('locale', locale, {
+    maxAge: 900000
+  });
   client.hmset('app', {publisher, locale, themeColor});
   client.hmset('pub', {me});
   res.redirect(referrer || `/config/${publisher}`);

@@ -33,5 +33,53 @@
     "validation": {
       "url": "Geben Sie eine Webadresse mit einer vollständigen URL, wie https://example.org"
     }
-  }
+  },
+  "Configuration": "Configuration",
+  "config": {
+    "app": {
+      "title": "config.app.title",
+      "locale": {
+        "label": "config.app.locale.label",
+        "hint": "config.app.locale.hint"
+      },
+      "publisher": {
+        "label": "config.app.publisher.label"
+      },
+      "themeColor": {
+        "label": "config.app.themeColor.label"
+      }
+    },
+    "github": {
+      "title": "config.github.title",
+      "user": {
+        "label": "config.github.user.label"
+      },
+      "repo": {
+        "label": "config.github.repo.label"
+      },
+      "branch": {
+        "label": "config.github.branch.label"
+      },
+      "token": {
+        "label": "config.github.token.label"
+      }
+    },
+    "pub": {
+      "title": "config.pub.title",
+      "me": {
+        "label": "config.pub.me.label"
+      }
+    },
+    "title %s": "config.title %s"
+  },
+  "Edit": "Edit",
+  "locale": {
+    "de": "locale.de",
+    "en": "locale.en"
+  },
+  "publisher": {
+    "github": "publisher.github",
+    "gitlab": "publisher.gitlab"
+  },
+  "Save changes": "Save changes"
 }

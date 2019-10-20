@@ -3,6 +3,7 @@ const path = require('path');
 const https = require('https');
 const debug = require('debug')('indiekit:app');
 const express = require('express');
+const cookies = require('cookie-parser')
 const session = require('express-session');
 const favicon = require('serve-favicon');
 const i18n = require('i18n');
@@ -38,6 +39,9 @@ app.set('view engine', 'njk');
 app.use(express.static(staticDir));
 app.use(favicon(`${staticDir}/favicon.ico`));
 
+// Use cookies
+app.use(cookies());
+
 // Parse application/x-www-form-urlencoded requests
 app.use(express.urlencoded({
   extended: true
@@ -45,8 +49,10 @@ app.use(express.urlencoded({
 
 // Internationalisation
 i18n.configure({
+  cookie: 'locale',
   defaultLocale: 'en',
   directory: path.join(__dirname, 'locales'),
+  indent: '  ',
   objectNotation: true,
   queryParameter: 'lang'
 });
