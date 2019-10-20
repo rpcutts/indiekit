@@ -1,5 +1,5 @@
 ---
-title: Configuring {{ app.name }}
+title: Getting started with {{ app.name }}
 ---
 Before you can use {{ app.name }} to post to your website, there are a few things you’ll need to set up.
 

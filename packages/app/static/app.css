@@ -462,6 +462,22 @@ mark {
 .banner__icon {
   margin-inline-end: var(--space-inline-small);
 }
+.bookmarklet {
+  font-size: var(--font-size-reference);
+  font-variant: oldstyle-nums;
+  hanging-punctuation: first;
+  hyphens: auto;
+  line-height: var(--line-height-loose);
+  word-spacing: var(--word-spacing);
+}
+.bookmarklet {
+  background-color: var(--color-neutral-lightest);
+  border-radius: var(--border-radius-small);
+  display: inline-block;
+  padding: var(--inset-squished);
+  margin: var(--space-block-xsmall) 0;
+  white-space: nowrap;
+}
 .button {
   color: var(--color-background);
   background-color: var(--color-neutral-dark);
@@ -783,7 +799,7 @@ mark {
   color: var(--color-neutral-dark);
   flex: 2;
   padding-inline-end: var(--space-inline);
-  word-break: break-all;
+  word-break: break-word;
 }
 .summary__actions {
   margin-inline-start: auto;

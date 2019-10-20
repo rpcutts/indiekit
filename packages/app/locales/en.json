@@ -96,11 +96,21 @@
         "label": "Configuration file path (optional)",
         "hint": "Path to the configuration file in your repository. <a href=\"%s\">Learn more about configuring your website</a>."
       }
+    },
+    "share": {
+      "title": "Sharing",
+      "bookmarklet": {
+        "label": "Bookmarklet",
+        "drag": "Drag this link to your bookmarks bar"
+      }
     }
   },
   "Help": "Help",
   "Save": "Save",
   "Save changes": "Save changes",
   "Configuration": "Configuration",
-  "Welcome back": "Welcome back"
+  "Welcome back": "Welcome back",
+  "Bookmarklet": "Bookmarklet",
+  "Share on %s": "Share on %s",
+  "Share page": "Share page"
 }

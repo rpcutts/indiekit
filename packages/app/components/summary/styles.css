@@ -42,7 +42,7 @@
   color: var(--color-neutral-dark);
   flex: 2;
   padding-inline-end: var(--space-inline);
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .summary__actions {

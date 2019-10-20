@@ -37,9 +37,6 @@ app.set('view engine', 'njk');
 app.use(express.static(staticDir));
 app.use(favicon(`${staticDir}/favicon.ico`));
 
-// Use cookies
-app.use(cookies());
-
 // Parse application/x-www-form-urlencoded requests
 app.use(express.urlencoded({
   extended: true
@@ -55,6 +52,9 @@ i18n.configure({
   queryParameter: 'lang'
 });
 app.use(i18n.init);
+
+// Use cookies
+app.use(cookies());
 
 // Session
 app.use(session({
@@ -108,7 +108,7 @@ const authenticate = async (req, res, next) => {
 app.use('/config', authenticate, require('./routes/config'));
 app.use('/share', authenticate, require('./routes/share'));
 app.use('/docs', require('./routes/docs'));
-// app.use(require('./routes/micropub'));
+app.use(require('./routes/micropub'));
 app.use(require('./routes/session'));
 app.use(require('./routes/error'));
 

@@ -4,12 +4,11 @@ const Redis = require('ioredis');
 const pkg = require(process.env.PWD + '/package');
 
 const config = {
-  client: new Redis(
-    process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : null
-  ),
+  client: new Redis(process.env.REDIS_URL),
   port: (process.env.NODE_ENV === 'test') ? null : process.env.PORT || 3000,
   secret: process.env.SECRET || 'secret',
-  // Default settings
+
+  // Default application settings
   app: {
     name: 'IndieKit',
     version: pkg.version,

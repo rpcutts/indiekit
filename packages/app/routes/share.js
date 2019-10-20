@@ -5,22 +5,13 @@ const fetch = require('node-fetch');
 
 const router = new express.Router();
 
-router.get('/', (req, res) => {
-  res.render('share', {
-    content: req.query.content,
-    name: req.query.name,
-    url: req.query.url,
-    success: req.query.success
-  });
-});
-
-router.get('/bookmarklet', (req, res) => {
+router.get('/:path?', (req, res) => {
   res.render('share', {
     content: req.query.content,
     name: req.query.name,
     url: req.query.url,
     success: req.query.success,
-    minimalui: true
+    minimalui: (req.params.path === 'bookmarklet')
   });
 });
 

@@ -11,11 +11,13 @@ const auth = new IndieAuth({
 const {client} = config;
 const router = new express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   const configured = await client.get('configured');
   if (!configured) {
     res.redirect('/docs/config');
   }
+
+  next();
 });
 
 router.get('/:path(sign-in|log-in)?', (req, res) => {
