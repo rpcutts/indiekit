@@ -101,6 +101,9 @@
         "label": "Bookmarklet",
         "drag": "Drag this link to your bookmarks bar"
       }
+    },
+    "share": {
+      "title": "config.share.title"
     }
   },
   "optional": "optional",
@@ -109,7 +112,5 @@
   "Save changes": "Save changes",
   "Configuration": "Configuration",
   "Welcome back": "Welcome back",
-  "Bookmarklet": "Bookmarklet",
-  "Share on %s": "Share on %s",
-  "Share page": "Share page"
+  "Bookmarklet": "Bookmarklet"
 }
