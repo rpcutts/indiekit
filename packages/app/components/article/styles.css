@@ -49,8 +49,8 @@
   --flow-space: var(space-block-medium);
   background-color: var(--color-neutral-lightest);
   border-radius: var(--border-radius-small);
-  margin: var(--space-block-small) 0;
-  padding: var(--inset-small);
+  margin: var(--space-block-medium) 0;
+  padding: var(--inset-squished);
   overflow: scroll;
   max-inline-size: auto;
 }
@@ -79,4 +79,12 @@
 .article code {
   background-color: var(--color-neutral-lightest);
   padding: var(--inset-small-squished);
+}
+
+.article .language-shell {
+  background-color: var(--color-neutral-darkest);
+  color: var(--color-neutral-lightest);
+  font-size: 85%;
+  line-height: var(--line-height-tight);
+  max-inline-size: unset;
 }

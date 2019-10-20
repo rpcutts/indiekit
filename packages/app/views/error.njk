@@ -3,7 +3,9 @@
 {% set title = error.status + " - " + error.name %}
 {% set content %}
 {{ error.message }}
-{%- if error.stack -%}
-  <pre><code>{{ error.stack }}</code></pre>
+{%- if error.stack %}
+```shell
+{{ error.stack }}
+```
 {%- endif %}
 {% endset %}

@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const httpError = require('http-errors');
 const microformats = require('@indiekit/microformats');
 
@@ -6,10 +7,11 @@ const microformats = require('@indiekit/microformats');
  *
  * @param {Object} req Request
  * @param {Object} posts Published posts
- * @param {Object} pub Publication settings
+ * @param {Object} config Publication config
  * @returns {Object} Requested information
  */
-module.exports = async (req, posts, pub) => {
+module.exports = async (req, posts, config) => {
+  debug('config for endpoint', config);
   try {
     const {query} = req;
 
@@ -23,17 +25,18 @@ module.exports = async (req, posts, pub) => {
 
     switch (query.q) {
       case 'config': {
+        console.log('config', await config);
         return {
-          categories: pub.categories,
-          'media-endpoint': pub['media-endpoint'],
-          'post-types': pub['post-types'],
-          'syndicate-to': pub['syndicate-to']
+          categories: config.categories,
+          'media-endpoint': config['media-endpoint'],
+          'post-types': config['post-types'],
+          'syndicate-to': config['syndicate-to']
         };
       }
 
       case 'category': {
         return {
-          categories: pub.categories
+          categories: config.categories
         };
       }
 
@@ -54,10 +57,10 @@ module.exports = async (req, posts, pub) => {
       }
 
       default: {
-        if (pub[query.q]) {
+        if (config[query.q]) {
           // Return configured property if matches provided query
           return {
-            [query.q]: pub[query.q]
+            [query.q]: config[query.q]
           };
         }
 

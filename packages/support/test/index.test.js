@@ -83,7 +83,7 @@ test('Throws error if file can’t be fetched from GitHub', async t => {
 
   // Setup
   const error = await t.throwsAsync(async () => {
-    await utils.getFile('foo.txt', github);
+    await utils.getData('foo.txt', github);
   });
 
   // Test assertions

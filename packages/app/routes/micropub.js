@@ -18,25 +18,24 @@ const publication = (async () => {
     configPath: pub.configPath,
     defaults: require('@indiekit/config-jekyll'),
     publisher: new Publisher(github),
-    url: pub.me
+    me: pub.me
   });
 })();
 
 // Get publication configuration
-const pubConfig = (async () => {
+(async () => {
   const pub = await publication;
   const config = await pub.getConfig();
-  return config;
+
+  // Micropub endpoint
+  router.use('/micropub', micropub.post({
+    config
+  }));
+
+  // Micropub media endpoint
+  router.use('/media', micropub.media({
+    config
+  }));
 })();
-
-// Micropub endpoint
-router.use('/', micropub.post({
-  me: pubConfig.me
-}));
-
-// Micropub media endpoint
-router.use('/media', micropub.media({
-  me: pubConfig.me
-}));
 
 module.exports = router;

@@ -12,6 +12,8 @@ const uploadMedia = require('./upload-media');
  * @returns {Object} Express middleware
  */
 module.exports = opts => {
+  const {config} = opts;
+
   // Create new Express router
   const media = new express.Router({
     caseSensitive: true,
@@ -59,7 +61,7 @@ module.exports = opts => {
         return next(error);
       });
 
-      const uploaded = await uploadMedia(req, file, media).catch(error => {
+      const uploaded = await uploadMedia(req, file, media, config).catch(error => {
         return next(error);
       });
 
