@@ -1,6 +1,6 @@
+const axios = require('axios');
 const debug = require('debug')('indiekit:indieauth:requestToken');
-const httpError = require('http-errors');
-const fetch = require('node-fetch');
+const HttpError = require('http-errors');
 
 /**
  * Requests an IndieAuth access token.
@@ -12,28 +12,26 @@ const fetch = require('node-fetch');
  */
 module.exports = async (opts, bearerToken) => {
   if (!bearerToken) {
-    throw new httpError.Unauthorized('No token provided in request');
+    throw new HttpError.Unauthorized('No token provided in request');
   }
 
   let accessToken;
   try {
-    const response = await fetch(opts.tokenEndpoint, {
-      method: 'get',
+    const response = await axios.get(opts.tokenEndpoint, {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${bearerToken}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
-
-    accessToken = await response.json();
+    accessToken = response.data;
   } catch (error) {
-    throw new httpError.InternalServerError(error.message);
-  }
-
-  // Endpoint has responded, but with an error
-  if (accessToken.error) {
-    throw new httpError.InternalServerError(accessToken.error_description);
+    const {response} = error;
+    if (response && response.data.error_description) {
+      throw new HttpError(response.status, response.data.error_description);
+    } else {
+      throw new HttpError(error.status, error.message);
+    }
   }
 
   return accessToken;

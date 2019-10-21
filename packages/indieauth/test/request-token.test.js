@@ -40,7 +40,7 @@ test('Throws error if token endpoint returns an error', async t => {
   const error = await t.throwsAsync(requestToken(t.context.opts, t.context.bearer));
 
   // Test assertions
-  t.is(error.status, 500);
+  t.is(error.status, 404);
   t.is(error.message, 'The code provided was not valid');
   scope.done();
 });
