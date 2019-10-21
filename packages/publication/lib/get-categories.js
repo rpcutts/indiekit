@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 /**
  * Returns an array of available categories.
@@ -11,16 +11,16 @@ module.exports = async pubCategories => {
   let categories = [];
 
   if (pubCategories && pubCategories.url) {
-    const response = await fetch(pubCategories.url, {
-      method: 'get',
-      headers: {
-        Accept: 'application/json'
-      }
-    }).catch(error => {
+    try {
+      const response = await axios.get(pubCategories.url, {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+      categories = response.data;
+    } catch (error) {
       throw new Error(error);
-    });
-
-    categories = await response.json();
+    }
   } else if (pubCategories && pubCategories.constructor === Array) {
     categories = pubCategories;
   }
