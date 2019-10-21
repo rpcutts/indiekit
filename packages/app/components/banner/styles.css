@@ -14,7 +14,7 @@
 
 .banner__body {
   @extend %reference;
-  align-items: center;
+  align-items: start;
   display: flex;
 }
 
@@ -25,5 +25,11 @@
 }
 
 .banner__icon {
+  flex: 0 0 auto;
+  margin: var(--space-block-xsmall) 0;
   margin-inline-end: var(--space-inline-small);
+}
+
+.banner__text {
+  flex: 1 1 auto;
 }

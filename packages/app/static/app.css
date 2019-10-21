@@ -458,7 +458,7 @@ mark {
   word-spacing: var(--word-spacing);
 }
 .banner__body {
-  align-items: center;
+  align-items: start;
   display: flex;
 }
 @media (min-width: 48em) {
@@ -467,7 +467,12 @@ mark {
   }
 }
 .banner__icon {
+  flex: 0 0 auto;
+  margin: var(--space-block-xsmall) 0;
   margin-inline-end: var(--space-inline-small);
+}
+.banner__text {
+  flex: 1 1 auto;
 }
 .bookmarklet {
   font-size: var(--font-size-reference);
