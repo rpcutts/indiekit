@@ -96,6 +96,7 @@ module.exports = opts => {
 
       try {
         const response = await action(req, store, config);
+        debug('action response', response);
         res.header('Location', response.location);
         return res.status(response.status).json({
           success: response.success,

@@ -1,7 +1,7 @@
 const querystring = require('querystring');
+const axios = require('axios');
 const debug = require('debug')('indiekit:app');
 const express = require('express');
-const fetch = require('node-fetch');
 
 const router = new express.Router();
 
@@ -19,16 +19,14 @@ router.get('/:path?', (req, res) => {
 router.post('/*', async (req, res, next) => {
   const host = `${req.protocol}://${req.headers.host}`;
   try {
-    const response = await fetch(`${host}/micropub`, {
-      method: 'post',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: querystring.stringify(req.body)
-    });
+    const response = await axios.post(`${host}/micropub`,
+      querystring.stringify(req.body)
+    );
 
-    const json = await response.json();
-    if (json) {
-      debug('Response JSON: %O', json);
-      const message = encodeURIComponent(json.success_description);
+    const success = response.data;
+    if (success) {
+      debug('Response JSON: %O', success);
+      const message = encodeURIComponent(success.success_description);
       res.redirect(`?success=${message}`);
     }
   } catch (error) {

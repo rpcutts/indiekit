@@ -431,7 +431,7 @@ mark {
   background-color: var(--color-neutral-lightest);
   padding: var(--inset-small-squished);
 }
-.article .language-shell {
+.article .language-bash {
   background-color: var(--color-neutral-darkest);
   color: var(--color-neutral-lightest);
   font-size: 85%;

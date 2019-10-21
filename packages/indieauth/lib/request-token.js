@@ -1,5 +1,4 @@
 const axios = require('axios');
-const debug = require('debug')('indiekit:indieauth:requestToken');
 const HttpError = require('http-errors');
 
 /**

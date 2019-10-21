@@ -33,7 +33,7 @@ module.exports = opts => {
 
   // Configure IndieAuth middleware
   const indieauth = new IndieAuth({
-    me: opts.me
+    me: config.me
   });
 
   media.get('/',

@@ -50,7 +50,7 @@ module.exports = async (req, postData, posts, pub) => {
     // Update publish path and public url
     const path = utils.render(typeConfig.post.path, properties);
     let url = utils.render(typeConfig.post.url, properties);
-    url = derive.permalink(pub.url, url);
+    url = derive.permalink(pub.me, url);
 
     // Update content
     const content = utils.render(typeTemplate, camelcaseKeys(properties));

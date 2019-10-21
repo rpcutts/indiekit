@@ -23,7 +23,7 @@ Configuration is provided via a JSON file in your repository. You can tell {{ ap
 
     ```json
     categories: {
-      "url": "{{ pub.url }}/categories.json"
+      "url": "{{ pub.me }}/categories.json"
     }
     ```
 

@@ -19,6 +19,7 @@ module.exports = async (req, posts, pub) => {
   try {
     const {body} = req;
     const mf2 = req.is('json') ? body : microformats.formEncodedToMf2(body);
+    debug('Create post (mf2): %O', mf2);
 
     // Post type
     const type = derive.postType(mf2);
@@ -36,10 +37,11 @@ module.exports = async (req, posts, pub) => {
     // Render publish path and public url
     const path = utils.render(typeConfig.post.path, properties);
     let url = utils.render(typeConfig.post.url, properties);
-    url = derive.permalink(pub.url, url);
+    url = derive.permalink(pub.me, url);
 
     // Render content
     const content = utils.render(typeTemplate, camelcaseKeys(properties));
+    debug('Create post (content): %s', content);
 
     // Create post file
     const {publisher} = pub;

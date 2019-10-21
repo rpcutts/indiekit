@@ -29,7 +29,6 @@ module.exports = async (req, store, pub) => {
     // Determine action to perform
     switch (action) {
       case 'delete': {
-        debug('Deleting post');
         const deleted = await deletePost(req, postData, pub).catch(error => {
           httpError(500, error.message);
         });
@@ -47,7 +46,6 @@ module.exports = async (req, store, pub) => {
       }
 
       case 'undelete': {
-        debug('Undeleting post');
         const undeleted = await undeletePost(req, postData, pub).catch(error => {
           httpError(500, error.message);
         });
@@ -66,7 +64,6 @@ module.exports = async (req, store, pub) => {
       }
 
       case 'update': {
-        debug('Updating post');
         const updated = await updatePost(req, postData, posts, pub).catch(error => {
           httpError(500, error.message);
         });
@@ -94,7 +91,6 @@ module.exports = async (req, store, pub) => {
   const {body} = req;
 
   // Upload attached media and add its URL to respective body property
-  debug('Uploading attachments');
   const uploaded = await uploadAttachments(req, media).catch(error => {
     httpError(500, error.message);
   });
@@ -108,7 +104,6 @@ module.exports = async (req, store, pub) => {
   }
 
   // Create post
-  debug('Creating post');
   const created = await createPost(req, posts, pub).catch(error => {
     httpError(500, error.message);
   });
