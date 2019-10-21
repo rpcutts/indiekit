@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 const htmlToMf2 = require('./html-to-mf2');
 
 /**
@@ -10,9 +10,10 @@ const htmlToMf2 = require('./html-to-mf2');
  * @returns {Promise} mf2 object
  */
 module.exports = async (url, properties) => {
-  const response = await fetch(url).catch(error => {
-    throw new Error(error);
-  });
-  const html = await response.text();
-  return htmlToMf2(html, properties);
+  try {
+    const response = await axios.get(url);
+    return htmlToMf2(response.data, properties);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };

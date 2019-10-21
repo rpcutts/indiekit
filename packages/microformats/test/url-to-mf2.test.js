@@ -10,7 +10,7 @@ test('Throws error if URL has no items', async t => {
 test('Throws error if no response from URL', async t => {
   const url = 'https://example.example';
   const error = await t.throwsAsync(urlToMf2(url));
-  t.regex(error.message, /^FetchError/);
+  t.is(error.message, 'getaddrinfo ENOTFOUND example.example');
 });
 
 test('Returns empty object if requested property not found', async t => {
