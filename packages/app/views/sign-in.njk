@@ -14,26 +14,26 @@
 
   {% if not session.me %}
     {{ input({
-      id: "url",
-      name: "url",
+      id: "me",
+      name: "me",
+      value: errors.me.value or pub.me,
       label: {
         text: __("Web address")
       },
       type: "url",
-      value: errors.url.value,
       errorMessage: {
-        text: errors.url.msg,
+        text: errors.me.msg,
         label: __("Error")
-      } if errors.url
+      } if errors.me
     }) | indent(2) }}
 
     {{ input({
       name: "redirect_uri",
+      value: redirect_uri,
       field: {
         classes: "visually-hidden"
       },
-      type: "hidden",
-      value: redirect_uri
+      type: "hidden"
     }) | indent(2) }}
 
     {{ button({

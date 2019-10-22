@@ -1,15 +1,29 @@
 {% extends "_form.njk" %}
 
-{% set title = __("config.github.title") %}
+{% set title = __("config.gitlab.title") %}
 {% set parent = __("config.title %s", app.name) %}
 
 {% block fieldset %}
   {{ input({
+    id: "instance",
+    name: "instance",
+    value: errors.instance.value or gitlab.instance or "https://gitlab.com",
+    label: {
+      text: __("config.gitlab.instance.label")
+    },
+    type: "url",
+    errorMessage: {
+      text: errors.instance.msg,
+      label: __("Error")
+    } if errors.instance
+  }) | indent(2) }}
+
+  {{ input({
     id: "user",
     name: "user",
-    value: errors.user.value or github.user,
+    value: errors.user.value or gitlab.user,
     label: {
-      text: __("config.github.user.label")
+      text: __("config.gitlab.user.label")
     },
     attributes: {
       spellcheck: "false"
@@ -23,12 +37,12 @@
   {{ input({
     id: "repo",
     name: "repo",
-    value: errors.repo.value or github.repo,
+    value: gitlab.repo,
     label: {
-      text: __("config.github.repo.label")
+      text: __("config.gitlab.repo.label")
     },
     hint: {
-      text: __("config.github.repo.hint")
+      text: __("config.gitlab.repo.hint")
     },
     attributes: {
       spellcheck: "false"
@@ -42,12 +56,12 @@
   {{ input({
     id: "branch",
     name: "branch",
-    value: errors.branch.value or github.branch or "master",
+    value: errors.branch.value or gitlab.branch or "master",
     label: {
-      text: __("config.github.branch.label")
+      text: __("config.gitlab.branch.label")
     },
     hint: {
-      text: __("config.github.branch.hint")
+      text: __("config.gitlab.branch.hint")
     },
     attributes: {
       spellcheck: "false"
@@ -61,12 +75,12 @@
   {{ input({
     id: "token",
     name: "token",
-    value: errors.token.value or github.token,
+    value: errors.token.value or gitlab.token,
     label: {
-      text: __("config.github.token.label")
+      text: __("config.gitlab.token.label")
     },
     hint: {
-      text: __("config.github.token.hint", "https://github.com/settings/tokens")
+      text: __("config.gitlab.token.hint", host + "/profile/personal_access_tokens")
     },
     attributes: {
       maxlength: 40,

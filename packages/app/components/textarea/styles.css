@@ -2,6 +2,7 @@
   border: var(--border-width-thick) solid var(--color-neutral);
   border-radius: var(--border-radius-small);
   padding: var(--inset-squished);
+  margin-block-start: var(--space-block-small);
   width: 100%;
 }
 

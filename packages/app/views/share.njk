@@ -29,48 +29,48 @@
   }) }}
 
   {{ input({
-    label: {
-      text: __("Title")
-    },
     id: "name",
     name: "name",
-    value: name
+    value: name,
+    label: {
+      text: __("Title")
+    }
   }) }}
 
   {{ textarea({
-    label: {
-      text: __("Content")
-    },
     id: "content",
     name: "content",
-    value: content
+    value: content,
+    label: {
+      text: __("Content")
+    }
   }) | indent(8) }}
 
   {{ input({
-    label: {
-      text: __("URL")
-    },
     id: "url",
     name: "bookmark-of",
-    value: url
+    value: url,
+    label: {
+      text: __("URL")
+    }
   }) }}
 
   {{ input({
-    field: {
-      classes: "visually-hidden"
-    },
-    type: "hidden",
     name: "access_token",
-    value: session.token
+    value: session.token,
+    field: {
+      classes: "visually-hidden"
+    },
+    type: "hidden"
   }) }}
 
   {{ input({
+    name: "h",
+    value: "entry",
     field: {
       classes: "visually-hidden"
     },
     type: "hidden",
-    name: "h",
-    value: "entry"
   }) }}
 
   {{ button({

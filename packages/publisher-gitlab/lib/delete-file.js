@@ -20,7 +20,7 @@ const {Gitlab} = require('gitlab');
  */
 module.exports = async (opts, path, message) => {
   const gitlab = new Gitlab({
-    host: opts.host,
+    host: opts.instance,
     token: opts.token
   });
 

@@ -684,6 +684,7 @@ mark {
   border: var(--border-width-thick) solid var(--color-neutral);
   border-radius: var(--border-radius-small);
   padding: var(--inset-squished);
+  margin-block-start: var(--space-block-small);
   width: 100%;
 }
 .input[readonly] {
@@ -821,6 +822,7 @@ mark {
   border: var(--border-width-thick) solid var(--color-neutral);
   border-radius: var(--border-radius-small);
   padding: var(--inset-squished);
+  margin-block-start: var(--space-block-small);
   width: 100%;
 }
 .textarea[readonly] {
@@ -927,9 +929,6 @@ mark {
   flex: 1;
   margin: 0 var(--space-block-medium);
   padding: var(--space-block-medium) 0;
-}
-.form__field > * + * {
-  margin-block-start: var(--space-block-small);
 }
 .form__field--error {
   border-inline-start-color: var(--color-error);

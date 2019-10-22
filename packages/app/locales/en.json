@@ -21,10 +21,9 @@
   },
   "locale": {
     "de": "Deutsch",
-    "en": "English",
-    "undefined": "locale.undefined"
+    "en": "English"
   },
-  "publisher": {
+  "publisherId": {
     "github": "GitHub",
     "gitlab": "GitLab"
   },
@@ -44,7 +43,7 @@
   "Save and continue": "Save and continue",
   "error": {
     "validation": {
-      "url": "Enter a web address with a complete URL, like https://example.org"
+      "me": "Enter a web address with a complete URL, like https://example.org"
     }
   },
   "Continue": "Continue",
@@ -56,14 +55,11 @@
         "label": "Language",
         "hint": "This is used to detirmine how dates and times should be formatted."
       },
-      "publisher": {
+      "publisherId": {
         "label": "Publisher"
       },
       "themeColor": {
         "label": "Theme color"
-      },
-      "token": {
-        "label": "Access token"
       }
     },
     "github": {
@@ -75,16 +71,41 @@
       "repo": {
         "label": "Repository name",
         "error": "Repository name must only include letters, numbers and hyphens.",
-        "hint": "Name of the repository files will be saved to."
+        "hint": "Name of the repository that files will be saved to."
       },
       "branch": {
         "label": "Branch name",
-        "hint": "Name of the branch files will be saved to."
+        "hint": "Name of the branch that files will be saved to."
       },
       "token": {
         "label": "Personal access token",
         "error": "Personal access token must be an alphanumeric value that is 40 characters long.",
-        "hint": "To create a new token, visit your account settings."
+        "hint": "To create a new token, <a href=\"%s\">visit your account settings</a>."
+      }
+    },
+    "gitlab": {
+      "title": "GitLab",
+      "user": {
+        "label": "Username",
+        "error": "Username must be between 1 and 38 characters long."
+      },
+      "repo": {
+        "label": "Project name",
+        "error": "Project name must only include letters, numbers and hyphens.",
+        "hint": "Name of the project repository that files will be saved to."
+      },
+      "branch": {
+        "label": "Branch name",
+        "hint": "Name of the branch that files will be saved to."
+      },
+      "token": {
+        "label": "Personal access token",
+        "error": "Personal access token must be an alphanumeric value that is 20 characters long.",
+        "hint": "To create a new token, <a href=\"%s\">visit your account settings</a>."
+      },
+      "instance": {
+        "label": "Instance",
+        "error": "Instance must be a URL"
       }
     },
     "pub": {
@@ -101,9 +122,6 @@
         "label": "Bookmarklet",
         "drag": "Drag this link to your bookmarks bar"
       }
-    },
-    "share": {
-      "title": "config.share.title"
     }
   },
   "optional": "optional",
@@ -113,5 +131,8 @@
   "Configuration": "Configuration",
   "Welcome back": "Welcome back",
   "Bookmarklet": "Bookmarklet",
-  "Share page": "Share page"
+  "Share page": "Share page",
+  "publisher": {
+    "github": "publisher.github"
+  }
 }

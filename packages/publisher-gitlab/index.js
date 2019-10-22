@@ -2,7 +2,7 @@ module.exports = class {
   constructor(opts) {
     this.opts = opts;
     this.opts.branch = opts.branch || 'master';
-    this.opts.host = opts.host || 'https://gitlab.com';
+    this.opts.instance = opts.instance || 'https://gitlab.com';
     this.opts.projectId = opts.projectId || `${opts.user}/${opts.repo}`;
   }
 

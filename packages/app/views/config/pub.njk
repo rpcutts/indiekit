@@ -7,6 +7,7 @@
   {{ input({
     id: "me",
     name: "me",
+    value: errors.me.value or pub.me or session.me,
     label: {
       text: __("config.pub.me.label")
     },
@@ -15,20 +16,19 @@
     },
     attributes: {
       readonly: true
-    },
-    value: pub.me or session.me
+    }
   }) | indent(2) }}
 
   {{ input({
     id: "configPath",
     name: "configPath",
+    value: errors.configPath.value or pub.configPath,
     label: {
       text: __("config.pub.configPath.label") + " (" + __("optional") + ")"
     },
     hint: {
       text: __("config.pub.configPath.hint", "/docs/website-configuration")
-    },
-    value: pub.configPath
+    }
   }) | indent(2) }}
 
   {{ button({

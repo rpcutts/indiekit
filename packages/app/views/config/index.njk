@@ -18,10 +18,10 @@
       }
     }, {
       key: {
-        text: __("config.app.publisher.label")
+        text: __("config.app.publisherId.label")
       },
       value: {
-        text: __("publisher." + app.publisher)
+        text: __("publisherId." + app.publisherId)
       }
     }, {
       key: {
@@ -68,7 +68,51 @@
         text: github.token
       }
     }]
-  }) }}
+  }) if app.publisherId == "github" }}
+
+  {{ summary({
+    title: __("config.gitlab.title"),
+    actions: [{
+      href: "/config/gitlab?referrer=/config",
+      text: __("Edit")
+    }],
+    rows: [{
+      key: {
+        text: __("config.gitlab.instance.label")
+      },
+      value: {
+        text: gitlab.instance
+      }
+    }, {
+      key: {
+        text: __("config.gitlab.user.label")
+      },
+      value: {
+        text: gitlab.user
+      }
+    }, {
+      key: {
+        text: __("config.gitlab.repo.label")
+      },
+      value: {
+        text: gitlab.repo
+      }
+    }, {
+      key: {
+        text: __("config.gitlab.branch.label")
+      },
+      value: {
+        text: gitlab.branch
+      }
+    }, {
+      key: {
+        text: __("config.gitlab.token.label")
+      },
+      value: {
+        text: gitlab.token
+      }
+    }]
+  }) if app.publisherId == "gitlab" }}
 
   {%- set bookmarklet %}
     {% set bookmarkletFunction -%}

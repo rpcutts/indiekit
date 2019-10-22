@@ -24,20 +24,22 @@ router.get('/app', async (req, res) => {
 });
 
 router.post('/app', (req, res) => {
-  const {publisher, locale, themeColor} = req.body;
+  const {publisherId, locale, themeColor} = req.body;
   const {me} = req.session;
   const {referrer} = req.query;
   res.cookie('locale', locale, {
     maxAge: 900000
   });
-  client.hmset('app', {publisher, locale, themeColor});
+  client.hmset('app', {publisherId, locale, themeColor});
   client.hmset('pub', {me});
-  res.redirect(referrer || `/config/${publisher}`);
+  res.redirect(referrer || `/config/${publisherId}`);
 });
 
-// GitHub
-router.get('/github', async (req, res) => {
-  res.render('config/github', {
+// Publisher (GitHub/GitLab)
+router.get('/:publisherId(github|gitlab)', async (req, res) => {
+  const {publisherId} = req.params;
+
+  res.render(`config/${publisherId}`, {
     referrer: req.query.referrer
   });
 });
@@ -49,30 +51,60 @@ router.post('/github', [
       return req.__(`config.github.${path}.error`);
     }),
   check('repo')
-    .matches(/^[a-zA-Z0-9-_]+$/i)
+    .matches(/^[a-z0-9-_]+$/i)
     .withMessage((value, {req, path}) => {
       return req.__(`config.github.${path}.error`);
     }),
   check('token')
-    .matches(/^[0-9a-fA-F]{40}$/i)
+    .matches(/^[a-f0-9]{40}$/i)
     .withMessage((value, {req, path}) => {
       return req.__(`config.github.${path}.error`);
     })
 ], async (req, res) => {
-  const {user, repo, branch, token} = req.body;
   const {referrer} = req.query;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     res.render('config/github', {
-      errors: errors.mapped(),
-      user,
-      repo,
-      branch,
-      token
+      errors: errors.mapped()
     });
-  } else if (user && repo && token) {
-    client.hmset('github', {user, repo, branch, token});
+  } else if (!errors) {
+    client.hmset('github', req.body);
+    res.redirect(referrer || '/config/publication');
+  }
+});
+
+router.post('/gitlab', [
+  check('instance')
+    .isURL({require_protocol: true})
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.gitlab.${path}.error`);
+    }),
+  check('user')
+    .matches(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i)
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.gitlab.${path}.error`);
+    }),
+  check('repo')
+    .matches(/^[a-z0-9-_]+$/i)
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.gitlab.${path}.error`);
+    }),
+  check('token')
+    .matches(/^[a-z0-9]{20}$/i)
+    .withMessage((value, {req, path}) => {
+      return req.__(`config.gitlab.${path}.error`);
+    })
+], async (req, res) => {
+  const {referrer} = req.query;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.render('config/gitlab', {
+      errors: errors.mapped()
+    });
+  } else if (!errors) {
+    client.hmset('gitlab', req.body);
     res.redirect(referrer || '/config/publication');
   }
 });

@@ -11,13 +11,10 @@ const auth = new IndieAuth({
 const {client} = config;
 const router = new express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   const configured = await client.get('configured');
-  if (!configured) {
-    res.redirect('/docs/config');
-  }
-
-  next();
+  const path = (configured === true) ? '/' : '/docs/config';
+  res.redirect(path);
 });
 
 router.get('/:path(sign-in|log-in)?', (req, res) => {
@@ -37,30 +34,28 @@ router.get('/:path(sign-in|log-in)?', (req, res) => {
 });
 
 router.post('/:path(sign-in|log-in)?', [
-  check('url').isURL({
-    require_protocol: true
-  }).withMessage((value, {req, path}) => {
-    return req.__(`error.validation.${path}`);
-  })
+  check('me')
+    .isURL({require_protocol: true})
+    .withMessage((value, {req, path}) => {
+      return req.__(`error.validation.${path}`);
+    })
 ], async (req, res) => {
-  const {url} = req.body;
+  const {me} = req.body;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.render('sign-in', {
-      errors: errors.mapped(),
-      url
+      errors: errors.mapped()
     });
-  } else if (url) {
-    auth.options.me = url;
+  } else if (me) {
+    auth.options.me = me;
     try {
       const authUrl = await auth.getAuthUrl('code', ['create']);
       res.redirect(authUrl);
     } catch (error) {
       debug(req.originalUrl, error);
       res.render('sign-in', {
-        error: error.message,
-        url
+        error: error.message
       });
     }
   }

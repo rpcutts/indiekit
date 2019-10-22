@@ -5,25 +5,24 @@
 
 {% block fieldset %}
   {{ select({
-    id: "publisher",
-    name: "publisher",
+    id: "publisherId",
+    name: "publisherId",
     label: {
-      text: __("config.app.publisher.label")
+      text: __("config.app.publisherId.label")
     },
     items: [{
       value: "github",
-      text: __("publisher.github"),
-      selected: app.publisher == "github"
+      text: __("publisherId.github"),
+      selected: app.publisherId == "github"
     }, {
       value: "gitlab",
-      text: __("publisher.gitlab"),
-      selected: app.publisher == "gitlab",
-      disabled: true
+      text: __("publisherId.gitlab"),
+      selected: app.publisherId == "gitlab"
     }],
     errorMessage: {
-      text: errors.publisher.msg,
+      text: errors.publisherId.msg,
       label: __("Error")
-    } if errors.publisher
+    } if errors.publisherId
   }) | indent(2) }}
 
   {{ select({
@@ -53,12 +52,12 @@
   {{ input({
     id: "theme-color",
     name: "themeColor",
+    value: errors.themeColor.value or app.themeColor,
     classes: "input--width-5",
     label: {
       text: __("config.app.themeColor.label")
     },
     type: "color",
-    value: app.themeColor,
     errorMessage: {
       text: errors.themeColor.msg,
       label: __("Error")

@@ -42,17 +42,6 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-// Internationalisation
-i18n.configure({
-  cookie: 'locale',
-  defaultLocale: 'en',
-  directory: path.join(__dirname, 'locales'),
-  indent: '  ',
-  objectNotation: true,
-  queryParameter: 'lang'
-});
-app.use(i18n.init);
-
 // Use cookies
 app.use(cookies());
 
@@ -68,14 +57,26 @@ app.use(session({
   store: new RedisStore({client})
 }));
 
+// Internationalisation
+i18n.configure({
+  cookie: 'locale',
+  defaultLocale: 'en',
+  directory: path.join(__dirname, 'locales'),
+  indent: '  ',
+  objectNotation: true,
+  queryParameter: 'lang'
+});
+app.use(i18n.init);
+
 // Add application and publication data to locals
 app.use(async (req, res, next) => {
   // Merge app defaults with user settings
   let app = await client.hgetall('app');
   app = {...config.app, ...app};
 
-  // Get GitHub settings
+  // Get publisher settings
   const github = await client.hgetall('github');
+  const gitlab = await client.hgetall('gitlab');
 
   // Determine URL of application server
   const url = `${req.protocol}://${req.headers.host}`;
@@ -87,6 +88,7 @@ app.use(async (req, res, next) => {
   res.locals.app = app;
   res.locals.app.url = url;
   res.locals.github = github;
+  res.locals.gitlab = gitlab;
   res.locals.pub = pub;
   res.locals.session = req.session;
 

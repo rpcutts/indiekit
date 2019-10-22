@@ -3,7 +3,7 @@ const Redis = require('ioredis');
 
 const pkg = require(process.env.PWD + '/package');
 
-const config = {
+module.exports = {
   client: new Redis(process.env.REDIS_URL),
   port: (process.env.NODE_ENV === 'test') ? null : process.env.PORT || 3000,
   secret: process.env.SECRET || 'secret',
@@ -19,5 +19,3 @@ const config = {
     themeColor: '#0000ee'
   }
 };
-
-module.exports = config;

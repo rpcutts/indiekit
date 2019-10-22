@@ -10,10 +10,6 @@
   padding: var(--space-block-medium) 0;
 }
 
-.form__field > * + * {
-  margin-block-start: var(--space-block-small);
-}
-
 .form__field--error {
   border-inline-start-color: var(--color-error);
   border-inline-start-width: var(--border-width-thick);
