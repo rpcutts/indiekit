@@ -4,9 +4,11 @@ const utils = require('@indiekit/support');
 
 const router = new express.Router();
 
-router.get('*', (req, res, next) => {
+router.get('/:locale/docs*', (req, res, next) => {
   try {
-    const filepath = path.join(__dirname, '../', req.originalUrl);
+    const {locale} = req.params;
+    const docpath = req.originalUrl.replace(`${locale}/docs`, `docs/${locale}`);
+    const filepath = path.join(__dirname, '..', docpath);
     const file = utils.resolveFilePath(filepath, 'md');
     const content = utils.renderDocument(file, res.locals);
 

@@ -12,12 +12,13 @@ const {client} = config;
 const router = new express.Router();
 
 router.get('/', async (req, res) => {
+  const {app} = res.locals;
   const configured = await client.get('configured');
-  const path = (configured === true) ? '/' : '/docs/config';
+  const path = (configured === true) ? '/' : `${app.locale}/docs/config`;
   res.redirect(path);
 });
 
-router.get('/:path(sign-in|log-in)?', (req, res) => {
+router.get('/sign-in', (req, res) => {
   const {app} = res.locals;
   const {redirect} = req.query;
   let redirectUri = `${app.url}/auth`;
@@ -33,7 +34,7 @@ router.get('/:path(sign-in|log-in)?', (req, res) => {
   res.render('sign-in');
 });
 
-router.post('/:path(sign-in|log-in)?', [
+router.post('/sign-in', [
   check('me')
     .isURL({require_protocol: true})
     .withMessage((value, {req, path}) => {
@@ -80,7 +81,7 @@ router.get('/auth', async (req, res, next) => {
   }
 });
 
-router.get('/:path(sign-out|log-out)', (req, res) => {
+router.get('/sign-out', (req, res) => {
   req.session.destroy();
   res.redirect('/');
 });

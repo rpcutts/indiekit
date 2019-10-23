@@ -109,7 +109,7 @@ const authenticate = async (req, res, next) => {
 // Routes
 app.use('/config', authenticate, require('./routes/config'));
 app.use('/share', authenticate, require('./routes/share'));
-app.use('/docs', require('./routes/docs'));
+app.use(require('./routes/docs'));
 app.use(require('./routes/micropub'));
 app.use(require('./routes/session'));
 app.use(require('./routes/error'));

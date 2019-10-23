@@ -60,7 +60,7 @@
         href: "/config",
         text: __("Configuration")
       } if session.me, {
-        href: "/docs",
+        href: "/" + app.locale + "/docs",
         text: __("Help")
       }, {
         href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,
