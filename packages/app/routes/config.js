@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 // Application
-router.get('/app', async (req, res) => {
+router.get('/app', (req, res) => {
   res.render('config/app', {
     referrer: req.query.referrer
   });
@@ -36,7 +36,7 @@ router.post('/app', (req, res) => {
 });
 
 // Publisher (GitHub/GitLab)
-router.get('/:publisherId(github|gitlab)', async (req, res) => {
+router.get('/:publisherId(github|gitlab)', (req, res) => {
   const {publisherId} = req.params;
 
   res.render(`config/${publisherId}`, {
@@ -60,18 +60,18 @@ router.post('/github', [
     .withMessage((value, {req, path}) => {
       return req.__(`config.github.${path}.error`);
     })
-], async (req, res) => {
+], (req, res) => {
   const {referrer} = req.query;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    res.render('config/github', {
+    return res.render('config/github', {
       errors: errors.mapped()
     });
-  } else if (!errors) {
-    client.hmset('github', req.body);
-    res.redirect(referrer || '/config/publication');
   }
+
+  client.hmset('github', req.body);
+  res.redirect(referrer || '/config/publication');
 });
 
 router.post('/gitlab', [
@@ -95,22 +95,22 @@ router.post('/gitlab', [
     .withMessage((value, {req, path}) => {
       return req.__(`config.gitlab.${path}.error`);
     })
-], async (req, res) => {
+], (req, res) => {
   const {referrer} = req.query;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    res.render('config/gitlab', {
+    return res.render('config/gitlab', {
       errors: errors.mapped()
     });
-  } else if (!errors) {
-    client.hmset('gitlab', req.body);
-    res.redirect(referrer || '/config/publication');
   }
+
+  client.hmset('gitlab', req.body);
+  res.redirect(referrer || '/config/publication');
 });
 
 // Application
-router.get('/publication', async (req, res) => {
+router.get('/publication', (req, res) => {
   res.render('config/pub', {
     referrer: req.query.referrer
   });
