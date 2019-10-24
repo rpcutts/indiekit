@@ -91,7 +91,7 @@ module.exports = async (req, store, pub) => {
   const {body} = req;
 
   // Upload attached media and add its URL to respective body property
-  const uploaded = await uploadAttachments(req, media).catch(error => {
+  const uploaded = await uploadAttachments(req, media, pub).catch(error => {
     return new HttpError(500, error.message);
   });
 
@@ -107,7 +107,6 @@ module.exports = async (req, store, pub) => {
   const created = await createPost(req, posts, pub).catch(error => {
     return new HttpError(500, error.message);
   });
-  console.log('created', created);
 
   if (created) {
     debug('created', created);

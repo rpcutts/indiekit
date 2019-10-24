@@ -5,7 +5,7 @@ const test = require('ava');
 const pub = new Publication({
   defaults,
   endpointUrl: 'https://endpoint.example',
-  url: process.env.INDIEKIT_URL
+  me: process.env.INDIEKIT_URL
 });
 
 const {queryEndpoint} = require('../.');

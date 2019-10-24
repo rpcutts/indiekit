@@ -63,7 +63,7 @@
       "NODE_ENV": "test"
     },
     "files": [
-      "packages/micropub/**/action.test.js"
+      "packages/**/*.test.js"
     ]
   },
   "nodemonConfig": {

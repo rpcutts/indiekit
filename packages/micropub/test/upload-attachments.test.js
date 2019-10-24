@@ -19,22 +19,16 @@ const pub = new Publication({
   defaults,
   endpointUrl: 'https://endpoint.example',
   publisher: github,
-  url: process.env.INDIEKIT_URL
+  me: process.env.INDIEKIT_URL
 });
 
 const {uploadAttachments} = require('../.');
 
-test.before(t => {
+test.before(async t => {
   const photo = fs.readFileSync(path.resolve(__dirname, 'fixtures/photo.jpg'));
-  t.context.media = [];
-  t.context.req = async () => {
+  t.context.req = () => {
     const req = {};
     req.session = sinon.stub().returns(req);
-    req.app = {
-      locals: {
-        pub: await pub.getConfig()
-      }
-    };
     req.files = [{
       buffer: Buffer.from(photo),
       mimetype: 'image/jpg',
@@ -42,6 +36,9 @@ test.before(t => {
     }];
     return req;
   };
+
+  t.context.config = await pub.getConfig();
+  t.context.media = [];
 });
 
 test('Uploads an attachment', async t => {
@@ -50,7 +47,7 @@ test('Uploads an attachment', async t => {
     .put(/\b[\d\w]{5}\b/g)
     .reply(200);
   const req = await t.context.req();
-  const result = await uploadAttachments(req, t.context.media);
+  const result = await uploadAttachments(req, t.context.media, t.context.config);
 
   // Test assertions
   t.is(result[0].type, 'photo');

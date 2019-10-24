@@ -31,7 +31,6 @@ test.serial.skip('Uploads a media file', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .persist()
-    .log(console.log())
     .put(/\b[\d\w]{5}\b/g)
     .reply(200);
 

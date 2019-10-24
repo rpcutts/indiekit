@@ -19,7 +19,7 @@ const pub = new Publication({
   defaults,
   endpointUrl: 'https://endpoint.example',
   publisher: github,
-  url: process.env.INDIEKIT_URL
+  me: process.env.INDIEKIT_URL
 });
 
 const {action} = require('../.');

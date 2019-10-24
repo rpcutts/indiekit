@@ -17,12 +17,12 @@ const pub = new Publication({
   defaults,
   endpointUrl: 'https://endpoint.example',
   publisher: github,
-  url: process.env.INDIEKIT_URL
+  me: process.env.INDIEKIT_URL
 });
 
 const {updatePost} = require('../.');
 
-test.beforeEach(t => {
+test.beforeEach(async t => {
   t.context.postData = {
     type: 'note',
     path: 'baz.md',
@@ -37,19 +37,17 @@ test.beforeEach(t => {
       }
     }
   };
-  t.context.req = async body => {
+  t.context.req = body => {
     const req = {};
     req.body = body;
     req.session = sinon.stub().returns(req);
     req.status = sinon.stub().returns(req);
     req.json = sinon.stub().returns(req);
-    req.app = {
-      locals: {
-        pub: await pub.getConfig()
-      }
-    };
     return req;
   };
+
+  t.context.config = await pub.getConfig();
+  t.context.posts = [];
 });
 
 test.serial('Updates a post by replacing its content', async t => {
@@ -70,7 +68,7 @@ test.serial('Updates a post by replacing its content', async t => {
       content: ['hello moon']
     }
   });
-  const updated = await updatePost(req, t.context.postData);
+  const updated = await updatePost(req, t.context.postData, t.context.posts, t.context.config);
 
   // Test assertions
   t.is(updated.mf2.properties.content[0], 'hello moon');
@@ -95,7 +93,7 @@ test.serial('Updates a post by adding a syndication value', async t => {
       syndication: ['http://web.archive.org/web/20190818120000/https://foo.bar/baz']
     }
   });
-  const updated = await updatePost(req, t.context.postData);
+  const updated = await updatePost(req, t.context.postData, t.context.posts, t.context.config);
 
   // Test assertions
   t.is(updated.mf2.properties.syndication[0], 'http://web.archive.org/web/20190818120000/https://foo.bar/baz');
@@ -118,7 +116,7 @@ test.serial('Updates a post by deleting a property', async t => {
     url: 'https://foo.bar/baz',
     delete: ['category']
   });
-  const updated = await updatePost(req, t.context.postData);
+  const updated = await updatePost(req, t.context.postData, t.context.posts, t.context.config);
 
   // Test assertions
   t.falsy(updated.mf2.properties.category);
@@ -143,7 +141,7 @@ test.serial('Updates a post by deleting an entry in a property', async t => {
       category: ['foo']
     }
   });
-  const updated = await updatePost(req, t.context.postData);
+  const updated = await updatePost(req, t.context.postData, t.context.posts, t.context.config);
 
   // Test assertions
   t.deepEqual(updated.mf2.properties.category, ['bar']);
@@ -168,7 +166,7 @@ test.serial('Throws publisher error updating a post', async t => {
       content: ['hello moon']
     }
   });
-  const error = await t.throwsAsync(updatePost(req, t.context.postData));
+  const error = await t.throwsAsync(updatePost(req, t.context.postData, t.context.posts, t.context.config));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);

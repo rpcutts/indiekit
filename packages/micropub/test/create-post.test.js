@@ -17,10 +17,17 @@ const github = new Publisher({
   repo: 'repo'
 });
 
+const pub = new Publication({
+  defaults,
+  endpointUrl: 'https://endpoint.example',
+  publisher: github,
+  me: process.env.INDIEKIT_URL
+});
+
 const {createPost} = require('../.');
 
-test.before(t => {
-  t.context.req = async config => {
+test.before(async t => {
+  t.context.req = () => {
     const req = {};
     req.body = {
       type: ['h-entry'],
@@ -34,19 +41,11 @@ test.before(t => {
     req.session = sinon.stub().returns(req);
     req.status = sinon.stub().returns(req);
     req.json = sinon.stub().returns(req);
-    req.app = {
-      locals: {
-        pub: await new Publication({
-          config,
-          defaults,
-          endpointUrl: 'https://endpoint.example',
-          publisher: github,
-          url: process.env.INDIEKIT_URL
-        }).getConfig()
-      }
-    };
     return req;
   };
+
+  t.context.config = await pub.getConfig();
+  t.context.posts = [];
 });
 
 test.serial('Creates a note post', async t => {
@@ -57,7 +56,7 @@ test.serial('Creates a note post', async t => {
 
   // Setup
   const req = await t.context.req();
-  const created = await createPost(req);
+  const created = await createPost(req, t.context.posts, t.context.config);
 
   // Test assertions
   t.truthy(validUrl.isUri(created.url));
@@ -72,7 +71,7 @@ test.serial('Throws publisher error creating a post', async t => {
 
   // Setup
   const req = await t.context.req();
-  const error = await t.throwsAsync(createPost(req));
+  const error = await t.throwsAsync(createPost(req, t.context.posts, t.context.config));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);
@@ -144,7 +143,7 @@ test.serial('Gets saved configured template (reading from file system)', async t
       }
     }
   });
-  const created = await createPost(req);
+  const created = await createPost(req, t.context.posts, t.context.config);
 
   // Test assertions
   t.truthy(validUrl.isUri(created.url));
@@ -178,7 +177,7 @@ test.serial.skip('Throws error getting configured template', async t => {
       }
     }
   });
-  const error = await t.throwsAsync(createPost(req));
+  const error = await t.throwsAsync(createPost(req, t.context.posts, t.context.config));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);

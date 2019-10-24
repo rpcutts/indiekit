@@ -17,12 +17,12 @@ const pub = new Publication({
   defaults,
   endpointUrl: 'https://endpoint.example',
   publisher: github,
-  url: process.env.INDIEKIT_URL
+  me: process.env.INDIEKIT_URL
 });
 
 const {deletePost} = require('../.');
 
-test.before(t => {
+test.before(async t => {
   t.context.postData = {
     type: 'note',
     path: '_notes/2019-08-17-baz.md',
@@ -40,13 +40,10 @@ test.before(t => {
     req.body = body;
     req.status = sinon.stub().returns(req);
     req.json = sinon.stub().returns(req);
-    req.app = {
-      locals: {
-        pub: await pub.getConfig()
-      }
-    };
     return req;
   };
+
+  t.context.config = await pub.getConfig();
 });
 
 test('Deletes a post', async t => {
@@ -70,7 +67,7 @@ test('Deletes a post', async t => {
     action: 'delete',
     url: 'https://foo.bar/baz'
   });
-  const deleted = await deletePost(req, t.context.postData);
+  const deleted = await deletePost(req, t.context.postData, t.context.config);
 
   // Test assertions
   t.true(deleted);
@@ -93,7 +90,7 @@ test('Throws publisher error deleting a post', async t => {
     action: 'delete',
     url: 'https://foo.bar/baz'
   });
-  const error = await t.throwsAsync(deletePost(req, t.context.postData));
+  const error = await t.throwsAsync(deletePost(req, t.context.postData, t.context.config));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);

@@ -18,12 +18,12 @@ const pub = new Publication({
   defaults,
   endpointUrl: 'https://endpoint.example',
   publisher: github,
-  url: process.env.INDIEKIT_URL
+  me: process.env.INDIEKIT_URL
 });
 
 const {undeletePost} = require('../.');
 
-test.before(t => {
+test.before(async t => {
   t.context.postData = {
     type: 'note',
     path: '_notes/2019-08-17-baz.md',
@@ -36,18 +36,15 @@ test.before(t => {
       slug: ['baz']
     }
   };
-  t.context.req = async body => {
+  t.context.req = body => {
     const req = {};
     req.body = body;
     req.status = sinon.stub().returns(req);
     req.json = sinon.stub().returns(req);
-    req.app = {
-      locals: {
-        pub: await pub.getConfig()
-      }
-    };
     return req;
   };
+
+  t.context.config = await pub.getConfig();
 });
 
 test('Undeletes a post', async t => {
@@ -61,7 +58,7 @@ test('Undeletes a post', async t => {
     action: 'undelete',
     url: 'https://foo.bar/baz'
   });
-  const undeleted = await undeletePost(req, t.context.postData);
+  const undeleted = await undeletePost(req, t.context.postData, t.context.config);
 
   // Test assertions
   t.truthy(validUrl.isUri(undeleted.url));
@@ -79,7 +76,7 @@ test('Throws error if GitHub responds with an error', async t => {
     action: 'delete',
     url: 'https://foo.bar/baz'
   });
-  const error = await t.throwsAsync(undeletePost(req, t.context.postData));
+  const error = await t.throwsAsync(undeletePost(req, t.context.postData, t.context.config));
 
   // Test assertions
   t.regex(error.message, /\bnot found\b/);
