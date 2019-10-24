@@ -1,5 +1,5 @@
 const debug = require('debug')('indiekit:micropub');
-const httpError = require('http-errors');
+const HttpError = require('http-errors');
 const utils = require('@indiekit/support');
 
 const createPost = require('./create-post');
@@ -17,20 +17,20 @@ module.exports = async (req, store, pub) => {
   if (action && url) {
     // If no post data has been recorded, throw error
     if (!posts) {
-      httpError(404, `Can’t ${action} post. No records found`);
+      return new HttpError(404, `Can’t ${action} post. No records found`);
     }
 
     // If no post data has been recorded for this URL, throw error
     const postData = posts.filter(post => post.url === url);
     if (postData === undefined) {
-      httpError(404, `Can’t ${action} post. No record found for ${url}`);
+      return new HttpError(404, `Can’t ${action} post. No record found for ${url}`);
     }
 
     // Determine action to perform
     switch (action) {
       case 'delete': {
         const deleted = await deletePost(req, postData, pub).catch(error => {
-          httpError(500, error.message);
+          return new HttpError(500, error.message);
         });
 
         if (deleted) {
@@ -47,7 +47,7 @@ module.exports = async (req, store, pub) => {
 
       case 'undelete': {
         const undeleted = await undeletePost(req, postData, pub).catch(error => {
-          httpError(500, error.message);
+          return new HttpError(500, error.message);
         });
 
         if (undeleted) {
@@ -65,7 +65,7 @@ module.exports = async (req, store, pub) => {
 
       case 'update': {
         const updated = await updatePost(req, postData, posts, pub).catch(error => {
-          httpError(500, error.message);
+          return new HttpError(500, error.message);
         });
 
         if (updated) {
@@ -92,7 +92,7 @@ module.exports = async (req, store, pub) => {
 
   // Upload attached media and add its URL to respective body property
   const uploaded = await uploadAttachments(req, media).catch(error => {
-    httpError(500, error.message);
+    return new HttpError(500, error.message);
   });
 
   if (uploaded) {
@@ -105,8 +105,9 @@ module.exports = async (req, store, pub) => {
 
   // Create post
   const created = await createPost(req, posts, pub).catch(error => {
-    httpError(500, error.message);
+    return new HttpError(500, error.message);
   });
+  console.log('created', created);
 
   if (created) {
     debug('created', created);

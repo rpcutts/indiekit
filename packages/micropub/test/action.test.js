@@ -24,8 +24,8 @@ const pub = new Publication({
 
 const {action} = require('../.');
 
-test.before(t => {
-  t.context.req = async file => {
+test.before(async t => {
+  t.context.req = file => {
     const req = {};
     req.body = {
       type: ['h-entry'],
@@ -45,12 +45,13 @@ test.before(t => {
     req.session = sinon.stub().returns(req);
     req.status = sinon.stub().returns(req);
     req.json = sinon.stub().returns(req);
-    req.app = {
-      locals: {
-        pub: await pub.getConfig()
-      }
-    };
     return req;
+  };
+
+  t.context.config = await pub.getConfig();
+  t.context.store = {
+    media: [],
+    posts: []
   };
 });
 
@@ -61,7 +62,7 @@ test.serial('Creates a post file', async t => {
     .reply(201);
 
   const req = await t.context.req();
-  const result = await action(req);
+  const result = await action(req, t.context.store, t.context.config);
 
   // Test assertions
   t.is(result.status, 202);
@@ -81,7 +82,7 @@ test.serial('Creates a post file with attachment', async t => {
   // Setup
   const file = fs.readFileSync(path.resolve(__dirname, 'fixtures/photo.jpg'));
   const req = await t.context.req(file);
-  const result = await action(req);
+  const result = await action(req, t.context.store, t.context.config);
 
   // Test assertions
   t.is(result.status, 202);
