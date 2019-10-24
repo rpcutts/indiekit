@@ -3,7 +3,7 @@ const test = require('ava');
 const Publisher = require('../.');
 
 const gitlab = new Publisher({
-  host: 'https://gitlab.example',
+  instance: 'https://gitlab.example',
   token: 'abc123',
   user: 'user',
   repo: 'repo'
