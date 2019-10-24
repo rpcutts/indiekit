@@ -12,15 +12,16 @@ test('Application serves a favicon', async t => {
   t.regex(response.header['content-type'], /^image/);
 });
 
-test('Application displays a home page', async t => {
-  const response = await app.get('/');
+test('Application redirects to help page if not configured', async t => {
+  const response = await app.get('/')
+    .set('Accept', 'text/html');
 
-  t.is(response.status, 200);
+  t.is(response.status, 302);
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
 test('Application displays a documentation page', async t => {
-  const response = await app.get('/docs');
+  const response = await app.get('/en/docs');
 
   t.is(response.status, 200);
   t.regex(response.header['content-type'], /^text\/html/);
