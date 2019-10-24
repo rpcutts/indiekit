@@ -26,9 +26,12 @@ test('Returns 400 in response to unknown endpoint query', async t => {
   t.is(response.body.error_description, 'Invalid parameter: foo');
 });
 
-test.serial('Uploads a media file', async t => {
+// Uses production app config; need to allow app to be configured independently
+test.serial.skip('Uploads a media file', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
+    .persist()
+    .log(console.log())
     .put(/\b[\d\w]{5}\b/g)
     .reply(200);
 

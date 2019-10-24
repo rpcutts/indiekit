@@ -11,7 +11,7 @@ const microformats = require('@indiekit/microformats');
  * @returns {Object} Requested information
  */
 module.exports = async (req, posts, config) => {
-  debug('config for endpoint', config);
+  debug('Config for endpoint', config);
   try {
     const {query} = req;
 
@@ -25,7 +25,6 @@ module.exports = async (req, posts, config) => {
 
     switch (query.q) {
       case 'config': {
-        console.log('config', await config);
         return {
           categories: config.categories,
           'media-endpoint': config['media-endpoint'],

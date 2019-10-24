@@ -10,7 +10,7 @@ const pub = new Publication({
 
 const {queryEndpoint} = require('../.');
 
-test.before(t => {
+test.before(async t => {
   t.context.posts = [{
     mf2: {
       type: ['h-entry'],
@@ -22,33 +22,30 @@ test.before(t => {
       }
     }
   }];
-  t.context.req = async query => {
+  t.context.req = query => {
     const req = {};
-    req.app = {
-      locals: {
-        pub: await pub.getConfig()
-      }
-    };
     req.query = query;
     return req;
   };
+
+  t.context.config = await pub.getConfig();
 });
 
 test('Returns publication configuration', async t => {
   const query = await t.context.req({q: 'config'});
-  const result = await queryEndpoint(query, t.context.posts);
+  const result = await queryEndpoint(query, t.context.posts, t.context.config);
   t.is(result['media-endpoint'], 'https://endpoint.example/media');
 });
 
 test('Returns publication categories', async t => {
   const query = await t.context.req({q: 'category'});
-  const result = await queryEndpoint(query, t.context.posts);
+  const result = await queryEndpoint(query, t.context.posts, t.context.config);
   t.deepEqual(result.categories, []);
 });
 
 test('Returns list of previously published posts', async t => {
   const query = await t.context.req({q: 'source'});
-  const result = await queryEndpoint(query, t.context.posts);
+  const result = await queryEndpoint(query, t.context.posts, t.context.config);
   t.truthy(result.items[0].properties.content[0]);
 });
 
@@ -66,15 +63,15 @@ test('Returns source (name property) for given URL', async t => {
 
 test('Throws error if source URL cannot be found', async t => {
   const query = await t.context.req({q: 'source', url: 'https://website.example'});
-  const error = await t.throwsAsync(queryEndpoint(query, t.context.posts));
-  t.regex(error.message, /^FetchError/);
+  const error = await t.throwsAsync(queryEndpoint(query, t.context.posts, t.context.config));
+  t.is(error.message, 'getaddrinfo ENOTFOUND website.example');
 });
 
 test('Returns any available configuration value', async t => {
   const query1 = await t.context.req({q: 'categories'});
-  const result1 = await queryEndpoint(query1, t.context.posts);
+  const result1 = await queryEndpoint(query1, t.context.posts, t.context.config);
   const query2 = await t.context.req({q: 'post-types'});
-  const result2 = await queryEndpoint(query2, t.context.posts);
+  const result2 = await queryEndpoint(query2, t.context.posts, t.context.config);
   t.truthy(result1.categories);
   t.truthy(result2['post-types']);
 });
