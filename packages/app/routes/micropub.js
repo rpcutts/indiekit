@@ -22,6 +22,7 @@ const publication = (async () => {
     configPath: pub.configPath,
     defaults: require('@indiekit/config-jekyll'),
     publisher: new Publisher(publisherConfig),
+    tmpdir: config.tmpdir,
     me: pub.me
   });
 })();

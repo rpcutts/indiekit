@@ -1,8 +1,6 @@
-const os = require('os');
-const path = require('path');
 const _ = require('lodash');
 const debug = require('debug')('indiekit:publication:resolveConfig');
-const utils = require('@indiekit/support');
+const getPostTypeTemplates = require('./get-post-type-templates');
 
 /**
  * Merge publication’s configured post types (saving any referenced templates)
@@ -23,27 +21,7 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
     }
 
     // Cache configured templates
-    const savedTemplates = [];
-    for (const key in configPostTypes) {
-      if (typeof configPostTypes[key] === 'object') {
-        const configPostType = configPostTypes[key];
-        if (configPostType.template && !configPostType.resolved) {
-          // Fetch template and save locally
-          savedTemplates.push(
-            utils.getData(configPostType.template, opts.publisher)
-          );
-
-          // Update `template` with path to saved file
-          configPostType.template = path.join(os.tmpdir(), configPostType.template);
-
-          // Flag as resolved
-          configPostType.resolved = true;
-        }
-      }
-    }
-
-    // Wait for all template files to be saved
-    await Promise.all(savedTemplates);
+    configPostTypes = getPostTypeTemplates(configPostTypes, opts);
 
     // Merge default and publication post types
     const resolvedPostTypes = _.merge(defaultPostTypes, configPostTypes);
@@ -62,9 +40,7 @@ async function resolvePostTypes(opts, configPostTypes, defaultPostTypes) {
  * @returns {Promise} Resolved configuration object
  */
 module.exports = async opts => {
-  const {defaults} = opts;
-  const {configPath} = opts;
-  const {publisher} = opts;
+  const {configPath, defaults, publisher} = opts;
 
   let config;
   if (configPath) {
@@ -84,18 +60,14 @@ module.exports = async opts => {
   }
 
   try {
-    // Merge publisher settings with default config
+    // Merge publisher and default configs
     const resolvedConfig = _.merge(defaults, config);
 
-    // Merge publisher post types (with saved templates) with default config
-    const configPostTypes = config['post-types'];
-    if (configPostTypes) {
-      const defaultPostTypes = defaults['post-types'];
-      const resolvedPostTypes = await resolvePostTypes(opts, configPostTypes, defaultPostTypes).catch(error => {
-        throw new Error(error.message);
-      });
-      resolvedConfig['post-types'] = resolvedPostTypes;
-    }
+    // Merge publisher and default post types
+    const resolvedPostTypes = await resolvePostTypes(opts, config['post-types'], defaults['post-types']).catch(error => {
+      throw new Error(error.message);
+    });
+    resolvedConfig['post-types'] = resolvedPostTypes;
 
     return resolvedConfig;
   } catch (error) {

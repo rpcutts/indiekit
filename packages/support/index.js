@@ -105,12 +105,13 @@ const utils = {
    *
    * @exports getData
    * @param {Object} basepath Path to remote file
+   * @param {Object} tmpdir Temporary directory
    * @param {Function} publisher Publishing function
    * @returns {String|Object} Cache value
    */
-  async getData(basepath, publisher) {
+  async getData(basepath, tmpdir, publisher) {
     let data;
-    const filePath = path.join(os.tmpdir(), pkg.name, basepath);
+    const filePath = path.join(tmpdir, basepath);
     const fileData = await fsp.readFile(filePath, {encoding: 'utf-8'}).catch(error => {
       debug('Error fetching %O from filesystem', error);
     });

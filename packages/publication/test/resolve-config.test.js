@@ -1,6 +1,3 @@
-const fsp = require('fs').promises;
-const path = require('path');
-const os = require('os');
 const nock = require('nock');
 const test = require('ava');
 const defaults = require('@indiekit/config-jekyll');
@@ -126,41 +123,4 @@ test('Throws error if `post-types` is not an object', async t => {
 
   // Test assertions
   t.is(error.message, '`post-types` should be an object');
-});
-
-test.skip('Updates `resolved` value to true', async t => {
-  const template = 'resolved-template.njk';
-  const templatePath = path.join(os.tmpdir(), template);
-
-  // Mock request
-  const scope = nock('https://api.github.com')
-    .get(uri => uri.includes(template))
-    .reply(200, {
-      content: 'Zm9vYmFy'
-    });
-
-  // Setup result
-  const pub = new Publication({
-    config: {
-      'post-types': {
-        note: {
-          name: 'Foobar',
-          template
-        }
-      }
-    },
-    defaults,
-    publisher: github
-  });
-  const result = await pub.getConfig();
-
-  // Test assertions
-  t.is(result['post-type-config'].note.resolved, true);
-  scope.done();
-
-  // Clean up
-  const savedTemplate = await fsp.readFile(templatePath);
-  if (savedTemplate) {
-    fsp.unlink(templatePath);
-  }
 });
