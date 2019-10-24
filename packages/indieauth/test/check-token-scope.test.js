@@ -20,6 +20,13 @@ test('Returns true if required scope is `post` but token provides `create`', asy
   t.true(hasScope);
 });
 
+test('Throws error if no access token provided', async t => {
+  const opts = {token: null};
+  const error = await t.throwsAsync(checkTokenScope(opts, 'delete'));
+  t.is(error.status, 401);
+  t.is(error.message, 'No access token provided');
+});
+
 test('Throws error if no scope provided in access token', async t => {
   const opts = {token: {}};
   const error = await t.throwsAsync(checkTokenScope(opts, 'delete'));

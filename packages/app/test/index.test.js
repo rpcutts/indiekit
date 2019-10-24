@@ -27,6 +27,12 @@ test('Application displays a documentation page', async t => {
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
+test('Application responds to 404 error if documentation not found', async t => {
+  const response = await app.get('/en/docs/404');
+
+  t.is(response.status, 404);
+});
+
 test('Application responds to 404 error (with HTML if accepted)', async t => {
   const response = await app.get('/foobar')
     .set('Accept', 'text/html');
