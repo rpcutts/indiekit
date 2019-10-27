@@ -1,6 +1,5 @@
-const debug = require('debug')('indiekit:app');
 const express = require('express');
-const micropub = require('@indiekit/micropub').middleware;
+const micropub = require('@indiekit/micropub');
 const Publication = require('@indiekit/publication');
 
 const config = require('./../config');
@@ -30,16 +29,11 @@ const publication = (async () => {
 // Get publication configuration
 (async () => {
   const pub = await publication;
-  const config = await pub.getConfig();
 
   // Micropub endpoint
-  router.use('/micropub', micropub.post({
-    config
-  }));
-
-  // Micropub media endpoint
-  router.use('/media', micropub.media({
-    config
+  router.use('/micropub', micropub({
+    config: await pub.getConfig(),
+    store: {}
   }));
 })();
 

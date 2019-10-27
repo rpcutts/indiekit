@@ -21,8 +21,7 @@ const updatePostData = require('./lib/update-post-data');
  */
 module.exports = opts => {
   const {config, publisher, store} = opts;
-  const mediaStore = store.media;
-  const postStore = store.posts;
+  const {mediaStore, postStore} = store;
 
   // Create new Express router
   const router = new express.Router({
