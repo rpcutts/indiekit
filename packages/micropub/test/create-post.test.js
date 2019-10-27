@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const fsp = require('fs').promises;
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const nock = require('nock');
@@ -10,6 +10,8 @@ const validUrl = require('valid-url');
 const defaults = require('@indiekit/config-jekyll');
 const Publication = require('@indiekit/publication');
 const Publisher = require('@indiekit/publisher-github');
+
+const pkg = require(process.env.PWD + '/package');
 
 const github = new Publisher({
   token: 'abc123',
@@ -30,6 +32,7 @@ test.before(async t => {
   t.context.req = () => {
     const req = {};
     req.body = {
+      // access_token: process.env.TEST_INDIEAUTH_TOKEN,
       type: ['h-entry'],
       properties: {
         content: [{
@@ -71,112 +74,6 @@ test.serial('Throws publisher error creating a post', async t => {
 
   // Setup
   const req = await t.context.req();
-  const error = await t.throwsAsync(createPost(req, t.context.posts, t.context.config));
-
-  // Test assertions
-  t.regex(error.message, /\bnot found\b/);
-  scope.done();
-});
-
-test.serial.skip('Gets new configured template (saving to file system)', async t => {
-  const template = 'fetched-template.njk';
-  const templatePath = path.join(os.tmpdir(), template);
-
-  // Mock request
-  const scope = nock('https://api.github.com')
-    .get(uri => uri.includes(template)) // Get template
-    .reply(200, {
-      content: 'Zm9vYmFy',
-      sha: '\b[0-9a-f]{5,40}\b',
-      name: 'foobar.njk'
-    })
-    .put(/[\d\w]{5}/g) // Save post
-    .reply(200);
-
-  // Setup
-  const req = await t.context.req({
-    'post-types': {
-      note: {
-        name: 'Foobar',
-        template,
-        post: {
-          path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
-          url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
-        }
-      }
-    }
-  });
-  const created = await createPost(req);
-
-  // Test assertions
-  t.truthy(validUrl.isUri(created.url));
-  scope.done();
-
-  // Clean up
-  const savedTemplate = await fsp.readFile(templatePath);
-  if (savedTemplate) {
-    fsp.unlink(templatePath);
-  }
-});
-
-test.serial('Gets saved configured template (reading from file system)', async t => {
-  const template = 'saved-template.njk';
-  const templatePath = path.join(os.tmpdir(), template);
-  fsp.writeFile(templatePath, 'foobar');
-
-  // Mock request
-  const scope = nock('https://api.github.com')
-    .put(/[\d\w]{5}/g) // Save post
-    .reply(200);
-
-  // Setup
-  const req = await t.context.req({
-    'post-types': {
-      note: {
-        name: 'Foobar',
-        template: templatePath,
-        resolved: true,
-        post: {
-          path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
-          url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
-        }
-      }
-    }
-  });
-  const created = await createPost(req, t.context.posts, t.context.config);
-
-  // Test assertions
-  t.truthy(validUrl.isUri(created.url));
-  scope.done();
-
-  // Clean up
-  const savedTemplate = await fsp.readFile(templatePath);
-  if (savedTemplate) {
-    fsp.unlink(templatePath);
-  }
-});
-
-test.serial.skip('Throws error getting configured template', async t => {
-  const template = 'unfetched-template.njk';
-
-  // Mock request
-  const scope = nock('https://api.github.com')
-    .get(uri => uri.includes(template)) // Get template
-    .replyWithError('not found');
-
-  // Setup
-  const req = await t.context.req({
-    'post-types': {
-      note: {
-        name: 'Foobar',
-        template,
-        post: {
-          path: '_notes/{{ published | date(\'yyyy-MM-dd\') }}-{{ slug }}.md',
-          url: 'notes/{{ published | date(\'yyyy/MM/dd\') }}/{{ slug }}'
-        }
-      }
-    }
-  });
   const error = await t.throwsAsync(createPost(req, t.context.posts, t.context.config));
 
   // Test assertions

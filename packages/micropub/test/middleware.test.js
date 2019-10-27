@@ -27,7 +27,7 @@ test('Returns 400 in response to unknown endpoint query', async t => {
   t.is(response.body.error_description, 'Invalid parameter: foo');
 });
 
-test('Returns 401 if token missing required scope', async t => {
+test.only('Returns 401 if token missing required scope', async t => {
   // Setup
   const response = await app.post('/micropub')
     .set('Accept', 'application/json')

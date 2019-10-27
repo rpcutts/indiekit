@@ -1,8 +1,10 @@
+const os = require('os');
 const path = require('path');
 const nock = require('nock');
 const test = require('ava');
 const Publisher = require('@indiekit/publisher-github');
 
+const pkg = require(process.env.PWD + '/package');
 const utils = require('../.');
 
 const github = new Publisher({
@@ -75,15 +77,16 @@ test('Decodes form-encoded string', t => {
   t.is(utils.decodeFormEncodedString('http%3A%2F%2Ffoo.bar'), 'http://foo.bar');
 });
 
-test('Throws error if file can’t be fetched from GitHub', async t => {
+test.only('Throws error if file can’t be fetched from GitHub', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))
     .replyWithError('not found');
 
   // Setup
+  const tmpdir = path.join(os.tmpdir(), pkg.name);
   const error = await t.throwsAsync(async () => {
-    await utils.getData('foo.txt', github);
+    await utils.getData('foo.txt', tmpdir, github);
   });
 
   // Test assertions

@@ -88,7 +88,7 @@ module.exports = opts => {
         indieauth.checkScope('create');
         return next();
       } catch (error) {
-        return next(indieauth.checkScope('create'));
+        return next(error);
       }
     },
     async (req, res, next) => {

@@ -10,12 +10,12 @@ const httpError = require('http-errors');
  * @param {String} requiredScope Required scope
  * @return {Boolean} True if tokenScope includes requiredScope
  */
-module.exports = async (opts, requiredScope) => {
+module.exports = (opts, requiredScope) => {
   if (!opts.token) {
     throw new httpError.Unauthorized('No access token provided');
   }
 
-  const {scope} = await opts.token;
+  const {scope} = opts.token;
   if (!scope) {
     throw new httpError.Unauthorized('No scope(s) provided by access token');
   }
