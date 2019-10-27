@@ -1,5 +1,5 @@
 /**
- * Reads a post data object.
+ * Return post data object.
  *
  * @exports readPostData
  * @param {Object} postStore Record of published posts
@@ -7,16 +7,17 @@
  * @returns {Object} postData
  */
 module.exports = (postStore, url) => {
-  // If no post data has been recorded, throw error
+  // Throw error if no post store
   if (!postStore) {
-    return new Error('No records found');
+    throw new Error('No records found');
   }
 
-  // If no post data has been recorded for this URL, throw error
+  // Throw error if no post data recorded for given URL
   const postData = postStore.filter(post => post.url === url);
-  if (postData === undefined) {
-    return new Error(`No record found for ${url}`);
+  if (postData.length === 0) {
+    throw new Error(`No record found for ${url}`);
   }
 
-  return postData;
+  // Reurn post data
+  return postData[0];
 };

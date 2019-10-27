@@ -1,5 +1,4 @@
 const utils = require('@indiekit/support');
-const dataFormat = require('./utils/data-format');
 const derive = require('./utils/derive');
 const update = require('./utils/update');
 
@@ -48,7 +47,15 @@ module.exports = async (req, postData, pub) => {
     url = derive.permalink(pub.me, url);
 
     // Return post data
-    const postData = dataFormat.post(type, path, url, properties);
+    const postData = {
+      type,
+      path,
+      url,
+      mf2: {
+        type: (type === 'event') ? ['h-event'] : ['h-entry'],
+        properties
+      }
+    };
     return postData;
   } catch (error) {
     throw new Error(error);

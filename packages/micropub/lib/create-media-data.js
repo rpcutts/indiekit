@@ -2,7 +2,7 @@ const utils = require('@indiekit/support');
 const derive = require('./utils/derive');
 
 /**
- * Creates a media data object.
+ * Create media data object.
  *
  * @param {Object} req Request
  * @param {Object} file File
@@ -12,7 +12,7 @@ const derive = require('./utils/derive');
 module.exports = async (req, file, pub) => {
   try {
     if (!file || file.truncated || !file.buffer) {
-      throw new Error('No file included in request');
+      throw String('No file included in request');
     }
 
     // Media type

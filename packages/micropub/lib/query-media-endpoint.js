@@ -4,10 +4,10 @@ const httpError = require('http-errors');
  * Express middleware function for querying Micropub media endpoint.
  *
  * @param {Object} req Request
- * @param {Object} media Uploaded media
+ * @param {Object} mediaStore Uploaded media
  * @returns {Object} Requested information
  */
-module.exports = (req, media) => {
+module.exports = (req, mediaStore) => {
   const {query} = req;
   try {
     if (!query) {
@@ -20,8 +20,8 @@ module.exports = (req, media) => {
 
     switch (query.q) {
       case 'last': {
-        return (media ? {
-          url: media[media.length - 1].url
+        return (mediaStore ? {
+          url: mediaStore[mediaStore.length - 1].url
         } : {});
       }
 

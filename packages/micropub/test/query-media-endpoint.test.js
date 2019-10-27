@@ -1,17 +1,18 @@
 const test = require('ava');
 
-const {queryEndpoint} = require('../../.').media;
+const queryMediaEndpoint = require('../lib/query-media-endpoint');
+
+const mediaStore = [{
+  type: 'photo',
+  path: 'foo.jpg',
+  url: 'https://store.media.example/foo.jpg'
+}, {
+  type: 'audio',
+  path: 'baz.mp3',
+  url: 'https://store.media.example/baz.mp3'
+}];
 
 test.before(t => {
-  t.context.media = [{
-    type: 'photo',
-    path: 'foo.jpg',
-    url: 'https://store.media.example/foo.jpg'
-  }, {
-    type: 'audio',
-    path: 'baz.mp3',
-    url: 'https://store.media.example/baz.mp3'
-  }];
   t.context.req = query => {
     const req = {};
     req.query = query;
@@ -20,18 +21,22 @@ test.before(t => {
 });
 
 test('Returns URL of last uploaded file', t => {
-  const result = queryEndpoint(t.context.req({q: 'last'}), t.context.media);
+  const result = queryMediaEndpoint(t.context.req({
+    q: 'last'
+  }), mediaStore);
   t.is(result.url, 'https://store.media.example/baz.mp3');
 });
 
 test('Returns empty object if no uploaded file records found', t => {
-  const result = queryEndpoint(t.context.req({q: 'last'}), null);
+  const result = queryMediaEndpoint(t.context.req({
+    q: 'last'
+  }), null);
   t.deepEqual(result, {});
 });
 
 test('Throws error if request is missing query string', t => {
   const error = t.throws(() => {
-    queryEndpoint(t.context.req(null), t.context.media);
+    queryMediaEndpoint(t.context.req(null), mediaStore);
   });
   t.is(error.status, 400);
   t.is(error.message, 'Request is missing query string');
@@ -39,7 +44,9 @@ test('Throws error if request is missing query string', t => {
 
 test('Throws error if unsupported query provided', t => {
   const error = t.throws(() => {
-    queryEndpoint(t.context.req({foo: 'bar'}), t.context.media);
+    queryMediaEndpoint(t.context.req({
+      foo: 'bar'
+    }), mediaStore);
   });
   t.is(error.status, 400);
   t.is(error.message, 'Invalid query');
@@ -47,7 +54,9 @@ test('Throws error if unsupported query provided', t => {
 
 test('Throws error if unsupported parameter provided', t => {
   const error = t.throws(() => {
-    queryEndpoint(t.context.req({q: 'foo'}), t.context.media);
+    queryMediaEndpoint(t.context.req({
+      q: 'foo'
+    }), mediaStore);
   });
   t.is(error.status, 400);
   t.is(error.message, 'Invalid parameter: foo');

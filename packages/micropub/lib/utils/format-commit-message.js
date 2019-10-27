@@ -1,5 +1,5 @@
 /**
- * Creates a commit message.
+ * Create commit message for given post action.
  *
  * @exports formatCommitMessage
  * @param {Object} action Commit action
@@ -7,7 +7,7 @@
  * @param {Object} pub Publication settings
  * @returns {String} Commit message
  */
-module.exports = async (action, postData, pub) => {
+module.exports = (action, postData, pub) => {
   try {
     const {type} = postData;
     const {icon} = pub['post-type-config'][type];

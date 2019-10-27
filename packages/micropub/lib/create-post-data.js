@@ -3,7 +3,7 @@ const utils = require('@indiekit/support');
 const derive = require('./utils/derive');
 
 /**
- * Creates a post data object.
+ * Create post data object.
  *
  * @exports createPostData
  * @param {Object} req Request

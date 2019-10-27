@@ -12,7 +12,6 @@ const readPostData = require('./lib/read-post-data');
 const queryEndpoint = require('./lib/query-endpoint');
 const queryMediaEndpoint = require('./lib/query-media-endpoint');
 const updatePostData = require('./lib/update-post-data');
-const uploadAttachments = require('./lib/upload-attachments');
 
 /**
  * Express middleware function for Micropub endpoint.
@@ -107,14 +106,41 @@ module.exports = opts => {
     }
   };
 
+  // Upload media
+  const uploadMedia = async (req, file, mediaStore) => {
+    const authorized = indieauth.checkScope('create');
+    const mediaData = await createMediaData(req, file, config);
+    const {path} = mediaData;
+    const message = formatCommitMessage('upload', mediaData, config);
+    const published = await publisher.createFile(path, file.buffer, message);
+
+    if (authorized && published) {
+      utils.addToArray(mediaStore, mediaData);
+      return {
+        location: mediaData.url,
+        status: 201,
+        success: 'create',
+        success_description: `Media saved to ${mediaData.url}`
+      };
+    }
+  };
+
   // Create post
   const createPost = async req => {
     const authorized = indieauth.checkScope('create');
     const {body} = req;
+    const {files} = req;
 
     // Upload attached media and add its URL to respective body property
-    const uploaded = await uploadAttachments(req, mediaStore, config);
-    if (uploaded) {
+    if (files && files.length > 0) {
+      const uploads = [];
+      for (const file of files) {
+        const upload = uploadMedia(req, file, mediaStore);
+        uploads.push(upload);
+      }
+
+      const uploaded = Promise.all(uploads);
+
       for (const upload of uploaded) {
         const property = upload.type;
         body[property] = utils.addToArray(body[property], upload.url);
@@ -214,18 +240,12 @@ module.exports = opts => {
     async (req, res, next) => {
       const {file} = req;
       try {
-        const authorized = indieauth.checkScope('create');
-        const mediaData = await createMediaData(req, file, config);
-        const {path} = mediaData;
-        const message = formatCommitMessage('upload', mediaData, config);
-        const published = await publisher.createFile(path, file.buffer, message);
-
-        if (authorized && published) {
-          utils.addToArray(mediaStore, mediaData);
-          res.header('Location', mediaData.url);
-          return res.status(201).json({
-            success: 'create',
-            success_description: `Media saved to ${mediaData.url}`
+        const response = uploadMedia(req, file, mediaStore);
+        if (response) {
+          res.header('Location', response.location);
+          return res.status(response.status).json({
+            success: response.success,
+            success_description: response.success_description
           });
         }
       } catch (error) {
