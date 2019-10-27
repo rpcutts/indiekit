@@ -1,5 +1,3 @@
-const fs = require('fs');
-const camelcaseKeys = require('camelcase-keys');
 const utils = require('@indiekit/support');
 const dataFormat = require('./utils/data-format');
 const derive = require('./utils/derive');
@@ -11,19 +9,16 @@ const update = require('./utils/update');
  * @exports update
  * @param {Object} req Request
  * @param {Object} postData Stored post data object
- * @param {Object} posts Post data store
  * @param {Object} pub Publication settings
  * @returns {String} Location of undeleted post
 */
-module.exports = async (req, postData, posts, pub) => {
+module.exports = async (req, postData, pub) => {
   try {
     const {body} = req;
 
     // Post type
     const {type} = postData;
     const typeConfig = pub['post-type-config'][type];
-    const typeTemplateFile = fs.readFileSync(typeConfig.template);
-    const typeTemplate = Buffer.from(typeTemplateFile).toString('utf-8');
 
     // Get properties
     let {properties} = postData.mf2;
@@ -52,20 +47,9 @@ module.exports = async (req, postData, posts, pub) => {
     let url = utils.render(typeConfig.post.url, properties);
     url = derive.permalink(pub.me, url);
 
-    // Update content
-    const content = utils.render(typeTemplate, camelcaseKeys(properties));
-
-    // Update (or create new) post file
-    const {publisher} = pub;
-    const message = `${typeConfig.icon} Updated ${type} post`;
-    const response = await publisher.updateFile(path, content, message);
-
     // Return post data
-    if (response) {
-      const postData = dataFormat.post(type, path, url, properties);
-      posts = utils.addToArray(posts, postData);
-      return postData;
-    }
+    const postData = dataFormat.post(type, path, url, properties);
+    return postData;
   } catch (error) {
     throw new Error(error);
   }
