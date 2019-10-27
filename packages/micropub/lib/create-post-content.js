@@ -3,7 +3,7 @@ const camelcaseKeys = require('camelcase-keys');
 const utils = require('@indiekit/support');
 
 /**
- * Creates a post content file.
+ * Create post content by populating post template with post data.
  *
  * @exports createPostContent
  * @param {Object} postData Post data
@@ -19,7 +19,7 @@ module.exports = async (postData, pub) => {
     const typeTemplate = Buffer.from(typeTemplateFile).toString('utf-8');
 
     // Derive properties
-    const {properties} = postData;
+    const {properties} = postData.mf2;
 
     // Return content
     const content = utils.render(typeTemplate, camelcaseKeys(properties));

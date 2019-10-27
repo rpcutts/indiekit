@@ -34,6 +34,7 @@ module.exports = (action, postData, pub) => {
       }
 
       default:
+        throw String('Unrecognized action');
     }
   } catch (error) {
     throw new Error(error);
