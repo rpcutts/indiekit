@@ -35,14 +35,17 @@ test.beforeEach(async t => {
 });
 
 test('Creates post data object', async t => {
-  // Setup
   const req = await t.context.req();
   const postData = await createPostData(req, t.context.config);
-
-  // Test assertions
   t.is(postData.type, 'note');
   t.regex(postData.path, /\b[\d\w]{5}\b/g);
   t.truthy(validUrl.isUri(postData.url));
   t.is(postData.mf2.type[0], 'h-entry');
   t.truthy(postData.mf2.properties);
+});
+
+test('Throws error', async t => {
+  const req = await t.context.req();
+  const error = await t.throwsAsync(createPostData(req, undefined));
+  t.is(error.message, 'Cannot read property \'post-type-config\' of undefined');
 });

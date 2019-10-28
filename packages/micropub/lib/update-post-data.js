@@ -47,7 +47,7 @@ module.exports = async (req, postData, pub) => {
     url = derive.permalink(pub.me, url);
 
     // Return post data
-    const postData = {
+    const updatePostData = {
       type,
       path,
       url,
@@ -56,8 +56,8 @@ module.exports = async (req, postData, pub) => {
         properties
       }
     };
-    return postData;
+    return updatePostData;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };

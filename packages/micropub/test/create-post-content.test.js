@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const test = require('ava');
 
@@ -27,12 +26,14 @@ const pub = {
   }
 };
 
-test('Creates post content by populating post template with post data.', async t => {
-  // Setup
+test('Creates post content by populating post template with post data', async t => {
   const postContent = await createPostContent(postData, pub);
-
-  // Test assertions
   t.true(postContent.includes('hello world'));
   t.true(postContent.includes('foo'));
   t.true(postContent.includes('bar'));
+});
+
+test('Throws error', async t => {
+  const error = await t.throwsAsync(createPostContent(postData, undefined));
+  t.is(error.message, 'Cannot read property \'post-type-config\' of undefined');
 });

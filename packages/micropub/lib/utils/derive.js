@@ -3,7 +3,6 @@ const {DateTime} = require('luxon');
 const fileType = require('file-type');
 const postTypeDiscovery = require('post-type-discovery');
 const slugify = require('slug');
-const utils = require('@indiekit/support');
 
 /**
  * Generate random alpha-numeric string, 5 characters long.
@@ -32,8 +31,6 @@ function excerptString(str, n) {
     str = str.split(/\s+/).slice(0, n).join(' ');
     return str;
   }
-
-  return null;
 }
 
 /**

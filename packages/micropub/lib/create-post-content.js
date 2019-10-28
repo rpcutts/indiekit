@@ -25,6 +25,6 @@ module.exports = async (postData, pub) => {
     const content = utils.render(typeTemplate, camelcaseKeys(properties));
     return content;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };

@@ -44,6 +44,6 @@ module.exports = async (req, pub) => {
     };
     return postData;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };

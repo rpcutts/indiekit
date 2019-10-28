@@ -1,8 +1,5 @@
-const os = require('os');
 const path = require('path');
 const utils = require('@indiekit/support');
-
-const pkg = require(process.env.PWD + '/package');
 
 /**
  * Merge publication’s configured post types (saving any referenced templates)
@@ -14,34 +11,30 @@ const pkg = require(process.env.PWD + '/package');
  * @returns {Promise} Post types object
  */
 module.exports = async (configPostTypes, opts) => {
-  try {
-    const savedTemplates = [];
-    for (const key in configPostTypes) {
-      if (typeof configPostTypes[key] === 'object') {
-        const configPostType = configPostTypes[key];
-        if (configPostType.template && !configPostType.resolved) {
-          // Fetch template and save locally
-          savedTemplates.push(
-            utils.getData(configPostType.template, opts.tmpdir, opts.publisher)
-          );
+  const savedTemplates = [];
+  for (const key in configPostTypes) {
+    if (typeof configPostTypes[key] === 'object') {
+      const configPostType = configPostTypes[key];
+      if (configPostType.template && !configPostType.resolved) {
+        // Fetch template and save locally
+        savedTemplates.push(
+          utils.getData(configPostType.template, opts.tmpdir, opts.publisher)
+        );
 
-          // Update `template` with path to saved file
-          configPostType.template = path.join(opts.tmpdir, configPostType.template);
+        // Update `template` with path to saved file
+        configPostType.template = path.join(opts.tmpdir, configPostType.template);
 
-          // Flag as resolved
-          configPostType.resolved = true;
-        }
+        // Flag as resolved
+        configPostType.resolved = true;
       }
     }
+  }
 
-    // Wait for all template files to be saved
-    await Promise.all(savedTemplates);
+  // Wait for all template files to be saved
+  await Promise.all(savedTemplates);
 
-    // Update post types config
-    if (savedTemplates) {
-      return configPostTypes;
-    }
-  } catch (error) {
-    throw new TypeError(error.message);
+  // Update post types config
+  if (savedTemplates) {
+    return configPostTypes;
   }
 };
