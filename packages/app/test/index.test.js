@@ -20,8 +20,15 @@ test('Application redirects to help page if not configured', async t => {
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
-test('Application displays a documentation page', async t => {
+test('Application displays a documentation index', async t => {
   const response = await app.get('/en/docs');
+
+  t.is(response.status, 200);
+  t.regex(response.header['content-type'], /^text\/html/);
+});
+
+test('Application displays a documentation page', async t => {
+  const response = await app.get('/en/docs/queries');
 
   t.is(response.status, 200);
   t.regex(response.header['content-type'], /^text\/html/);

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const utils = require('@indiekit/support');
@@ -9,7 +10,9 @@ router.get('/:locale/docs*', (req, res, next) => {
     const {locale} = req.params;
     const docpath = req.originalUrl.replace(`${locale}/docs`, `docs/${locale}`);
     const filepath = path.join(__dirname, '..', docpath);
-    const file = utils.resolveFilePath(filepath, 'md');
+    const file = (fs.existsSync(filepath)) ?
+      path.join(filepath, 'index.md') :
+      `${filepath}.md`;
     const content = utils.renderDocument(file, res.locals);
 
     res.render('_document', {

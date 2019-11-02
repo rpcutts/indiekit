@@ -1,10 +1,10 @@
-const os = require('os');
+const fs = require('fs');
 const path = require('path');
 const nock = require('nock');
 const test = require('ava');
 const Publisher = require('@indiekit/publisher-github');
 
-const pkg = require(process.env.PWD + '/package');
+const outputDir = path.join(process.env.PWD, '.ava_output');
 const utils = require('../.');
 
 const github = new Publisher({
@@ -14,6 +14,7 @@ const github = new Publisher({
 });
 
 test('Adds data to an array, creating it if doesn’t exist.', t => {
+  t.deepEqual(utils.addToArray(null, 'baz'), ['baz']);
   t.deepEqual(utils.addToArray(['foo', 'bar'], 'baz'), ['foo', 'bar', 'baz']);
 });
 
@@ -77,19 +78,56 @@ test('Decodes form-encoded string', t => {
   t.is(utils.decodeFormEncodedString('http%3A%2F%2Ffoo.bar'), 'http://foo.bar');
 });
 
-test('Throws error if file can’t be fetched from GitHub', async t => {
+test('Gets data from filesystem', async t => {
+  // Setup
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+
+  const dataFile = path.join(outputDir, 'foo.txt');
+  fs.writeFileSync(dataFile, 'foobar');
+  const result = await utils.getData('foo.txt', outputDir, github);
+
+  // Test assertions
+  t.is(result, 'foobar');
+  fs.unlinkSync(dataFile);
+});
+
+test('Gets data from publisher', async t => {
+  // Setup
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
+
   // Mock request
   const scope = nock('https://api.github.com')
-    .get(uri => uri.includes('foo.txt'))
+    .get(uri => uri.includes('bar.txt'))
+    .reply(200, {
+      content: 'Zm9vYmFy',
+      sha: '\b[0-9a-f]{5,40}\b',
+      name: 'bar.txt'
+    });
+  const result = await utils.getData('bar.txt', outputDir, github);
+
+  // Test assertions
+  t.is(result, 'foobar');
+  fs.unlinkSync(path.join(outputDir, 'bar.txt'));
+  scope.done();
+});
+
+test('Throws error if data can’t be fetched from GitHub', async t => {
+  // Mock request
+  const scope = nock('https://api.github.com')
+    .get(uri => uri.includes('baz.txt'))
     .replyWithError('not found');
 
   // Setup
-  const tmpdir = path.join(os.tmpdir(), pkg.name);
   const error = await t.throwsAsync(async () => {
-    await utils.getData('foo.txt', tmpdir, github);
+    await utils.getData('baz.txt', outputDir, github);
   });
 
   // Test assertions
+  t.log(error);
   t.regex(error.message, /\bnot found\b/);
   scope.done();
 });
@@ -140,9 +178,4 @@ test('Renders Markdown string as HTML', t => {
   const inline = utils.renderMarkdown('**bold**', 'inline');
   t.is(block, '<p><strong>bold</strong></p>\n');
   t.is(inline, '<strong>bold</strong>');
-});
-
-test('Resolves a URL path to either named file, or index in named folder.', t => {
-  const result = utils.resolveFilePath('path', 'html');
-  t.is(result, 'path/index.html');
 });

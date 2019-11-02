@@ -108,30 +108,31 @@ const utils = {
   async getData(basepath, tmpdir, publisher) {
     let data;
     const filePath = path.join(tmpdir, basepath);
-    const fileData = await fs.promises.readFile(filePath, {encoding: 'utf-8'}).catch(error => {
-      debug('Error fetching %O from filesystem', error);
-    });
+    const fileData = await fs.promises.readFile(filePath, {encoding: 'utf-8'})
+      .catch(error => {
+        debug('Error fetching %O from filesystem', error);
+      });
 
     if (fileData) {
       debug('Got %s from filesystem', basepath);
       data = fileData;
     } else {
-      const pubData = await publisher.readFile(basepath).catch(error => {
-        debug('Error fetching %s from publisher', basepath);
-        throw new Error(error.message);
-      });
+      const pubData = await publisher.readFile(basepath)
+        .catch(error => {
+          throw new Error(error.message);
+        });
 
       if (pubData) {
-        debug('Got %s from publisher, %O', basepath);
         await fs.promises.mkdir(path.dirname(filePath), {recursive: true}).catch(error => {
-          debug('Error creating directories for %s', filePath);
           throw new Error(error.message);
         });
 
-        data = await fs.promises.writeFile(filePath, pubData).catch(error => {
-          debug('Error writing %s to filesystem', basepath);
+        await fs.promises.writeFile(filePath, pubData).catch(error => {
           throw new Error(error.message);
         });
+
+        debug('Got %s from publisher', basepath);
+        data = pubData;
       }
     }
 
@@ -200,23 +201,6 @@ const utils = {
 
       return markdown.render(str);
     }
-  },
-
-  /**
-   * Resolve a URL path to either named file, or index in named folder.
-   *
-   * @function resolveFilePath
-   * @param {String} urlpath Path to file
-   * @param {String} ext File extension
-   * @return {String} Resolved path to file on disk
-   */
-  resolveFilePath(urlpath, ext) {
-    const dir = `${urlpath}.${ext}`;
-    if (fs.existsSync(dir)) {
-      return dir;
-    }
-
-    return path.join(urlpath, `index.${ext}`);
   }
 };
 
