@@ -1,7 +1,7 @@
 const nock = require('nock');
 const test = require('ava');
 
-const authorizeRequest = require('../lib/authorize-request');
+const authorizeRequest = require('../../lib/authorize-request');
 
 const tokenEndpoint = 'https://tokens.indieauth.com/token';
 const me = 'https://website.example';

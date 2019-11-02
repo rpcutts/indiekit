@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const verifyToken = require('../lib/verify-token');
+const verifyToken = require('../../lib/verify-token');
 
 const me = 'https://website.example';
 

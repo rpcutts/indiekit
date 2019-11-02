@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const checkTokenScope = require('../lib/check-token-scope');
+const checkTokenScope = require('../../lib/check-token-scope');
 
 test('Returns true if required scope is provided by token', t => {
   const opts = {token: {scope: 'create update'}};

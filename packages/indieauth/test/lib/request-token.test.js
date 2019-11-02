@@ -1,7 +1,7 @@
 const nock = require('nock');
 const test = require('ava');
 
-const requestToken = require('../lib/request-token');
+const requestToken = require('../../lib/request-token');
 
 const tokenEndpoint = 'https://tokens.indieauth.com/token';
 

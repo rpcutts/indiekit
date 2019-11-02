@@ -1,6 +1,4 @@
 const fs = require('fs');
-const fsp = require('fs').promises;
-const os = require('os');
 const path = require('path');
 const _ = require('lodash');
 const debug = require('debug')('indiekit:support:utils');
@@ -8,8 +6,6 @@ const {DateTime} = require('luxon');
 const frontmatter = require('front-matter');
 const nunjucks = require('nunjucks');
 const markdown = require('./lib/markdown');
-
-const pkg = require(process.env.PWD + '/package');
 
 const utils = {
   /**
@@ -112,7 +108,7 @@ const utils = {
   async getData(basepath, tmpdir, publisher) {
     let data;
     const filePath = path.join(tmpdir, basepath);
-    const fileData = await fsp.readFile(filePath, {encoding: 'utf-8'}).catch(error => {
+    const fileData = await fs.promises.readFile(filePath, {encoding: 'utf-8'}).catch(error => {
       debug('Error fetching %O from filesystem', error);
     });
 
@@ -127,12 +123,12 @@ const utils = {
 
       if (pubData) {
         debug('Got %s from publisher, %O', basepath);
-        await fsp.mkdir(path.dirname(filePath), {recursive: true}).catch(error => {
+        await fs.promises.mkdir(path.dirname(filePath), {recursive: true}).catch(error => {
           debug('Error creating directories for %s', filePath);
           throw new Error(error.message);
         });
 
-        data = await fsp.writeFile(filePath, pubData).catch(error => {
+        data = await fs.promises.writeFile(filePath, pubData).catch(error => {
           debug('Error writing %s to filesystem', basepath);
           throw new Error(error.message);
         });

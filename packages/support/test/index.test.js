@@ -77,7 +77,7 @@ test('Decodes form-encoded string', t => {
   t.is(utils.decodeFormEncodedString('http%3A%2F%2Ffoo.bar'), 'http://foo.bar');
 });
 
-test.only('Throws error if file can’t be fetched from GitHub', async t => {
+test('Throws error if file can’t be fetched from GitHub', async t => {
   // Mock request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('foo.txt'))

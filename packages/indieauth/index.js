@@ -14,6 +14,7 @@ class IndieAuth {
     this.checkScope = this.checkScope.bind(this);
   }
 
+  // Authorize request
   async authorize(req, res, next) {
     const verifiedToken = await authorizeRequest(this.opts, req).catch(error => {
       return next(error);
@@ -22,6 +23,7 @@ class IndieAuth {
     return next();
   }
 
+  // Check scope
   checkScope(requiredScope) {
     return checkTokenScope(this.opts, requiredScope);
   }
