@@ -1,7 +1,7 @@
 /**
  * Create commit message for given post action.
  *
- * @exports formatCommitMessage
+ * @exports formatMessage
  * @param {Object} action Commit action
  * @param {Object} postData postData
  * @param {Object} pub Publication settings

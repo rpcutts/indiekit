@@ -11,7 +11,7 @@ test.beforeEach(t => {
 });
 
 // Delete post
-test('Deletes a post', async t => {
+test.skip('Deletes a post', async t => {
   // Mock GitHub delete file request
   const scope = nock('https://api.github.com')
     .get(uri => uri.includes('baz.md'))

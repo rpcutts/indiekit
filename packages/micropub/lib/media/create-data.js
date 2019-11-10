@@ -1,5 +1,5 @@
 const utils = require('@indiekit/support');
-const derive = require('./utils/derive');
+const deriveProperty = require('./../utils/derive-property');
 
 /**
  * Create media data object.
@@ -16,16 +16,16 @@ module.exports = async (req, file, pub) => {
     }
 
     // Media type
-    const type = derive.mediaType(file);
+    const type = deriveProperty.mediaType(file);
     const typeConfig = pub['post-type-config'][type];
 
     // Derive properties
-    const properties = derive.fileData(file);
+    const properties = deriveProperty.fileData(file);
 
     // Render publish path and public url
     const path = utils.render(typeConfig.media.path, properties);
     let url = utils.render(typeConfig.media.url || typeConfig.media.path, properties);
-    url = derive.permalink(pub.me, url);
+    url = deriveProperty.permalink(pub.me, url);
 
     // Return media data
     const mediaData = {

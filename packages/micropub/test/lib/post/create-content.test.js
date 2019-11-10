@@ -1,7 +1,7 @@
 const path = require('path');
 const test = require('ava');
 
-const createPostContent = require('../../lib/create-post-content');
+const createContent = require('../../../lib/post/create-content');
 
 const postData = {
   type: 'note',
@@ -21,19 +21,19 @@ const postData = {
 const pub = {
   'post-type-config': {
     note: {
-      template: path.resolve(__dirname, 'fixtures/template.njk')
+      template: path.resolve(__dirname, '../fixtures/template.njk')
     }
   }
 };
 
 test('Creates post content by populating post template with post data', async t => {
-  const postContent = await createPostContent(postData, pub);
+  const postContent = await createContent(postData, pub);
   t.true(postContent.includes('hello world'));
   t.true(postContent.includes('foo'));
   t.true(postContent.includes('bar'));
 });
 
 test('Throws error', async t => {
-  const error = await t.throwsAsync(createPostContent(postData, undefined));
+  const error = await t.throwsAsync(createContent(postData, undefined));
   t.is(error.message, 'Cannot read property \'post-type-config\' of undefined');
 });

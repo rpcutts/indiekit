@@ -10,7 +10,7 @@ const pub = new Publication({
   me: process.env.INDIEKIT_URL
 });
 
-const updatePostData = require('../../lib/update-post-data');
+const updateData = require('../../../lib/post/update-data');
 
 test.beforeEach(async t => {
   t.context.req = body => {
@@ -41,7 +41,7 @@ test.beforeEach(async t => {
 });
 
 test('Updates post data by replacing its content', async t => {
-  const postContent = await updatePostData(t.context.req({
+  const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
     replace: {
@@ -52,7 +52,7 @@ test('Updates post data by replacing its content', async t => {
 });
 
 test('Updates post data by adding a syndication value', async t => {
-  const postContent = await updatePostData(t.context.req({
+  const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
     add: {
@@ -63,7 +63,7 @@ test('Updates post data by adding a syndication value', async t => {
 });
 
 test('Updates post data by deleting a property', async t => {
-  const postContent = await updatePostData(t.context.req({
+  const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
     delete: ['category']
@@ -72,7 +72,7 @@ test('Updates post data by deleting a property', async t => {
 });
 
 test('Updates post data by deleting an entry in a property', async t => {
-  const postContent = await updatePostData(t.context.req({
+  const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
     delete: {
@@ -83,7 +83,7 @@ test('Updates post data by deleting an entry in a property', async t => {
 });
 
 test('Throws error', async t => {
-  const error = await t.throwsAsync(updatePostData(t.context.req({
+  const error = await t.throwsAsync(updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
     add: {

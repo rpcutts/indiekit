@@ -1,16 +1,10 @@
 const express = require('express');
 const multer = require('multer');
 const IndieAuth = require('@indiekit/indieauth');
-const utils = require('@indiekit/support');
 
-const formatCommitMessage = require('./lib/utils/format-commit-message');
-
-const createMediaData = require('./lib/create-media-data');
-const createPostData = require('./lib/create-post-data');
-const createPostContent = require('./lib/create-post-content');
+const readPostData = require('./lib/post/read-data');
 const queryEndpoint = require('./lib/query-endpoint');
 const queryMediaEndpoint = require('./lib/query-media-endpoint');
-const updatePostData = require('./lib/update-post-data');
 
 /**
  * Express middleware function for Micropub endpoint.
@@ -19,8 +13,20 @@ const updatePostData = require('./lib/update-post-data');
  * @returns {Object} Express middleware
  */
 module.exports = opts => {
-  const {config, store} = opts;
+  const {config, postStore, mediaStore} = opts;
   const {publisher} = config;
+
+  const media = require('./lib/media')({
+    config,
+    mediaStore,
+    publisher
+  });
+
+  const post = require('./lib/post')({
+    config,
+    postStore,
+    publisher
+  });
 
   // Create new Express router
   const router = new express.Router({
@@ -49,121 +55,11 @@ module.exports = opts => {
     me: config.me
   });
 
-  // Delete post
-  const deletePost = async postData => {
-    const authorized = indieauth.checkScope('delete');
-    const message = formatCommitMessage('delete', postData, config);
-    const published = await publisher.deleteFile(postData.path, message);
-
-    if (authorized && published) {
-      return {
-        status: 200,
-        success: 'delete',
-        success_description: `Post deleted from ${postData.url}`
-      };
-    }
-  };
-
-  // Undelete post
-  const undeletePost = async postData => {
-    const authorized = indieauth.checkScope('create');
-    const postContent = await createPostContent(postData, config);
-    const message = formatCommitMessage('undelete', postData, config);
-    const published = await publisher.createFile(postData.path, postContent, message);
-
-    if (authorized && published) {
-      return {
-        location: postData.url,
-        status: 200,
-        success: 'delete_undelete',
-        success_description: `Post undeleted from ${postData.url}`
-      };
-    }
-  };
-
-  // Update post
-  const updatePost = async (req, url, postData) => {
-    const authorized = indieauth.checkScope('update');
-    postData = await updatePostData(req, postData, config);
-    const postContent = await createPostContent(postData, config);
-    const message = formatCommitMessage('update', postData, config);
-    const published = await publisher.updateFile(postData.path, postContent, message);
-
-    if (authorized && published) {
-      // TODO: Check existing record gets updated with new data
-      await store.set(postData.url, postData);
-      const hasUpdatedUrl = (url !== postData.url);
-      return {
-        location: postData.url,
-        status: hasUpdatedUrl ? 201 : 200,
-        success: 'update',
-        success_description: hasUpdatedUrl ?
-          `Post updated and moved to ${postData.url}` :
-          `Post updated at ${url}`
-      };
-    }
-  };
-
-  // Upload media
-  const uploadMedia = async (req, file) => {
-    const authorized = indieauth.checkScope('create');
-    const mediaData = await createMediaData(req, file, config);
-    const {path} = mediaData;
-    const message = formatCommitMessage('upload', mediaData, config);
-    const published = await publisher.createFile(path, file.buffer, message);
-
-    if (authorized && published) {
-      await store.set(mediaData.url, mediaData);
-      return {
-        location: mediaData.url,
-        status: 201,
-        success: 'create',
-        success_description: `Media saved to ${mediaData.url}`
-      };
-    }
-  };
-
-  // Create post
-  const createPost = async req => {
-    const authorized = indieauth.checkScope('create');
-    const {body} = req;
-    const {files} = req;
-
-    // Upload attached media and add its URL to respective body property
-    if (files && files.length > 0) {
-      const uploads = [];
-      for (const file of files) {
-        const upload = uploadMedia(req, file);
-        uploads.push(upload);
-      }
-
-      const uploaded = Promise.all(uploads);
-
-      for (const upload of uploaded) {
-        const property = upload.type;
-        body[property] = utils.addToArray(body[property], upload.url);
-      }
-    }
-
-    // Create post
-    const postData = await createPostData(req, config);
-    const postContent = await createPostContent(postData, config);
-    const message = formatCommitMessage('create', postData, config);
-    const published = await publisher.createFile(postData.path, postContent, message);
-
-    if (authorized && published) {
-      // await store.set(postData.url, postData);
-      return {
-        location: postData.url,
-        status: 202,
-        success: 'create_pending',
-        success_description: `Post will be created at ${postData.url}`
-      };
-    }
-  };
+  // Use request parsers
+  router.use(indieauth.authorize, urlencodedParser, jsonParser);
 
   // Query endpoint
-  router.get('/', urlencodedParser, async (req, res, next) => {
+  router.get('/', async (req, res, next) => {
     try {
       const response = await queryEndpoint(req, config);
       return res.json(response);
@@ -173,7 +69,7 @@ module.exports = opts => {
   });
 
   // Query media endpoint
-  router.get('/media', urlencodedParser, (req, res, next) => {
+  router.get('/media', (req, res, next) => {
     try {
       const response = queryMediaEndpoint(req);
       return res.json(response);
@@ -184,10 +80,7 @@ module.exports = opts => {
 
   // Create/update/delete/undelete post
   router.post('/',
-    indieauth.authorize,
     multipartParser.any(),
-    jsonParser,
-    urlencodedParser,
     async (req, res, next) => {
       const action = req.query.action || req.body.action;
       const url = req.query.url || req.body.url;
@@ -195,29 +88,37 @@ module.exports = opts => {
       let response;
       try {
         if (action && url) {
-          const postData = await store.get(url)
+          const postData = await readPostData(postStore, url);
           switch (action) {
             case 'delete': {
-              response = await deletePost(postData);
+              if (indieauth.checkScope('delete')) {
+                response = await post.delete(postData);
+              }
+
               break;
             }
 
             case 'undelete': {
-              response = await undeletePost(postData);
+              if (indieauth.checkScope('create')) {
+                response = await post.undelete(postData);
+              }
+
               break;
             }
 
             case 'update': {
-              response = await updatePost(req, url, postData);
+              if (indieauth.checkScope('update')) {
+                response = await post.update(req, url, postData);
+              }
 
               break;
             }
 
             default:
           }
+        } else if (indieauth.checkScope('create')) {
+          response = await post.create(req);
         }
-
-        response = await createPost(req);
 
         if (response) {
           res.header('Location', response.location);
@@ -234,12 +135,11 @@ module.exports = opts => {
 
   // Upload media
   router.post('/media',
-    indieauth.authorize,
     multipartParser.single('file'),
     async (req, res, next) => {
       const {file} = req;
       try {
-        const response = uploadMedia(req, file);
+        const response = media.upload(req, file);
         if (response) {
           res.header('Location', response.location);
           return res.status(response.status).json({

@@ -127,7 +127,6 @@ test('Throws error if data can’t be fetched from GitHub', async t => {
   });
 
   // Test assertions
-  t.log(error);
   t.regex(error.message, /\bnot found\b/);
   scope.done();
 });

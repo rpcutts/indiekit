@@ -11,7 +11,7 @@ const pub = new Publication({
   me: process.env.INDIEKIT_URL
 });
 
-const createPostData = require('../../lib/create-post-data');
+const createData = require('../../../lib/post/create-data');
 
 test.beforeEach(async t => {
   t.context.req = () => {
@@ -36,7 +36,7 @@ test.beforeEach(async t => {
 
 test('Creates post data object', async t => {
   const req = await t.context.req();
-  const postData = await createPostData(req, t.context.config);
+  const postData = await createData(req, t.context.config);
   t.is(postData.type, 'note');
   t.regex(postData.path, /\b[\d\w]{5}\b/g);
   t.truthy(validUrl.isUri(postData.url));
@@ -46,6 +46,6 @@ test('Creates post data object', async t => {
 
 test('Throws error', async t => {
   const req = await t.context.req();
-  const error = await t.throwsAsync(createPostData(req, undefined));
+  const error = await t.throwsAsync(createData(req, undefined));
   t.is(error.message, 'Cannot read property \'post-type-config\' of undefined');
 });

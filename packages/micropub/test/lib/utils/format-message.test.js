@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const formatCommitMessage = require('../../../lib/utils/format-commit-message');
+const formatMessage = require('../../../lib/utils/format-message');
 
 const postData = {
   type: 'note'
@@ -15,11 +15,11 @@ const pub = {
 
 test('Creates commit message for given post action', t => {
   const message = {
-    create: formatCommitMessage('create', postData, pub),
-    delete: formatCommitMessage('delete', postData, pub),
-    undelete: formatCommitMessage('undelete', postData, pub),
-    update: formatCommitMessage('update', postData, pub),
-    upload: formatCommitMessage('upload', postData, pub)
+    create: formatMessage('create', postData, pub),
+    delete: formatMessage('delete', postData, pub),
+    undelete: formatMessage('undelete', postData, pub),
+    update: formatMessage('update', postData, pub),
+    upload: formatMessage('upload', postData, pub)
   };
 
   t.is(message.create, ':notebook_with_decorative_cover: Created note post');
@@ -31,7 +31,7 @@ test('Creates commit message for given post action', t => {
 
 test('Throws error', t => {
   const error = t.throws(() => {
-    formatCommitMessage('foo', postData, pub);
+    formatMessage('foo', postData, pub);
   });
   t.is(error.message, 'Unrecognized action');
 });

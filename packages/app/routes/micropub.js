@@ -31,14 +31,18 @@ const publication = (async () => {
 (async () => {
   const {client} = config;
   const pub = await publication;
-  const store = new JSONCache(client, {
-    prefix: 'store:'
+  const mediaStore = new JSONCache(client, {
+    prefix: 'media:'
+  });
+  const postStore = new JSONCache(client, {
+    prefix: 'post:'
   });
 
   // Micropub endpoint
   router.use('/micropub', micropub({
     config: await pub.getConfig(),
-    store
+    mediaStore,
+    postStore
   }));
 })();
 

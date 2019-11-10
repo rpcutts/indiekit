@@ -1,11 +1,11 @@
 const microformats = require('@indiekit/microformats');
 const utils = require('@indiekit/support');
-const derive = require('./utils/derive');
+const deriveProperty = require('./../utils/derive-property');
 
 /**
  * Create post data object.
  *
- * @exports createPostData
+ * @exports createData
  * @param {Object} req Request
  * @param {Object} pub Publication settings
  * @returns {Object} postData
@@ -17,20 +17,20 @@ module.exports = async (req, pub) => {
     const mf2 = req.is('json') ? body : microformats.formEncodedToMf2(body);
 
     // Post type
-    const type = derive.postType(mf2);
+    const type = deriveProperty.postType(mf2);
     const typeConfig = pub['post-type-config'][type];
 
     // Derive properties
     const {properties} = mf2;
-    properties.content = derive.content(mf2);
-    properties.photo = await derive.photo(mf2);
-    properties.published = derive.published(mf2);
-    properties.slug = derive.slug(mf2, pub['slug-separator']);
+    properties.content = deriveProperty.content(mf2);
+    properties.photo = await deriveProperty.photo(mf2);
+    properties.published = deriveProperty.published(mf2);
+    properties.slug = deriveProperty.slug(mf2, pub['slug-separator']);
 
     // Render publish path and public url
     const path = utils.render(typeConfig.post.path, properties);
     let url = utils.render(typeConfig.post.url, properties);
-    url = derive.permalink(pub.me, url);
+    url = deriveProperty.permalink(pub.me, url);
 
     // Return post data
     const postData = {

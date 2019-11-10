@@ -5,7 +5,7 @@ const utils = require('@indiekit/support');
 /**
  * Create post content by populating post template with post data.
  *
- * @exports createPostContent
+ * @exports createContent
  * @param {Object} postData Post data
  * @param {Object} pub Publication settings
  * @returns {String} Rendered content

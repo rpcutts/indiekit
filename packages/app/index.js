@@ -118,6 +118,7 @@ app.use(require('./routes/error'));
 app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
   error.status = error.status || 500;
   res.status(error.status);
+  debug(error.stack);
 
   if (req.accepts('html')) {
     // Respond with HTML
