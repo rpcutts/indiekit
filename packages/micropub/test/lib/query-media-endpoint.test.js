@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const queryMediaEndpoint = require('../lib/query-media-endpoint');
+const queryMediaEndpoint = require('../../lib/query-media-endpoint');
 
 const mediaStore = [{
   type: 'photo',

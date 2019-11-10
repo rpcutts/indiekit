@@ -7,7 +7,7 @@ const pub = new Publication({
   me: process.env.INDIEKIT_URL
 });
 
-const queryEndpoint = require('../lib/query-endpoint');
+const queryEndpoint = require('../../lib/query-endpoint');
 
 const postStore = [{
   mf2: {

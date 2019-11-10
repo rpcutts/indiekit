@@ -12,7 +12,7 @@ const pub = new Publication({
   me: process.env.INDIEKIT_URL
 });
 
-const createMediaData = require('../lib/create-media-data');
+const createMediaData = require('../../lib/create-media-data');
 
 test.beforeEach(async t => {
   const photo = fs.readFileSync(path.resolve(__dirname, 'fixtures/photo.jpg'));

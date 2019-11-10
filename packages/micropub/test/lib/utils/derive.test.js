@@ -3,7 +3,7 @@ const path = require('path');
 const test = require('ava');
 const {DateTime} = require('luxon');
 
-const derive = require('../../lib/utils/derive');
+const derive = require('../../../lib/utils/derive');
 
 test('Derives content from `content[0].html` property', t => {
   const providedHtmlValue = require('./../fixtures/content-provided-html-value');

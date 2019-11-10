@@ -1,4 +1,5 @@
 const express = require('express');
+const JSONCache = require('redis-json');
 const micropub = require('@indiekit/micropub');
 const Publication = require('@indiekit/publication');
 
@@ -28,12 +29,16 @@ const publication = (async () => {
 
 // Get publication configuration
 (async () => {
+  const {client} = config;
   const pub = await publication;
+  const store = new JSONCache(client, {
+    prefix: 'store:'
+  });
 
   // Micropub endpoint
   router.use('/micropub', micropub({
     config: await pub.getConfig(),
-    store: {}
+    store
   }));
 })();
 

@@ -1,7 +1,7 @@
 const test = require('ava');
 const validUrl = require('valid-url');
 
-const readPostData = require('../lib/read-post-data');
+const readPostData = require('../../lib/read-post-data');
 
 const postStore = [{
   type: 'note',

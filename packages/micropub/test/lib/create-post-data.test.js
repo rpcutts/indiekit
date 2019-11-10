@@ -11,7 +11,7 @@ const pub = new Publication({
   me: process.env.INDIEKIT_URL
 });
 
-const createPostData = require('../lib/create-post-data');
+const createPostData = require('../../lib/create-post-data');
 
 test.beforeEach(async t => {
   t.context.req = () => {

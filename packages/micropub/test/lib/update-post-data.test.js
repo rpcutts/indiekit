@@ -10,7 +10,7 @@ const pub = new Publication({
   me: process.env.INDIEKIT_URL
 });
 
-const updatePostData = require('../lib/update-post-data');
+const updatePostData = require('../../lib/update-post-data');
 
 test.beforeEach(async t => {
   t.context.req = body => {

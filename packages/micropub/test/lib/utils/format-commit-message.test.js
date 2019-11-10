@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const formatCommitMessage = require('../../lib/utils/format-commit-message');
+const formatCommitMessage = require('../../../lib/utils/format-commit-message');
 
 const postData = {
   type: 'note'

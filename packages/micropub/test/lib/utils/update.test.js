@@ -1,6 +1,6 @@
 const test = require('ava');
 
-const update = require('../../lib/utils/update');
+const update = require('../../../lib/utils/update');
 
 test('Adds properties to an object', t => {
   const obj = {

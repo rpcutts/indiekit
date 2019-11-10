@@ -1,7 +1,7 @@
 const path = require('path');
 const test = require('ava');
 
-const createPostContent = require('../lib/create-post-content');
+const createPostContent = require('../../lib/create-post-content');
 
 const postData = {
   type: 'note',
