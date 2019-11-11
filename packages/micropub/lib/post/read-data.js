@@ -19,6 +19,5 @@ module.exports = async (postStore, url) => {
   }
 
   // Reurn post data
-  console.log('postData', postData);
   return postData;
 };
