@@ -2,13 +2,13 @@ const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
-const config = require('./../config');
+const server = require('./../config/server');
 
 const auth = new IndieAuth({
-  secret: config.secret
+  secret: server.secret
 });
 
-const {client} = config;
+const {client} = server;
 const router = new express.Router();
 
 router.get('/', async (req, res) => {

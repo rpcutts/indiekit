@@ -40,7 +40,7 @@ test.beforeEach(async t => {
   t.context.config = await pub.getConfig();
 });
 
-test('Updates post data by replacing its content', async t => {
+test('Updates data by replacing its content', async t => {
   const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
@@ -51,7 +51,7 @@ test('Updates post data by replacing its content', async t => {
   t.is(postContent.mf2.properties.content[0], 'hello moon');
 });
 
-test('Updates post data by adding a syndication value', async t => {
+test('Updates data by adding a syndication value', async t => {
   const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
@@ -62,7 +62,18 @@ test('Updates post data by adding a syndication value', async t => {
   t.is(postContent.mf2.properties.syndication[0], 'http://web.archive.org/web/20190818120000/https://foo.bar/baz');
 });
 
-test('Updates post data by deleting a property', async t => {
+test('Updates data by adding a category', async t => {
+  const postContent = await updateData(t.context.req({
+    action: 'update',
+    url: 'https://foo.bar/baz',
+    add: {
+      category: ['baz']
+    }
+  }), t.context.postData, t.context.config);
+  t.deepEqual(postContent.mf2.properties.category, ['foo', 'bar', 'baz']);
+});
+
+test('Updates data by deleting a property', async t => {
   const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
@@ -71,7 +82,7 @@ test('Updates post data by deleting a property', async t => {
   t.falsy(postContent.mf2.properties.category);
 });
 
-test('Updates post data by deleting an entry in a property', async t => {
+test('Updates data by deleting an entry in a property', async t => {
   const postContent = await updateData(t.context.req({
     action: 'update',
     url: 'https://foo.bar/baz',
@@ -80,6 +91,40 @@ test('Updates post data by deleting an entry in a property', async t => {
     }
   }), t.context.postData, t.context.config);
   t.deepEqual(postContent.mf2.properties.category, ['bar']);
+});
+
+test('Updates data by deleting an entry in a property (removing property if last entry removed)', async t => {
+  const postContent = await updateData(t.context.req({
+    action: 'update',
+    url: 'https://foo.bar/baz',
+    delete: {
+      category: ['foo', 'bar']
+    }
+  }), t.context.postData, t.context.config);
+  t.falsy(postContent.mf2.properties.category);
+});
+
+test('Ignores properties that don’t exist in target object', async t => {
+  const postContent = await updateData(t.context.req({
+    action: 'update',
+    url: 'https://foo.bar/baz',
+    delete: {
+      tags: ['foo', 'bar']
+    }
+  }), t.context.postData, t.context.config);
+  t.deepEqual(postContent.mf2.properties.category, ['foo', 'bar']);
+  t.falsy(postContent.mf2.properties.tags);
+});
+
+test('Throws error if deleted property is not an array', async t => {
+  const error = await t.throwsAsync(updateData(t.context.req({
+    action: 'update',
+    url: 'https://foo.bar/baz',
+    delete: {
+      category: 'foo'
+    }
+  }), t.context.postData, t.context.config));
+  t.is(error.message, 'category should be an array');
 });
 
 test('Throws error', async t => {

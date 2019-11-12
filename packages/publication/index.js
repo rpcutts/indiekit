@@ -23,7 +23,6 @@ module.exports = class {
       categories: await getCategories(resolvedConfig.categories),
       'post-type-config': resolvedConfig['post-types'],
       'post-types': getPostTypes(resolvedConfig['post-types']),
-      publisher: this.opts.publisher,
       'media-endpoint': resolvedConfig['media-endpoint'] || resolvedMediaEndpoint,
       'slug-separator': resolvedConfig['slug-separator'],
       'syndicate-to': resolvedConfig['syndicate-to'],

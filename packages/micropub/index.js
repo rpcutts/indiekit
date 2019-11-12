@@ -13,8 +13,7 @@ const queryMediaEndpoint = require('./lib/query-media-endpoint');
  * @returns {Object} Express middleware
  */
 module.exports = opts => {
-  const {config, postStore, mediaStore} = opts;
-  const {publisher} = config;
+  const {config, postStore, mediaStore, publisher} = opts;
 
   const media = require('./lib/media')({
     config,

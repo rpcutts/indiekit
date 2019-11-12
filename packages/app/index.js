@@ -11,10 +11,12 @@ const nunjucks = require('nunjucks');
 const RedisStore = require('connect-redis')(session);
 
 const utils = require('@indiekit/support');
-const config = require('./config');
 
-const {client} = config;
-const {port} = config;
+const application = require('./config/application');
+const server = require('./config/server');
+
+const {client} = server;
+const {port} = server;
 const app = express();
 
 // Correctly report secure connections
@@ -50,10 +52,10 @@ app.use(session({
   cookie: {
     secure: true
   },
-  name: config.name,
+  name: application.name,
   resave: false,
   saveUninitialized: false,
-  secret: config.secret,
+  secret: server.secret,
   store: new RedisStore({client})
 }));
 
@@ -70,10 +72,6 @@ app.use(i18n.init);
 
 // Add application and publication data to locals
 app.use(async (req, res, next) => {
-  // Merge app defaults with user settings
-  let app = await client.hgetall('app');
-  app = {...config.app, ...app};
-
   // Get publisher settings
   const github = await client.hgetall('github');
   const gitlab = await client.hgetall('gitlab');
@@ -85,7 +83,7 @@ app.use(async (req, res, next) => {
   const pub = await client.hgetall('pub');
 
   // Set locals for use in application templates
-  res.locals.app = app;
+  res.locals.app = await application;
   res.locals.app.url = url;
   res.locals.github = github;
   res.locals.gitlab = gitlab;

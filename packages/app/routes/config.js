@@ -1,16 +1,16 @@
 const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
-const config = require('../config');
+const server = require('../config/server');
 
-const {client} = config;
+const {client} = server;
 const router = new express.Router();
 
 // Configuration
 router.get('/', async (req, res) => {
   const configured = await client.get('configured');
   if (configured) {
-    res.render('config/index', {config});
+    res.render('config/index', {server});
   } else {
     res.redirect('/config/app');
   }
