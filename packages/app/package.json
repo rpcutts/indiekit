@@ -47,6 +47,7 @@
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "express-validator": "^6.2.0",
+    "front-matter": "^3.0.2",
     "http-errors": "^1.7.3",
     "i18n": "^0.8.4",
     "indieauth-helper": "github:grantcodes/indieauth-helper",

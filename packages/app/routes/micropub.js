@@ -9,14 +9,12 @@ const router = new express.Router();
 
 // Get publication configuration
 (async () => {
-  const pub = await publication;
-
   // Micropub endpoint
   router.use('/micropub', micropub({
-    config: await pub.getConfig(),
+    config: await publication,
     mediaStore: cache('media'),
     postStore: cache('post'),
-    publisher: await publisher
+    publisher
   }));
 })();
 

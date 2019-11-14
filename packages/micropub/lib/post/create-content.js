@@ -15,8 +15,7 @@ module.exports = async (postData, pub) => {
     // Post type
     const {type} = postData;
     const typeConfig = pub['post-type-config'][type];
-    const typeTemplateFile = await fs.promises.readFile(typeConfig.template);
-    const typeTemplate = Buffer.from(typeTemplateFile).toString('utf-8');
+    const typeTemplate = await fs.promises.readFile(typeConfig.template, 'utf-8');
 
     // Derive properties
     const {properties} = postData.mf2;

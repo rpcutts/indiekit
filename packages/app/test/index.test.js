@@ -40,6 +40,13 @@ test('Application responds to 404 error if documentation not found', async t => 
   t.is(response.status, 404);
 });
 
+// test('Application redirects to sign-in for pages requiring authentication', async t => {
+//   const response = await app.get('/share');
+//
+//   t.is(response.status, 302);
+//   t.is(response.text, 'Found. Redirecting to /sign-in?redirect=/share');
+// });
+
 test('Application responds to 404 error (with HTML if accepted)', async t => {
   const response = await app.get('/foobar')
     .set('Accept', 'text/html');
@@ -64,32 +71,5 @@ test('Application responds to 404 error (with plain text if accepted)', async t 
 
   t.is(response.status, 404);
   t.is(response.text, 'NotFoundError: The requested resource was not found');
-  t.regex(response.header['content-type'], /^text\/plain/);
-});
-
-test('Application responds to errors (with HTML if accepted)', async t => {
-  const response = await app.get('/teapot')
-    .set('Accept', 'text/html');
-
-  t.is(response.status, 418);
-  t.true(response.text.includes('<!DOCTYPE html>'));
-  t.regex(response.header['content-type'], /^text\/html/);
-});
-
-test('Application responds to errors (with JSON if accepted)', async t => {
-  const response = await app.get('/teapot')
-    .set('Accept', 'application/json');
-
-  t.is(response.status, 418);
-  t.is(response.body.error, 'ImATeapotError');
-  t.regex(response.header['content-type'], /^application\/json/);
-});
-
-test('Application responds to errors (with plain text if accepted)', async t => {
-  const response = await app.get('/teapot')
-    .set('Accept', 'text/plain');
-
-  t.is(response.status, 418);
-  t.is(response.text, 'ImATeapotError: https://tools.ietf.org/html/rfc2324');
   t.regex(response.header['content-type'], /^text\/plain/);
 });

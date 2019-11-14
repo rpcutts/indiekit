@@ -6,13 +6,14 @@ const express = require('express');
 const cookies = require('cookie-parser');
 const session = require('express-session');
 const favicon = require('serve-favicon');
+const httpError = require('http-errors');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
-const RedisStore = require('connect-redis')(session);
 
 const utils = require('@indiekit/support');
 
 const application = require('./config/application');
+const publication = require('./config/publication');
 const server = require('./config/server');
 
 const {client} = server;
@@ -44,19 +45,16 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-// Use cookies
-app.use(cookies());
-
 // Session
+app.use(cookies());
 app.use(session({
   cookie: {
     secure: true
   },
-  name: application.name,
+  name: 'indiekit',
   resave: false,
   saveUninitialized: false,
-  secret: server.secret,
-  store: new RedisStore({client})
+  secret: server.secret
 }));
 
 // Internationalisation
@@ -72,45 +70,32 @@ app.use(i18n.init);
 
 // Add application and publication data to locals
 app.use(async (req, res, next) => {
-  // Get publisher settings
-  const github = await client.hgetall('github');
-  const gitlab = await client.hgetall('gitlab');
-
-  // Determine URL of application server
-  const url = `${req.protocol}://${req.headers.host}`;
-
-  // Get publication settings
-  const pub = await client.hgetall('pub');
-
-  // Set locals for use in application templates
-  res.locals.app = await application;
-  res.locals.app.url = url;
-  res.locals.github = github;
-  res.locals.gitlab = gitlab;
-  res.locals.pub = pub;
+  res.locals.app = await application();
+  res.locals.app.url = `${req.protocol}://${req.headers.host}`;
+  res.locals.github = await client.hgetall('github');
+  res.locals.gitlab = await client.hgetall('gitlab');
+  res.locals.pub = await publication();
   res.locals.session = req.session;
 
   next();
 });
 
 // Routes
-const authenticate = async (req, res, next) => {
-  // If current session, proceed to next middleware
-  if (req.session && req.session.me) {
-    return next();
-  }
+const authenticate = require('./middleware/authenticate');
+const document = require('./middleware/document');
+const share = require('./middleware/share');
 
-  // No current session
-  res.redirect(`/sign-in?redirect=${req.originalUrl}`);
-};
-
-// Routes
 app.use('/config', authenticate, require('./routes/config'));
-app.use('/share', authenticate, require('./routes/share'));
-app.use(require('./routes/docs'));
+
+app.use('/share', authenticate, share);
+app.use('/:locale/docs*', document);
 app.use(require('./routes/micropub'));
 app.use(require('./routes/session'));
-app.use(require('./routes/error'));
+
+// 404
+app.use((req, res, next) => {
+  return next(httpError(404, req.__('The requested resource was not found')));
+});
 
 // Handle errors
 app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars

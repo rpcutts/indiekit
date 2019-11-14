@@ -160,18 +160,6 @@ test('Throws error if required context data is missing', t => {
   t.is(error.message, 'src must be a string or an object describing the source');
 });
 
-test('Renders a document which has YAML frontmatter and Nunjucks variables', t => {
-  const file = path.join(__dirname, 'fixtures/document.md');
-  const context = {
-    name: 'Foo',
-    location: 'Bar'
-  };
-  const result = utils.renderDocument(file, context);
-  t.is(result.body, 'Foo walks into Bar\n');
-  t.is(result.page.thingy, 'Whatsit');
-  t.is(result.title, 'All about Foo');
-});
-
 test('Renders Markdown string as HTML', t => {
   const block = utils.renderMarkdown('**bold**');
   const inline = utils.renderMarkdown('**bold**', 'inline');

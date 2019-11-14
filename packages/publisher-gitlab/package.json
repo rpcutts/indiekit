@@ -31,7 +31,7 @@
     "test": "echo \"Run tests from root\" && exit 1"
   },
   "dependencies": {
-    "gitlab": "^11.4.2"
+    "gitlab": "^11.5.1"
   },
   "xo": false
 }

@@ -3,7 +3,7 @@ const pkg = require(process.env.PWD + '/package');
 const server = require('./../config/server');
 
 // Default application settings
-module.exports = (async () => {
+module.exports = async () => {
   const {client} = server;
   const userConfig = await client.hgetall('app');
 
@@ -16,4 +16,4 @@ module.exports = (async () => {
     publisherId: userConfig.publisherId || 'github',
     themeColor: userConfig.themeColor || '#0000ee'
   };
-})();
+};

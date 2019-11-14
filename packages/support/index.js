@@ -3,7 +3,6 @@ const path = require('path');
 const _ = require('lodash');
 const debug = require('debug')('indiekit:support:utils');
 const {DateTime} = require('luxon');
-const frontmatter = require('front-matter');
 const nunjucks = require('nunjucks');
 const markdown = require('./lib/markdown');
 
@@ -153,35 +152,6 @@ const utils = {
     env.addFilter('date', this.formatDate);
 
     return env.renderString(string, context);
-  },
-
-  /**
-   * Render a document which has YAML frontmatter and Nunjucks variables.
-   *
-   * @function renderDocument
-   * @param {String} file File to parse
-   * @param {String} context Context data
-   * @return {Object} Document data object
-   */
-  renderDocument(file, context) {
-    // Read file
-    let string = fs.readFileSync(file);
-
-    // Convert file buffer to string
-    string = Buffer.from(string).toString('utf8');
-
-    // Parse YAML frontmatter
-    const document = frontmatter(string);
-
-    // Add YAML frontmatter data to provided context under the `page` key
-    context.page = document.attributes;
-
-    // Return document object with Nunjucks rendered body
-    return {
-      body: utils.render(document.body, context),
-      page: document.attributes,
-      title: utils.render(document.attributes.title, context)
-    };
   },
 
   /**

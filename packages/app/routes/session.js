@@ -14,7 +14,9 @@ const router = new express.Router();
 router.get('/', async (req, res) => {
   const {app} = res.locals;
   const configured = await client.get('configured');
-  const path = (configured === true) ? '/' : `${app.locale}/docs/config`;
+  const path = (configured === true) ?
+    '/' :
+    `${app.locale}/docs/config`;
   res.redirect(path);
 });
 
