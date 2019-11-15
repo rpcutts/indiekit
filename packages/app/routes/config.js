@@ -1,16 +1,18 @@
-const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
-const server = require('../config/server');
 
-const {client} = server;
+// Models
+const application = require('../models/application');
+const publication = require('../models/publication');
+const publisher = require('../models/publisher');
+
 const router = new express.Router();
 
 // Configuration
 router.get('/', async (req, res) => {
-  const configured = await client.get('configured');
+  const configured = await application.get('configured');
   if (configured) {
-    res.render('config/index', {server});
+    res.render('config/index');
   } else {
     res.redirect('/config/app');
   }
@@ -18,20 +20,15 @@ router.get('/', async (req, res) => {
 
 // Application
 router.get('/app', (req, res) => {
-  res.render('config/app', {
-    referrer: req.query.referrer
-  });
+  res.render('config/app', {referrer: req.query.referrer});
 });
 
 router.post('/app', (req, res) => {
   const {publisherId, locale, themeColor} = req.body;
-  const {me} = req.session;
   const {referrer} = req.query;
-  res.cookie('locale', locale, {
-    maxAge: 900000
-  });
-  client.hmset('app', {publisherId, locale, themeColor});
-  client.hmset('pub', {me});
+
+  res.cookie('locale', locale, {maxAge: 900000});
+  application.setAll({publisherId, locale, themeColor});
   res.redirect(referrer || `/config/${publisherId}`);
 });
 
@@ -39,9 +36,7 @@ router.post('/app', (req, res) => {
 router.get('/:publisherId(github|gitlab)', (req, res) => {
   const {publisherId} = req.params;
 
-  res.render(`config/${publisherId}`, {
-    referrer: req.query.referrer
-  });
+  res.render(`config/${publisherId}`, {referrer: req.query.referrer});
 });
 
 router.post('/github', [
@@ -61,17 +56,13 @@ router.post('/github', [
       return req.__(`config.github.${path}.error`);
     })
 ], (req, res) => {
-  const {referrer} = req.query;
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
-    return res.render('config/github', {
-      errors: errors.mapped()
-    });
+    return res.render('config/github', {errors: errors.mapped()});
   }
 
-  client.hmset('github', req.body);
-  res.redirect(referrer || '/config/publication');
+  publisher('github').setAll(req.body);
+  res.redirect(req.query.referrer || '/config/publication');
 });
 
 router.post('/gitlab', [
@@ -96,32 +87,24 @@ router.post('/gitlab', [
       return req.__(`config.gitlab.${path}.error`);
     })
 ], (req, res) => {
-  const {referrer} = req.query;
   const errors = validationResult(req);
-
   if (!errors.isEmpty()) {
-    return res.render('config/gitlab', {
-      errors: errors.mapped()
-    });
+    return res.render('config/gitlab', {errors: errors.mapped()});
   }
 
-  client.hmset('gitlab', req.body);
-  res.redirect(referrer || '/config/publication');
+  publisher('gitlab').setAll(req.body);
+  res.redirect(req.query.referrer || '/config/publication');
 });
 
-// Application
+// Publication
 router.get('/publication', (req, res) => {
-  res.render('config/pub', {
-    referrer: req.query.referrer
-  });
+  res.render('config/pub', {referrer: req.query.referrer});
 });
 
 router.post('/publication', (req, res) => {
-  const {configPath} = req.body;
-  const {referrer} = req.query;
-  client.hmset('pub', {configPath});
-  client.set('configured', true);
-  res.redirect(referrer || '/config');
+  application.set('configured', true);
+  publication.setAll(req.body);
+  res.redirect(req.query.referrer || '/config');
 });
 
 module.exports = router;

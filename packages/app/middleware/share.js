@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
       name: req.query.name,
       url: req.query.url,
       success: req.query.success,
-      minimalui: req.params.path.includes('bookmarklet')
+      minimalui: (req.params.path === 'bookmarklet') // Change to use .includes()
     });
   }
 

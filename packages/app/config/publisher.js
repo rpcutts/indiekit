@@ -1,11 +1,10 @@
-const application = require('./../config/application');
-const server = require('./../config/server');
+const application = require('./../models/application');
+const publisher = require('./../models/publisher');
 
 module.exports = (async () => {
-  const {client} = server;
-  const {publisherId} = await application();
+  const {publisherId} = await application.getAll();
   const Publisher = require(`@indiekit/publisher-${publisherId}`);
-  const userConfig = await client.hgetall(publisherId);
+  const publisherConfig = await publisher(publisherId).getAll();
 
-  return new Publisher(userConfig);
+  return new Publisher(publisherConfig);
 })();

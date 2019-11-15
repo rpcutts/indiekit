@@ -12,11 +12,11 @@ const nunjucks = require('nunjucks');
 
 const utils = require('@indiekit/support');
 
-const application = require('./config/application');
-const publication = require('./config/publication');
+const application = require('./models/application');
+const publication = require('./models/publication');
+const publisher = require('./models/publisher');
 const server = require('./config/server');
 
-const {client} = server;
 const {port} = server;
 const app = express();
 
@@ -70,11 +70,11 @@ app.use(i18n.init);
 
 // Add application and publication data to locals
 app.use(async (req, res, next) => {
-  res.locals.app = await application();
+  res.locals.app = await application.getAll();
   res.locals.app.url = `${req.protocol}://${req.headers.host}`;
-  res.locals.github = await client.hgetall('github');
-  res.locals.gitlab = await client.hgetall('gitlab');
-  res.locals.pub = await publication();
+  res.locals.github = await publisher('github').getAll();
+  res.locals.gitlab = await publisher('gitlab').getAll();
+  res.locals.pub = await publication.getAll();
   res.locals.session = req.session;
 
   next();
