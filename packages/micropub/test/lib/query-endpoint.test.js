@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+const nock = require('nock');
 const Publication = require('@indiekit/publication');
 const test = require('ava');
 
@@ -56,31 +59,62 @@ test('Returns list of previously published posts', async t => {
 });
 
 test('Returns source (as mf2 object) for given URL', async t => {
+  // Mock request
+  const file = path.resolve(__dirname, 'fixtures/html-with-mf2.html');
+  const html = fs.readFileSync(file, 'utf-8');
+  const scope = nock('https://website.example')
+    .get('/foo')
+    .reply(200, html);
+
+  // Setup
   const query = await t.context.req({
     q: 'source',
-    url: 'https://paulrobertlloyd.com/2018/11/warp_and_weft'
+    url: 'https://website.example/foo'
   });
   const result = await queryEndpoint(query, postStore);
+
+  // Test assertions
   t.truthy(result.properties);
+  scope.done();
 });
 
 test('Returns source (name property) for given URL', async t => {
+  // Mock request
+  const file = path.resolve(__dirname, 'fixtures/html-with-mf2.html');
+  const html = fs.readFileSync(file, 'utf-8');
+  const scope = nock('https://website.example')
+    .get('/foo')
+    .reply(200, html);
+
+  // Setup
   const query = await t.context.req({
     q: 'source',
-    url: 'https://paulrobertlloyd.com/2018/11/warp_and_weft',
+    url: 'https://website.example/foo',
     properties: 'name'
   });
   const result = await queryEndpoint(query, postStore);
-  t.is(result.name[0], 'Warp and Weft');
+
+  // Test assertions
+  t.is(result.name[0], 'I ate a cheese sandwich.');
+  scope.done();
 });
 
 test('Throws error if source URL cannot be found', async t => {
+  // Mock request
+  const scope = nock('https://website.example')
+    .get('/foo')
+    .replyWithError('not found');
+
+  // Setup
   const query = await t.context.req({
     q: 'source',
-    url: 'https://website.example'
+    url: 'https://website.example/foo'
   });
   const error = await t.throwsAsync(queryEndpoint(query, postStore, t.context.config));
-  t.is(error.message, 'getaddrinfo ENOTFOUND website.example');
+
+  // Test assertions
+  t.is(error.message, 'not found');
+  scope.done();
 });
 
 test('Returns any available configuration value', async t => {
