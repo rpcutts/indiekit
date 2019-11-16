@@ -1,11 +1,12 @@
 const test = require('ava');
-const redis = require('redis-mock');
+const proxyquire = require('proxyquire');
+const Redis = require('ioredis-mock');
 const JSONCache = require('redis-json');
 const validUrl = require('valid-url');
 
-const readData = require('../../../lib/post/read-data');
+const client = new Redis();
 
-const client = redis.createClient();
+const readData = proxyquire('../../../lib/post/read-data', {client});
 const postStore = new JSONCache(client, {
   prefix: 'post:'
 });
