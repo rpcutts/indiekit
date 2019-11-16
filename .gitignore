@@ -11,8 +11,9 @@ npm-debug.log*
 packages/app/static/app.css
 
 # Testing and coverage
-coverage
+.ava_output
 .nyc_output
+coverage
 
 # Dependencies
 node_modules/
