@@ -1,14 +1,14 @@
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
 const frontmatter = require('front-matter');
-
 const utils = require('@indiekit/support');
 
-module.exports = (req, res, next) => {
+const router = new express.Router();
+
+router.get('/*', (req, res, next) => {
   try {
-    const {locale} = req.params;
-    const docpath = req.originalUrl.replace(`${locale}/docs`, `docs/${locale}`);
-    const filepath = path.join(__dirname, '..', docpath);
+    const filepath = path.join(__dirname, '..', req.originalUrl);
     const file = (fs.existsSync(filepath)) ?
       path.join(filepath, 'index.md') :
       `${filepath}.md`;
@@ -27,4 +27,6 @@ module.exports = (req, res, next) => {
   } catch (error) {
     next();
   }
-};
+});
+
+module.exports = router;

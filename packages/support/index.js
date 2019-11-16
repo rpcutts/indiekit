@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
-const debug = require('debug')('indiekit:support:utils');
+const debug = require('debug')('indiekit:support');
 const {DateTime} = require('luxon');
 const nunjucks = require('nunjucks');
 const markdown = require('./lib/markdown');
@@ -122,13 +122,8 @@ const utils = {
         });
 
       if (pubData) {
-        await fs.promises.mkdir(path.dirname(filePath), {recursive: true}).catch(error => {
-          throw new Error(error.message);
-        });
-
-        await fs.promises.writeFile(filePath, pubData).catch(error => {
-          throw new Error(error.message);
-        });
+        await fs.promises.mkdir(path.dirname(filePath), {recursive: true});
+        await fs.promises.writeFile(filePath, pubData);
 
         debug('Got %s from publisher', basepath);
         data = pubData;

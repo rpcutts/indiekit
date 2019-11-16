@@ -1,4 +1,3 @@
-const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
@@ -9,14 +8,6 @@ const auth = new IndieAuth({
 });
 
 const router = new express.Router();
-
-router.get('/', async (req, res) => {
-  const {app} = res.locals;
-  const path = (app.configured === true) ?
-    '/' :
-    `${app.locale}/docs/config`;
-  res.redirect(path);
-});
 
 router.get('/sign-in', (req, res) => {
   const {app} = res.locals;
@@ -30,7 +21,6 @@ router.get('/sign-in', (req, res) => {
   auth.options.clientId = app.url;
   auth.options.redirectUri = redirectUri;
 
-  debug('auth.options: %O', auth.options);
   res.render('sign-in');
 });
 
@@ -54,7 +44,6 @@ router.post('/sign-in', [
       const authUrl = await auth.getAuthUrl('code', ['create']);
       res.redirect(authUrl);
     } catch (error) {
-      debug(req.originalUrl, error);
       res.render('sign-in', {
         error: error.message
       });
@@ -65,7 +54,6 @@ router.post('/sign-in', [
 router.get('/auth', async (req, res, next) => {
   const {code, me, state} = req.query;
   const redirect = req.query.redirect || '/';
-  debug('/auth query', req.query);
   if (code && state && auth.validateState(state)) {
     try {
       const token = await auth.getToken(code);
@@ -73,7 +61,6 @@ router.get('/auth', async (req, res, next) => {
       req.session.token = token;
       res.redirect(redirect);
     } catch (error) {
-      debug(req.originalUrl, error);
       next(error);
     }
   } else {

@@ -1,12 +1,12 @@
 {% extends "_document.njk" %}
 
-{% set title = __("config.title %s", app.name) %}
+{% set title = __("Configuration") %}
 
 {% block content %}
   {{ summary({
     title: __("config.app.title"),
     actions: [{
-      href: "/config/app?referrer=/config",
+      href: "/config/application?referrer=/config",
       text: __("Edit")
     }],
     rows: [{

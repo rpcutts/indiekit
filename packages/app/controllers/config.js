@@ -1,6 +1,9 @@
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 
+// Middleware
+const auth = require('../middleware/authenticate');
+
 // Models
 const application = require('../models/application');
 const publication = require('../models/publication');
@@ -8,22 +11,25 @@ const publisher = require('../models/publisher');
 
 const router = new express.Router();
 
+// Require authentication
+router.use(auth);
+
 // Configuration
 router.get('/', async (req, res) => {
   const configured = await application.get('configured');
   if (configured) {
     res.render('config/index');
   } else {
-    res.redirect('/config/app');
+    res.redirect('/config/application');
   }
 });
 
 // Application
-router.get('/app', (req, res) => {
-  res.render('config/app', {referrer: req.query.referrer});
+router.get('/application', (req, res) => {
+  res.render('config/application', {referrer: req.query.referrer});
 });
 
-router.post('/app', (req, res) => {
+router.post('/application', (req, res) => {
   const {publisherId, locale, themeColor} = req.body;
   const {referrer} = req.query;
 
@@ -98,7 +104,7 @@ router.post('/gitlab', [
 
 // Publication
 router.get('/publication', (req, res) => {
-  res.render('config/pub', {referrer: req.query.referrer});
+  res.render('config/publication', {referrer: req.query.referrer});
 });
 
 router.post('/publication', (req, res) => {

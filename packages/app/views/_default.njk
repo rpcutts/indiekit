@@ -29,7 +29,7 @@
   </head>
   <body>
     {{ console({
-      items: [locale, session, app, github]
+      items: [locale, session, app, github, gitlab]
     }) }}
     {{ header({
       url: app.url,
@@ -60,7 +60,7 @@
         href: "/config",
         text: __("Configuration")
       } if session.me, {
-        href: "/" + app.locale + "/docs",
+        href: "/docs/" + app.locale,
         text: __("Help")
       }, {
         href: app.repository.url | replace('.git', '') + "/releases/tag/v" + app.version,

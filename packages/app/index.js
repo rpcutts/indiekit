@@ -80,17 +80,8 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// Routes
-const authenticate = require('./middleware/authenticate');
-const document = require('./middleware/document');
-const share = require('./middleware/share');
-
-app.use('/config', authenticate, require('./routes/config'));
-
-app.use('/share', authenticate, share);
-app.use('/:locale/docs*', document);
-app.use(require('./routes/micropub'));
-app.use(require('./routes/session'));
+// Route controllers
+app.use(require('./controllers'));
 
 // 404
 app.use((req, res, next) => {

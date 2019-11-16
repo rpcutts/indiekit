@@ -27,6 +27,7 @@
     "github": "GitHub",
     "gitlab": "GitLab"
   },
+  "Configuration": "Configuration",
   "Documentation": "Documentation",
   "Sign out": "Sign out",
   "Sign in": "Sign in",
@@ -48,7 +49,6 @@
   },
   "Continue": "Continue",
   "config": {
-    "title %s": "Configure %s",
     "app": {
       "title": "Application settings",
       "locale": {
@@ -122,13 +122,13 @@
         "label": "Bookmarklet",
         "drag": "Drag this link to your bookmarks bar"
       }
-    }
+    },
+    "title %s": "config.title %s"
   },
   "optional": "optional",
   "Help": "Help",
   "Save": "Save",
   "Save changes": "Save changes",
-  "Configuration": "Configuration",
   "Welcome back": "Welcome back",
   "Bookmarklet": "Bookmarklet",
   "Share page": "Share page",

@@ -7,10 +7,8 @@ const publisher = require('./../config/publisher');
 
 const router = new express.Router();
 
-// Get publication configuration
 (async () => {
-  // Micropub endpoint
-  router.use('/micropub', micropub({
+  router.use('/', micropub({
     config: await publication,
     mediaStore: cache('media'),
     postStore: cache('post'),

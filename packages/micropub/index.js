@@ -54,8 +54,9 @@ module.exports = opts => {
     me: config.me
   });
 
-  // Use request parsers
-  router.use(indieauth.authorize, urlencodedParser, jsonParser);
+  // Middleware
+  router.use(urlencodedParser, jsonParser);
+  router.post(indieauth.authorize);
 
   // Query endpoint
   router.get('/', async (req, res, next) => {

@@ -21,21 +21,21 @@ test('Application redirects to help page if not configured', async t => {
 });
 
 test('Application displays a documentation index', async t => {
-  const response = await app.get('/en/docs');
+  const response = await app.get('/docs/en');
 
   t.is(response.status, 200);
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
 test('Application displays a documentation page', async t => {
-  const response = await app.get('/en/docs/queries');
+  const response = await app.get('/docs/en/queries');
 
   t.is(response.status, 200);
   t.regex(response.header['content-type'], /^text\/html/);
 });
 
 test('Application responds to 404 error if documentation not found', async t => {
-  const response = await app.get('/en/docs/404');
+  const response = await app.get('/docs/en/404');
 
   t.is(response.status, 404);
 });
