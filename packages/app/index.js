@@ -124,7 +124,7 @@ app.use((error, req, res, next) => { // eslint-disable-line no-unused-vars
 });
 
 // Start application
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
   debug('Listening on port %s', port);
   app.listen(port);
 } else {

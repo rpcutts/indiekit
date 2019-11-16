@@ -16,6 +16,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install, test and run coverage checks
       env:
+        NODE_ENV: test
         SECRET: secret
         TEST_INDIEAUTH_TOKEN: ${{ secrets.TEST_INDIEAUTH_TOKEN }}
         TEST_INDIEAUTH_TOKEN_NOSCOPE: ${{ secrets.TEST_INDIEAUTH_TOKEN_NOSCOPE }}
