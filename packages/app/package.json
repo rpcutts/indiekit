@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "app",
+  "name": "@indiekit/app",
   "version": "0.1.0",
   "description": "An IndieWeb publishing toolkit",
   "keywords": [
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@indiekit/config-jekyll": "0.1.0",
+    "@indiekit/frontend": "0.1.0",
     "@indiekit/indieauth": "0.1.0",
     "@indiekit/microformats": "0.1.0",
     "@indiekit/micropub": "0.1.0",

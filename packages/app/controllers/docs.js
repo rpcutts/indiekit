@@ -19,7 +19,7 @@ router.get('/*', (req, res, next) => {
     // Parse YAML frontmatter
     const document = frontmatter(string);
 
-    res.render('_document', {
+    res.render('document', {
       page: document.attributes,
       title: utils.render(document.attributes.title, res.locals),
       content: utils.render(document.body, res.locals)

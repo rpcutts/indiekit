@@ -10,6 +10,7 @@ const httpError = require('http-errors');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
 
+const {components, layouts} = require('@indiekit/frontend');
 const utils = require('@indiekit/support');
 
 const application = require('./models/application');
@@ -24,10 +25,9 @@ const app = express();
 app.enable('trust proxy');
 
 // Parse Nunjucks templates
-const componentsDir = path.join(__dirname, 'components');
 const viewsDir = path.join(__dirname, 'views');
 const staticDir = path.join(__dirname, 'static');
-const env = nunjucks.configure([componentsDir, viewsDir, staticDir], {
+const env = nunjucks.configure([components, layouts, viewsDir, staticDir], {
   autoescape: true,
   express: app,
   watch: true

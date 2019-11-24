@@ -2,9 +2,9 @@
   Share interface inspired and developed from an idea described by Max Böck.
   See: https://mxb.dev/blog/indieweb-link-sharing/
 -#}
-{% from "preview/macro.njk" import preview %}
+{% extends "form.njk" %}
 
-{% extends "_form.njk" %}
+{% from "preview/macro.njk" import preview %}
 
 {% set title = __("Share") %}
 

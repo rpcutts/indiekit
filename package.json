@@ -19,10 +19,10 @@
     "url": "https://github.com/paulrobertlloyd/indiekit.git"
   },
   "scripts": {
-    "build:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config packages/app/postcss.config.js",
+    "build:styles": "postcss packages/frontend/styles/app.css -o packages/app/static/app.css --config packages/frontend/postcss.config.js",
     "build": "npm run build:styles",
     "watch:app": "nodemon packages/app",
-    "watch:styles": "postcss packages/app/styles/app.css -o packages/app/static/app.css --config packages/app/postcss.config.js --watch",
+    "watch:styles": "postcss packages/frontend/styles/app.css -o packages/app/static/app.css --config packages/frontend/postcss.config.js --watch",
     "watch": "DEBUG=indiekit:* npm-run-all --parallel watch:*",
     "preinstall": "npx lerna bootstrap",
     "start": "node packages/app",
@@ -34,13 +34,7 @@
   },
   "dependencies": {
     "lerna": "^3.16.4",
-    "npm-run-all": "^4.1.5",
-    "postcss-cli": "^6.1.3",
-    "postcss-custom-media": "^7.0.8",
-    "postcss-custom-selectors": "^5.1.2",
-    "postcss-easy-import": "^3.0.0",
-    "postcss-extend-rule": "^3.0.0",
-    "postcss-media-minmax": "^4.0.0"
+    "npm-run-all": "^4.1.5"
   },
   "devDependencies": {
     "@indiekit/app": "file:packages/app",
@@ -73,10 +67,6 @@
     "ext": "css,js,json,md"
   },
   "nyc": {
-    "exclude": [
-      "packages/app/index.js",
-      "packages/**/*.test.js"
-    ],
     "reporter": [
       "text",
       "lcovonly"
