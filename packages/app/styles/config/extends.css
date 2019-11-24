@@ -21,7 +21,7 @@
 
 %subhead {
   font-size: var(--font-size-subhead);
-  font-weight: 700;
+  font-weight: 500;
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
 }

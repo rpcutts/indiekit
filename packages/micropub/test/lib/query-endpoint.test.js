@@ -1,14 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const nock = require('nock');
-const Publication = require('@indiekit/publication');
 const test = require('ava');
-
-const pub = new Publication({
-  defaults: require('@indiekit/config-jekyll'),
-  endpointUrl: 'https://endpoint.example',
-  me: process.env.INDIEKIT_URL
-});
 
 const queryEndpoint = require('../../lib/query-endpoint');
 
@@ -24,14 +17,18 @@ const postStore = [{
   }
 }];
 
-test.before(async t => {
+test.before(t => {
   t.context.req = query => {
     const req = {};
     req.query = query;
     return req;
   };
 
-  t.context.config = await pub.getConfig();
+  t.context.config = {
+    defaults: require('@indiekit/config-jekyll'),
+    endpointUrl: 'https://endpoint.example',
+    me: process.env.INDIEKIT_URL
+  };
 });
 
 test('Returns publication configuration', async t => {

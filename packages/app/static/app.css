@@ -23,7 +23,7 @@
   --font-family-monospace: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
   --font-size-title: calc(1.75rem + 1vw);
   --font-size-heading: calc(1.125rem + 0.5vw);
-  --font-size-subhead: calc(1rem + 0.5vw);
+  --font-size-subhead: calc(1rem + 0.25vw);
   --font-size-body: calc(0.875rem + 0.5vw);
   --font-size-reference: calc(0.75rem + 0.25vw);
   --font-size-default: 1rem;
@@ -351,7 +351,7 @@ mark {
   margin: 0 var(--space-block-medium);
   padding: var(--space-block-medium) 0;
 }
-.article > * {
+.article > *:not([class]) {
   max-inline-size: var(--line-measure);
 }
 .article > * + * {
@@ -394,7 +394,7 @@ mark {
 }
 .article h4 {
   font-size: var(--font-size-subhead);
-  font-weight: 700;
+  font-weight: 500;
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
 }
@@ -738,7 +738,7 @@ mark {
 }
 .preview__title {
   font-size: var(--font-size-subhead);
-  font-weight: 700;
+  font-weight: 500;
   hanging-punctuation: first;
   line-height: var(--line-height-tight);
 }
@@ -795,7 +795,7 @@ mark {
   border-block-start-style: solid;
   border-block-start-color: var(--color-neutral-light);
   line-height: var(--line-height-tight);
-  padding-block-end: var(--space-block-small);
+  padding-block-end: var(--space-block-xsmall);
   padding-block-start: var(--space-block-xsmall);
 }
 @media (min-width: 30em) {
@@ -806,8 +806,8 @@ mark {
 }
 .summary__key {
   flex: 1;
-  padding-block-end: var(--space-block-small);
   padding-inline-end: var(--space-inline);
+  max-inline-size: 15rem;
 }
 .summary__value {
   color: var(--color-neutral-dark);

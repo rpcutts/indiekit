@@ -132,7 +132,12 @@
   "Welcome back": "Welcome back",
   "Bookmarklet": "Bookmarklet",
   "Share page": "Share page",
-  "publisher": {
-    "github": "publisher.github"
-  }
+  "Custom configuration values": "Custom values",
+  "Post types": "Post types",
+  "Permalink": "Permalink",
+  "Published file path": "Published file path",
+  "Template location": "Template location",
+  "Categories": "Categories",
+  "View configuration": "View configuration",
+  "Custom values": "Custom values"
 }

@@ -1,5 +1,6 @@
 ---
 title: Endpoint queries
+parent: Help
 ---
 {{ app.name }} supports a number of endpoint queries, both [those in the Micropub standard](https://www.w3.org/TR/micropub/#querying) and others [proposed by the IndieWeb community](https://indieweb.org/Micropub-extensions).
 

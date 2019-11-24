@@ -23,7 +23,7 @@
   --font-family-monospace: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
   --font-size-title: calc(1.75rem + 1vw);
   --font-size-heading: calc(1.125rem + 0.5vw);
-  --font-size-subhead: calc(1rem + 0.5vw);
+  --font-size-subhead: calc(1rem + 0.25vw);
   --font-size-body: calc(0.875rem + 0.5vw);
   --font-size-reference: calc(0.75rem + 0.25vw);
   --font-size-default: 1rem;

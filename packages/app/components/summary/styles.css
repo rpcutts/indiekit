@@ -22,7 +22,7 @@
   border-block-start-style: solid;
   border-block-start-color: var(--color-neutral-light);
   line-height: var(--line-height-tight);
-  padding-block-end: var(--space-block-small);
+  padding-block-end: var(--space-block-xsmall);
   padding-block-start: var(--space-block-xsmall);
 }
 
@@ -35,8 +35,8 @@
 
 .summary__key {
   flex: 1;
-  padding-block-end: var(--space-block-small);
   padding-inline-end: var(--space-inline);
+  max-inline-size: 15rem;
 }
 
 .summary__value {

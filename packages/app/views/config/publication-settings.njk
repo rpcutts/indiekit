@@ -1,0 +1,51 @@
+{% extends "_document.njk" %}
+
+{% set title = __("Custom values") %}
+{% set parent = __("Configuration") %}
+
+{% block content %}
+  <h3>{{ __("Post types") }}</h3>
+  {% set postTypes = pub["post-types"] %}
+  {% if postTypes %}
+    {% for type in postTypes %}
+    {{ summary({
+      title: (type.icon | emoji) + " " + type.name,
+      rows: [{
+        key: {
+          text: __("Permalink")
+        },
+        value: {
+          text: "<code>" + type.post.url + "</code>"
+        }
+      }, {
+        key: {
+          text: __("Published file path")
+        },
+        value: {
+          text: "<code>" + type.post.path + "</code>"
+        }
+      }, {
+        key: {
+          text: __("Template location")
+        },
+        value: {
+          text: "<code>" + type.template + "</code>"
+        }
+      }]
+    }) }}
+    {% endfor %}
+  {% endif %}
+
+  <h3>{{ __("Syndication targets") }}</h3>
+  {% set targets = pub["syndicate-to"] %}
+  {% if targets %}
+    <ul>
+    {% for target in pub["syndicate-to"] %}
+      <li><a href="{{ target.uid }}">{{ target.name }}</a></li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h3>{{ __("Categories") }}</h3>
+  {{ pub.categories | sort | join(", ") }}
+{% endblock %}

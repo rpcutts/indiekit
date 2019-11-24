@@ -1,6 +1,5 @@
 const defaults = require('@indiekit/config-jekyll');
 const nock = require('nock');
-const Publication = require('@indiekit/publication');
 const Publisher = require('@indiekit/publisher-github');
 const test = require('ava');
 const validUrl = require('valid-url');
@@ -9,13 +8,6 @@ const github = new Publisher({
   token: 'abc123',
   user: 'user',
   repo: 'repo'
-});
-
-const pub = new Publication({
-  defaults,
-  endpointUrl: 'https://endpoint.example',
-  publisher: github,
-  me: process.env.INDIEKIT_URL
 });
 
 const {upload} = require('../../../lib/media')({
@@ -38,7 +30,12 @@ test.beforeEach(async t => {
   };
 
   t.context.media = [];
-  t.context.config = await pub.getConfig();
+  t.context.config = {
+    defaults,
+    endpointUrl: 'https://endpoint.example',
+    publisher: github,
+    me: process.env.INDIEKIT_URL
+  };
 });
 
 test('Uploads a media file', async t => {

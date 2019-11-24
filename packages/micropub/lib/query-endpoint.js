@@ -6,12 +6,11 @@ const microformats = require('@indiekit/microformats');
  * Express middleware function for querying Micropub endpoint.
  *
  * @param {Object} req Request
- * @param {Object} posts Published posts
  * @param {Object} config Publication config
+ * @param {Object} posts Published posts
  * @returns {Object} Requested information
  */
-module.exports = async (req, posts, config) => {
-  debug('Config for endpoint', config);
+module.exports = async (req, config, posts) => {
   try {
     const {query} = req;
 
@@ -25,10 +24,14 @@ module.exports = async (req, posts, config) => {
 
     switch (query.q) {
       case 'config': {
+        const mediaEndpoint = `${req.protocol}://${req.headers.host}/media`;
         return {
           categories: config.categories,
-          'media-endpoint': config['media-endpoint'],
-          'post-types': config['post-types'],
+          'media-endpoint': config['media-endpoint'] || mediaEndpoint,
+          'post-types': config['post-types'].map(postType => ({
+            type: postType.type,
+            name: postType.name
+          })),
           'syndicate-to': config['syndicate-to']
         };
       }

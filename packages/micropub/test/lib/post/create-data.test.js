@@ -1,19 +1,12 @@
 require('dotenv').config();
 
-const Publication = require('@indiekit/publication');
 const sinon = require('sinon');
 const test = require('ava');
 const validUrl = require('valid-url');
 
-const pub = new Publication({
-  defaults: require('@indiekit/config-jekyll'),
-  endpointUrl: 'https://endpoint.example',
-  me: process.env.INDIEKIT_URL
-});
-
 const createData = require('../../../lib/post/create-data');
 
-test.beforeEach(async t => {
+test.beforeEach(t => {
   t.context.req = () => {
     const req = {};
     req.body = {
@@ -31,7 +24,11 @@ test.beforeEach(async t => {
     return req;
   };
 
-  t.context.config = await pub.getConfig();
+  t.context.config = {
+    defaults: require('@indiekit/config-jekyll'),
+    endpointUrl: 'https://endpoint.example',
+    me: process.env.INDIEKIT_URL
+  };
 });
 
 test('Creates post data object', async t => {

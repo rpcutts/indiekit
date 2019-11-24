@@ -33,6 +33,7 @@ const env = nunjucks.configure([componentsDir, viewsDir, staticDir], {
   watch: true
 });
 env.addFilter('date', utils.formatDate);
+env.addFilter('emoji', utils.renderEmoji);
 env.addFilter('markdown', utils.renderMarkdown);
 app.set('view engine', 'njk');
 

@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:indieauth');
 const authorizeRequest = require('./lib/authorize-request');
 const checkTokenScope = require('./lib/check-token-scope');
 
@@ -19,6 +20,7 @@ class IndieAuth {
     const verifiedToken = await authorizeRequest(this.opts, req).catch(error => {
       return next(error);
     });
+    debug(verifiedToken);
     this.opts.token = verifiedToken;
     return next();
   }

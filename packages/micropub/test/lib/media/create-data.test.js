@@ -2,19 +2,12 @@ require('dotenv').config();
 
 const fs = require('fs');
 const path = require('path');
-const Publication = require('@indiekit/publication');
 const test = require('ava');
 const validUrl = require('valid-url');
 
-const pub = new Publication({
-  defaults: require('@indiekit/config-jekyll'),
-  endpointUrl: 'https://endpoint.example',
-  me: process.env.INDIEKIT_URL
-});
-
 const createData = require('../../../lib/media/create-data');
 
-test.beforeEach(async t => {
+test.beforeEach(t => {
   const photo = fs.readFileSync(path.resolve(__dirname, '../fixtures/photo.jpg'));
   t.context.file = {
     buffer: Buffer.from(photo),
@@ -26,7 +19,11 @@ test.beforeEach(async t => {
     return req;
   };
 
-  t.context.config = await pub.getConfig();
+  t.context.config = {
+    defaults: require('@indiekit/config-jekyll'),
+    endpointUrl: 'https://endpoint.example',
+    me: process.env.INDIEKIT_URL
+  };;
 });
 
 test('Creates media data object', async t => {

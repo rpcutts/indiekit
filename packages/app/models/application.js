@@ -7,16 +7,16 @@ module.exports = (() => {
   const methods = {};
 
   methods.getAll = async () => {
-    const application = await client.hgetall('application');
+    const config = await client.hgetall('application');
     return {
       name: 'IndieKit',
       version: pkg.version,
       description: pkg.description,
       repository: pkg.repository,
-      configured: application.configured,
-      locale: application.locale || 'en',
-      publisherId: application.publisherId || 'github',
-      themeColor: application.themeColor || '#0000ee'
+      configured: config.configured,
+      locale: config.locale || 'en',
+      publisherId: config.publisherId || 'github',
+      themeColor: config.themeColor || '#0000ee'
     };
   };
 

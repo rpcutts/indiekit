@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const express = require('express');
 const multer = require('multer');
 const IndieAuth = require('@indiekit/indieauth');
@@ -14,6 +15,8 @@ const queryMediaEndpoint = require('./lib/query-media-endpoint');
  */
 module.exports = opts => {
   const {config, postStore, mediaStore, publisher} = opts;
+
+  debug('Publication config: %O', config);
 
   const media = require('./lib/media')({
     config,
@@ -61,7 +64,7 @@ module.exports = opts => {
   // Query endpoint
   router.get('/', async (req, res, next) => {
     try {
-      const response = await queryEndpoint(req, config);
+      const response = await queryEndpoint(req, config, postStore);
       return res.json(response);
     } catch (error) {
       return next(error);
@@ -71,7 +74,7 @@ module.exports = opts => {
   // Query media endpoint
   router.get('/media', (req, res, next) => {
     try {
-      const response = queryMediaEndpoint(req);
+      const response = queryMediaEndpoint(req, mediaStore);
       return res.json(response);
     } catch (error) {
       return next(error);
@@ -84,6 +87,8 @@ module.exports = opts => {
     async (req, res, next) => {
       const action = req.query.action || req.body.action;
       const url = req.query.url || req.body.url;
+
+      debug('req.body', req.body);
 
       let response;
       try {

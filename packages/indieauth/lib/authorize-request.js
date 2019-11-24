@@ -1,4 +1,4 @@
-const debug = require('debug')('indiekit:indieauth:authorizeRequest');
+const debug = require('debug')('indiekit:indieauth');
 const HttpError = require('http-errors');
 const requestToken = require('./request-token');
 const verifyToken = require('./verify-token');

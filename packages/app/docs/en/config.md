@@ -1,5 +1,6 @@
 ---
 title: Getting started with {{ app.name }}
+parent: Help
 ---
 Before you can use {{ app.name }} to post to your website, there are a few things you’ll need to set up.
 

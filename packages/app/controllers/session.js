@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:app');
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 const IndieAuth = require('indieauth-helper');
@@ -42,6 +43,7 @@ router.post('/sign-in', [
     auth.options.me = me;
     try {
       const authUrl = await auth.getAuthUrl('code', ['create']);
+      debug(authUrl);
       res.redirect(authUrl);
     } catch (error) {
       res.render('sign-in', {
@@ -57,6 +59,7 @@ router.get('/auth', async (req, res, next) => {
   if (code && state && auth.validateState(state)) {
     try {
       const token = await auth.getToken(code);
+      debug(token);
       req.session.me = me;
       req.session.token = token;
       res.redirect(redirect);

@@ -1,9 +1,10 @@
 ---
 title: Website configuration
+parent: Help
 ---
 {{ app.name }} lets you customise where posts are saved, how they are formatted and what URLs they will appear at.
 
-Configuration is provided via a JSON file in your repository. You can tell {{ app.name }} where to find this file by providing a value for the `INDIEKIT_CONFIG_PATH` environment variable.
+Configuration is provided via a JSON file saved in your repository. You can let {{ app.name }} know where to find this file by prviding a value for ‘Configuration file path’ in [website settings](/config/publication).
 
 ### Configuration options
 
@@ -49,7 +50,7 @@ Configuration is provided via a JSON file in your repository. You can tell {{ ap
   ```
 
 `post-types`
-: {{ app.name }} provides a set of default paths and templates for the following [post types](https://indieweb.org/posts#Types_of_Posts):
+: {{ app.name }} provides a set of default paths and templates for the following post types:
 
   * 📄 [`article`](https://indieweb.org/article)
   * 📔 [`note`](https://indieweb.org/note)
@@ -67,30 +68,31 @@ Configuration is provided via a JSON file in your repository. You can tell {{ ap
 
   ```json
   {
-    "post-types": {
-      "note": {
-        "name": "Micro note",
-        "icon": ":memo:",
-        "template": "_micropub/templates/note.njk",
-        "post": {
-          "path": "_notes/{​{ published | date('yyyy-MM-dd') }}-{​{ slug }}.md",
-          "url": "notes/{​{ published | date('yyyy/MM') }}/{​{ slug }}"
-        },
+    "post-types": [{
+      "type": "note",
+      "name": "Micro note",
+      "icon": ":memo:",
+      "template": "_micropub/templates/note.njk",
+      "post": {
+        "path": "_notes/{​{ published | date('yyyy-MM-dd') }}-{​{ slug }}.md",
+        "url": "notes/{​{ published | date('yyyy/MM') }}/{​{ slug }}"
       },
-      "photo": {
-        "name": "Photograph",
-        "template": "_micropub/templates/photo.njk",
-        "post": {
-          "path": "_photos/{​{ published | date('yyyy-MM-dd') }}-{​{ slug }}.md",
-          "url": "photos/{​{ published | date('yyyy/MM') }}/{​{ slug }}"
-        },
-        "media": {
-          "path": "media/photos/{​{ published | date('yyyy/MM') }}/{​{ filename }}",
-        }
+    }, {
+      "type": "photo",
+      "name": "Photograph",
+      "template": "_micropub/templates/photo.njk",
+      "post": {
+        "path": "_photos/{​{ published | date('yyyy-MM-dd') }}-{​{ slug }}.md",
+        "url": "photos/{​{ published | date('yyyy/MM') }}/{​{ slug }}"
+      },
+      "media": {
+        "path": "media/photos/{​{ published | date('yyyy/MM') }}/{​{ filename }}",
       }
-    }
+    }]
   }
   ```
+
+  * **`type`**: The IndieWeb [post type](https://indieweb.org/Category:PostType).
 
   * **`name`**: The name you give to this post type on your own site. You needn’t specify this value, but if you do, certain Micropub clients will expose it in their publishing UI.
 

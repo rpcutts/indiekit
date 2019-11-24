@@ -1,7 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
+const axios = require('axios');
 const debug = require('debug')('indiekit:support');
+const emoji = require('node-emoji');
 const {DateTime} = require('luxon');
 const nunjucks = require('nunjucks');
 const markdown = require('./lib/markdown');
@@ -96,57 +98,160 @@ const utils = {
   },
 
   /**
-   * Get file from publisher and save it to filesystem.
+   * Returns an array of available categories.
    *
-   * @exports getData
-   * @param {Object} basepath Path to remote file
-   * @param {Object} tmpdir Temporary directory
+   * @exports getCategories
+   * @param {Object} pubCategories Publication category configuration
+   * @returns {Promise|Array} Array of categories
+   */
+  async getCategories(pubCategories) {
+    let categories = [];
+
+    if (pubCategories && pubCategories.url) {
+      categories = utils.fetchJson(pubCategories.url);
+    } else if (pubCategories && pubCategories.constructor === Array) {
+      categories = pubCategories;
+    }
+
+    return categories;
+  },
+
+  /**
+   * Get remote configuration file.
+   *
+   * @exports getConfig
+   * @param {Object} configPath Path to remote configuration file
+   * @param {Function} publisher Publishing function
+   * @param {Function} tmpdir Temporary directory
+   * @returns {Promise|Object} Configuration file
+   */
+  async getConfig(configPath, publisher, tmpdir) {
+    let config;
+    if (configPath) {
+      // Get remote configuration file (if provided)
+      const content = await publisher.readFile(configPath).catch(error => {
+        throw new Error(error.message);
+      });
+      config = JSON.parse(content);
+      config = await utils.updateTemplatePaths(config, publisher, tmpdir);
+      return config;
+    }
+
+    return false;
+  },
+
+  /**
+   * Get remote configuration file.
+   *
+   * @function getPostTypes
+   * @param {Object} defaults Default configuration
+   * @param {Object} config User configuration
+   * @returns {Promise|Array} Post type array
+   */
+  async getPostTypes(defaults, config) {
+    const defaultPostTypes = _.keyBy(defaults['post-types'], 'type');
+    const configPostTypes = _.keyBy(config['post-types'], 'type');
+    const mergedPostTypes = _.merge(defaultPostTypes, configPostTypes);
+    const postTypes = _.values(mergedPostTypes);
+
+    return postTypes;
+  },
+
+  /**
+   * Fetch file from publisher and save it to filesystem.
+   *
+   * @function cachePublishedFile
+   * @param {Object} file File to cache
+   * @param {Function} cacheDir Cache directory
    * @param {Function} publisher Publishing function
    * @returns {String|Object} Cache value
    */
-  async getData(basepath, tmpdir, publisher) {
-    let data;
-    const filePath = path.join(tmpdir, basepath);
-    const fileData = await fs.promises.readFile(filePath, {encoding: 'utf-8'})
-      .catch(error => {
-        debug('Error fetching %O from filesystem', error);
+  async cachePublishedFile(file, cacheDir, publisher) {
+    return fs.promises.access(file)
+      .catch(async () => {
+        debug('File not found at %s', file);
+        debug('Fetching %s file from remote', file);
+        const pubData = await publisher.readFile(file)
+          .catch(error => {
+            throw new Error(error.message);
+          });
+
+        if (pubData) {
+          const cacheFile = path.basename(file);
+          const cachePath = path.join(cacheDir, cacheFile);
+          await fs.promises.mkdir(path.dirname(cachePath), {recursive: true});
+          await fs.promises.writeFile(cachePath, pubData);
+
+          debug('File saved to %s', cachePath);
+          return cachePath;
+        }
       });
+  },
 
-    if (fileData) {
-      debug('Got %s from filesystem', basepath);
-      data = fileData;
-    } else {
-      const pubData = await publisher.readFile(basepath)
-        .catch(error => {
-          throw new Error(error.message);
-        });
-
-      if (pubData) {
-        await fs.promises.mkdir(path.dirname(filePath), {recursive: true});
-        await fs.promises.writeFile(filePath, pubData);
-
-        debug('Got %s from publisher', basepath);
-        data = pubData;
-      }
+  /**
+   * Get remote configuration file.
+   *
+   * @function updateTemplatePaths
+   * @param {Object} config User configuratiom
+   * @param {Function} publisher Publishing function
+   * @param {Function} tmpdir Temporary directory
+   * @returns {Promise|Array} Post type array
+   */
+  async updateTemplatePaths(config, publisher, tmpdir) {
+    for await (const postType of config['post-types']) {
+      const {template} = postType;
+      const cachePath = path.join(tmpdir, 'templates');
+      const cachedTemplate = await utils.cachePublishedFile(template, cachePath, publisher);
+      postType.template = cachedTemplate;
     }
 
-    return data;
+    return config;
+  },
+
+  /**
+   * Fetch remote JSON file.
+   *
+   * @function fetchJson
+   * @param {Object} filePath Path to JSON filedate
+   */
+  async fetchJson(filePath) {
+    try {
+      const response = await axios.get(filePath, {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  /**
+   * Render GFM emoji.
+   *
+   * @function render
+   * @param {String} str GFM emoji name
+   * @return {String} Emoji
+   */
+  renderEmoji(str) {
+    return emoji.get(str);
   },
 
   /**
    * Render a Nunjucks template string using context data.
    *
    * @function render
-   * @param {String} string Template string
+   * @param {String} str Template string
    * @param {String} context Context data
    * @return {String} Rendered string
    */
-  render(string, context) {
+  render(str, context) {
     const env = new nunjucks.Environment();
 
     env.addFilter('date', this.formatDate);
 
-    return env.renderString(string, context);
+    return env.renderString(str, context);
   },
 
   /**

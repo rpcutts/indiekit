@@ -1,18 +1,11 @@
 require('dotenv').config();
 
-const Publication = require('@indiekit/publication');
 const sinon = require('sinon');
 const test = require('ava');
 
-const pub = new Publication({
-  defaults: require('@indiekit/config-jekyll'),
-  endpointUrl: 'https://endpoint.example',
-  me: process.env.INDIEKIT_URL
-});
-
 const updateData = require('../../../lib/post/update-data');
 
-test.beforeEach(async t => {
+test.beforeEach(t => {
   t.context.req = body => {
     const req = {};
     req.body = body;
@@ -37,7 +30,11 @@ test.beforeEach(async t => {
     }
   };
 
-  t.context.config = await pub.getConfig();
+  t.context.config = {
+    defaults: require('@indiekit/config-jekyll'),
+    endpointUrl: 'https://endpoint.example',
+    me: process.env.INDIEKIT_URL
+  };
 });
 
 test('Updates data by replacing its content', async t => {

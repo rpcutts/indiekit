@@ -8,7 +8,7 @@
   padding: var(--space-block-medium) 0;
 }
 
-.article > * {
+.article > *:not([class]) {
   max-inline-size: var(--line-measure);
 }
 

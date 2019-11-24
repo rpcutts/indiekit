@@ -1,18 +1,12 @@
 const express = require('express');
 const {check, validationResult} = require('express-validator');
 
-// Middleware
-const auth = require('../middleware/authenticate');
-
 // Models
 const application = require('../models/application');
 const publication = require('../models/publication');
 const publisher = require('../models/publisher');
 
 const router = new express.Router();
-
-// Require authentication
-router.use(auth);
 
 // Configuration
 router.get('/', async (req, res) => {
@@ -111,6 +105,10 @@ router.post('/publication', (req, res) => {
   application.set('configured', true);
   publication.setAll(req.body);
   res.redirect(req.query.referrer || '/config');
+});
+
+router.get('/publication/settings', (req, res) => {
+  res.render('config/publication-settings');
 });
 
 module.exports = router;

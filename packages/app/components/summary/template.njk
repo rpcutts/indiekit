@@ -33,7 +33,7 @@
         {{- row.key.text | safe -}}
       </dt>
       <dd class="summary__value {%- if row.value.classes %} {{ row.value.classes }}{% endif %}">
-        {{- row.value.text | indent(8) | trim | safe -}}
+        {{- row.value.text | safe -}}
       </dd>
     </div>
     {% endfor %}

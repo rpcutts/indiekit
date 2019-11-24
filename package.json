@@ -45,7 +45,6 @@
   "devDependencies": {
     "@indiekit/app": "file:packages/app",
     "@indiekit/config-jekyll": "file:packages/config-jekyll",
-    "@indiekit/publication": "file:packages/publication",
     "@indiekit/publisher-github": "file:packages/publisher-github",
     "ava": "^2.3.0",
     "coveralls": "^3.0.6",
