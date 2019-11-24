@@ -19,10 +19,6 @@
     "repost": "Repost",
     "like": "Like post"
   },
-  "locale": {
-    "de": "Deutsch",
-    "en": "English"
-  },
   "publisherId": {
     "github": "GitHub",
     "gitlab": "GitLab"
@@ -52,8 +48,7 @@
     "app": {
       "title": "Application settings",
       "locale": {
-        "label": "Language",
-        "hint": "This is used to detirmine how dates and times should be formatted."
+        "label": "Language"
       },
       "publisherId": {
         "label": "Publisher"
@@ -121,6 +116,12 @@
       "bookmarklet": {
         "label": "Bookmarklet",
         "drag": "Drag this link to your bookmarks bar"
+      },
+      "locale": {
+        "label": "Language"
+      },
+      "timezone": {
+        "label": "Timezone"
       }
     },
     "title %s": "config.title %s"

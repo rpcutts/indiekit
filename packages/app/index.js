@@ -9,6 +9,8 @@ const favicon = require('serve-favicon');
 const httpError = require('http-errors');
 const i18n = require('i18n');
 const nunjucks = require('nunjucks');
+const timezones = require('tz-ids');
+const languages = require('iso-639-1');
 
 const {components, layouts} = require('@indiekit/frontend');
 const utils = require('@indiekit/support');
@@ -35,6 +37,7 @@ const env = nunjucks.configure([components, layouts, viewsDir, staticDir], {
 env.addFilter('date', utils.formatDate);
 env.addFilter('emoji', utils.renderEmoji);
 env.addFilter('markdown', utils.renderMarkdown);
+env.addFilter('language', str => languages.getNativeName(str));
 app.set('view engine', 'njk');
 
 // Serve static files and paths
@@ -77,6 +80,8 @@ app.use(async (req, res, next) => {
   res.locals.gitlab = await publisher('gitlab').getAll();
   res.locals.pub = await publication.getAll();
   res.locals.session = req.session;
+  res.locals.timezones = timezones;
+  res.locals.languages = languages.getLanguages(languages.getAllCodes());
 
   next();
 });

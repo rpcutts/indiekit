@@ -33,9 +33,11 @@ module.exports = (() => {
       categories,
       configPath: publication.configPath,
       me: publication.me,
+      locale: publication.locale || 'en',
       'post-types': postTypes,
       'slug-separator': config['slug-separator'] || defaults['slug-separator'],
-      'syndicate-to': config['syndicate-to'] || defaults['syndicate-to']
+      'syndicate-to': config['syndicate-to'] || defaults['syndicate-to'],
+      timezone: publication.timezone || 'utc'
     };
   };
 

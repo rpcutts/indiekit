@@ -11,17 +11,17 @@
     }],
     rows: [{
       key: {
-        text: __("config.app.locale.label")
-      },
-      value: {
-        text: __("locale." + app.locale)
-      }
-    }, {
-      key: {
         text: __("config.app.publisherId.label")
       },
       value: {
         text: __("publisherId." + app.publisherId)
+      }
+    }, {
+      key: {
+        text: __("config.app.locale.label")
+      },
+      value: {
+        text: app.locale | language
       }
     }, {
       key: {
@@ -154,6 +154,20 @@
       },
       value: {
         text: pub.me
+      }
+    }, {
+      key: {
+        text: __("config.pub.locale.label")
+      },
+      value: {
+        text: pub.locale | language
+      }
+    }, {
+      key: {
+        text: __("config.pub.timezone.label")
+      },
+      value: {
+        text: pub.timezone
       }
     }, {
       key: {

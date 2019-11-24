@@ -31,16 +31,13 @@
     label: {
       text: __("config.app.locale.label")
     },
-    hint: {
-      text: __("config.app.locale.hint")
-    },
     items: [{
       value: "de",
-      text: __("locale.de"),
+      text: "de" | language,
       selected: app.locale == "de"
     }, {
       value: "en",
-      text: __("locale.en"),
+      text: "en" | language,
       selected: app.locale == "en"
     }],
     errorMessage: {

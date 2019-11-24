@@ -766,6 +766,7 @@ mark {
   border: var(--border-width-thick) solid var(--color-neutral);
   border-radius: var(--border-radius-small);
   block-size: 3rem;
+  margin-block-start: var(--space-block-small);
   padding: var(--inset-squished);
   width: 100%;
 }

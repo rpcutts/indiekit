@@ -24,7 +24,7 @@ module.exports = async (req, pub) => {
     const {properties} = mf2;
     properties.content = deriveProperty.content(mf2);
     properties.photo = await deriveProperty.photo(mf2);
-    properties.published = deriveProperty.published(mf2);
+    properties.published = deriveProperty.published(mf2, pub.locale, pub.timezone);
     properties.slug = deriveProperty.slug(mf2, pub['slug-separator']);
 
     // Render publish path and public url

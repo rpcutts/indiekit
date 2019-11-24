@@ -128,17 +128,15 @@ const photo = async mf2 => {
  * @exports published
  * @param {Object} mf2 microformats2 object
  * @param {Object} locale Locale to use for formatting datetime
+ * @param {Object} zone Timezone offset
  * @returns {Array} Array containing ISO formatted date
  */
-const published = (mf2, locale = 'en-GB') => {
+const published = (mf2, locale = 'en-GB', zone = 'utc') => {
   let {published} = mf2.properties;
   const now = DateTime.local().toISO();
 
   if (published) {
-    published = DateTime.fromISO(published[0], {
-      locale,
-      zone: 'utc'
-    }).toISO();
+    published = DateTime.fromISO(published[0], {locale, zone}).toISO();
     return new Array(published);
   }
 

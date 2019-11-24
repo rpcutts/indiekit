@@ -19,6 +19,50 @@
     }
   }) | indent(2) }}
 
+  {% set languageItems = [] %}
+  {% for language in languages %}
+    {% set result = languageItems.push({
+      value: language.code,
+      text: language.nativeName,
+      selected: pub.locale == language.code
+    }) %}
+  {% endfor %}
+
+  {{ select({
+    id: "locale",
+    name: "locale",
+    label: {
+      text: __("config.pub.locale.label")
+    },
+    items: languageItems,
+    errorMessage: {
+      text: errors.locale.msg,
+      label: __("Error")
+    } if errors.locale
+  }) | indent(2) }}
+
+  <datalist id="timezones">
+  {% for timezone in timezones %}
+    <option>{{ timezone }}</option>
+  {% endfor %}
+  </datalist>
+
+  {{ input({
+    id: "timezone",
+    name: "timezone",
+    value: errors.timezone.value or pub.timezone,
+    label: {
+      text: __("config.pub.timezone.label")
+    },
+    attributes: {
+      list: "timezones"
+    },
+    errorMessage: {
+      text: errors.timezone.msg,
+      label: __("Error")
+    } if errors.timezone
+  }) | indent(2) }}
+
   {{ input({
     id: "configPath",
     name: "configPath",
