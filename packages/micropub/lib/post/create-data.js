@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const microformats = require('@indiekit/microformats');
 const utils = require('@indiekit/support');
 const deriveProperty = require('./../utils/derive-property');
@@ -18,7 +19,7 @@ module.exports = async (req, pub) => {
 
     // Post type
     const type = deriveProperty.postType(mf2);
-    const typeConfig = pub['post-type-config'][type];
+    const typeConfig = utils.getPostTypeConfig(pub, type);
 
     // Derive properties
     const {properties} = mf2;
@@ -42,6 +43,7 @@ module.exports = async (req, pub) => {
         properties
       }
     };
+    debug(postData);
     return postData;
   } catch (error) {
     throw new Error(error.message);

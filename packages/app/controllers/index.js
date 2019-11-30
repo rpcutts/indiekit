@@ -3,16 +3,8 @@ const express = require('express');
 
 const router = new express.Router();
 
-// Authentication middleware
-const auth = (req, res, next) => {
-  // If current session, proceed to next middleware
-  if (req.session && req.session.me) {
-    return next();
-  }
-
-  // No current session
-  res.redirect(`/sign-in?redirect=${req.originalUrl}`);
-};
+// Middlewares
+const auth = require('../middleware/auth');
 
 // Routes
 router.use('/config', auth, require('./config'));

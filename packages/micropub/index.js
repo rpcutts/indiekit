@@ -59,7 +59,6 @@ module.exports = opts => {
 
   // Middleware
   router.use(urlencodedParser, jsonParser);
-  router.post(indieauth.authorize);
 
   // Query endpoint
   router.get('/', async (req, res, next) => {
@@ -83,6 +82,7 @@ module.exports = opts => {
 
   // Create/update/delete/undelete post
   router.post('/',
+    indieauth.authorize,
     multipartParser.any(),
     async (req, res, next) => {
       const action = req.query.action || req.body.action;
@@ -140,6 +140,7 @@ module.exports = opts => {
 
   // Upload media
   router.post('/media',
+    indieauth.authorize,
     multipartParser.single('file'),
     async (req, res, next) => {
       const {file} = req;

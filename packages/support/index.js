@@ -158,6 +158,18 @@ const utils = {
   },
 
   /**
+   * Get configuration for a given post type.
+   *
+   * @function getPostTypeConfig
+   * @param {Object} config Publication config
+   * @param {String} type Post type
+   * @returns {Object} Post type config
+   */
+  getPostTypeConfig(config, type) {
+    return config['post-types'].find(postType => postType.type === type);
+  },
+
+  /**
    * Fetch file from publisher and save it to filesystem.
    *
    * @function cachePublishedFile

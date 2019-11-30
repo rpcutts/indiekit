@@ -131,7 +131,7 @@ module.exports = async (req, postData, pub) => {
 
     // Post type
     const {type} = postData;
-    const typeConfig = pub['post-type-config'][type];
+    const typeConfig = utils.getPostTypeConfig(pub, type);
 
     // Get properties
     let {properties} = postData.mf2;

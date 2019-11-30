@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const utils = require('@indiekit/support');
 const deriveProperty = require('./../utils/derive-property');
 
@@ -17,7 +18,7 @@ module.exports = async (req, file, pub) => {
 
     // Media type
     const type = deriveProperty.mediaType(file);
-    const typeConfig = pub['post-type-config'][type];
+    const typeConfig = utils.getPostTypeConfig(pub, type);
 
     // Derive properties
     const properties = deriveProperty.fileData(file);
@@ -33,6 +34,7 @@ module.exports = async (req, file, pub) => {
       path,
       url
     };
+    debug(mediaData);
     return mediaData;
   } catch (error) {
     throw new Error(error);

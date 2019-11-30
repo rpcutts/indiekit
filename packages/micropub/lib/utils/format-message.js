@@ -1,3 +1,5 @@
+const utils = require('@indiekit/support');
+
 /**
  * Create commit message for given post action.
  *
@@ -10,7 +12,8 @@
 module.exports = (action, postData, pub) => {
   try {
     const {type} = postData;
-    const {icon} = pub['post-type-config'][type];
+    const typeConfig = utils.getPostTypeConfig(pub, type);
+    const {icon} = typeConfig;
 
     switch (action) {
       case 'create': {
