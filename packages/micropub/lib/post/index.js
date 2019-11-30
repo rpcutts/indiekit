@@ -1,3 +1,4 @@
+const debug = require('debug')('indiekit:micropub');
 const utils = require('@indiekit/support');
 
 const createData = require('./create-data');

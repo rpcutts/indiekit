@@ -16,7 +16,11 @@ const queryMediaEndpoint = require('./lib/query-media-endpoint');
 module.exports = opts => {
   const {config, postStore, mediaStore, publisher} = opts;
 
-  debug('Publication config: %O', config);
+  try {
+    debug('publisher.getFile()', publisher.getFile());
+  } catch (error) {
+    debug('Error', error);
+  }
 
   const media = require('./lib/media')({
     config,
@@ -87,8 +91,6 @@ module.exports = opts => {
     async (req, res, next) => {
       const action = req.query.action || req.body.action;
       const url = req.query.url || req.body.url;
-
-      debug('req.body', req.body);
 
       let response;
       try {

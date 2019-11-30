@@ -76,8 +76,8 @@ app.use(i18n.init);
 app.use(async (req, res, next) => {
   res.locals.app = await application.getAll();
   res.locals.app.url = `${req.protocol}://${req.headers.host}`;
-  res.locals.github = await publisher('github').getAll();
-  res.locals.gitlab = await publisher('gitlab').getAll();
+  // res.locals.github = await publisher('github').getAll();
+  // res.locals.gitlab = await publisher('gitlab').getAll();
   res.locals.pub = await publication.getAll();
   res.locals.session = req.session;
   res.locals.timezones = timezones;
